@@ -11,7 +11,7 @@ from pprint import pprint
 from make_material import sample_vignette
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
-OAI = "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"
+# OAI = "bla"
 openai.api_key = OAI
 
 def getLogProbContinuation(initialSequence, continuation, preface = ''):
