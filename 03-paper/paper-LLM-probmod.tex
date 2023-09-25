@@ -231,17 +231,6 @@ Participants first played two of these in the production condition, then the oth
 
 \subsection{Results}\label{results}
 
-\begin{figure}
-  \centering
-
-    \includegraphics[width=0.45\linewidth]{00-pics/refgame-counts.pdf}
-    \hfill
-    \includegraphics[width=0.45\linewidth]{00-pics/model-predictions-vanilla.pdf}
-
-  \caption{Counts of choices from reference games with human participants (left-hand side), alongside vanilla model predictions from GPT-3.5 (right-hand side). \mf{fix plots}}
-  \label{fig:refgame-counts}
-\end{figure}
-
 The overall distribution of choices that correspond to the target, competitor, and distractor states is shown in Figure~\ref{fig:refgame-counts} on the left.\footnote{
   The production condition actually has two distractor choices.
   Here and in the following, these are lumped together as a single category, also when modeling random errors in later models.
@@ -252,17 +241,33 @@ This is in line with previous experimental results on human reference games.
 % \citep{QingFranke2013:Variations-on-a}.
 For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
 
+\begin{figure}
+  \centering
 
-\newpage
+    \includegraphics[width=0.9\linewidth]{00-pics/PPC-alpha-eps-model.pdf}
+
+    \caption{Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of three models (shapes and error bars).
+      Shapes show the mean of the posterior predictive distributions of three models, differing in the scope of the item-level aggregation with respect to soft-maximizing and scaling.
+      Error-bars show corresponding 95\% credible intervals of the posterior predictive.
+    }
+  \label{fig:refgame-counts}
+\end{figure}
 
 \section{LLM predictions for reference games}
 \label{llm-predictions-for-reference-games}
 
 This section explores different ways of deriving quantitative predictions from an LLM to feed into a statistical model for the human data.
-Since the reference game descriptions and choice options are all text-based, probabilities for discrete-choice predictions of LLMs can be defined as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the game description.
+Since the task descriptions and choice options are all text-based, probabilities for discrete-choice predictions of LLMs can be defined as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
 The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in term of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
-Using average log-probs for each answer option as a basic score, there are at least three conceivable ways of deriving forced-choice probabilities when averaging over item-level variation. \mf{include figure}
+Using average log-probs for each answer option as a basic score, there are at least three conceivable ways of deriving forced-choice probabilities when averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
 In the following, we first introduce the relevant notation and terminology, then describe the different options, and finally compare measures as central predictors in probabilistic models for the human choice data.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
+  \caption{measures}
+  \label{fig:measures-overview}
+\end{figure}
 
 \subsection{Notation \& terminology}
 \label{sec:notat--term}
@@ -301,7 +306,7 @@ The softmax function can furthermore be decomposed into a first step of mapping 
   \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \ \ \ \text{with: } q_{i} \propto p_{i}^{\alpha}
 \end{align*}
 %
-This means that there are three conceivable scope-sites for aggregating item-level information as shown in Figure XYZ. \mf{make figure}.
+This means that there are three conceivable scope-sites for aggregating item-level information as shown in Figure~\ref{fig:measures-overview}.
 Narrow-scope aggregation first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities:
 %
 \begin{align*}
@@ -323,9 +328,6 @@ Intermediate-scope aggregation performs item-level averaging after mapping score
 %
 
 \mf{explain conceptual differences}
-
-These different conditional-level predictions do not, generally, coincide.
-For example, the right-hand side of Figure~\ref{fig:refgame-counts} shows model predictions for $\alpha=1$, which is the special case where the intermediate- and wide-scope approach do coincide.
 
 \newpage
 

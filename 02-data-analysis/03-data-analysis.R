@@ -296,7 +296,7 @@ PPC_data |>
   ) +
   theme(legend.position = "right")
 
-ggsave(filename = "../03-paper/00-pics/PPC-alpha-eps-model.pdf", width = 8, height = 3.5, scale = 0.9)
+ggsave(filename = "../03-paper/00-pics/PPC-alpha-eps-model.pdf", width = 8, height = 3.5, scale = 1.0)
 
 #######################################################
 ## Bayesian p-values
