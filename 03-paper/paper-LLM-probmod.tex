@@ -323,11 +323,27 @@ Wide-scope aggregation, first transposes scores into probabilities, scales them 
 Intermediate-scope aggregation performs item-level averaging after mapping scores onto probabilities (using softmax with $\alpha=1$), but before scaling (with a power-law transformation with variable $\alpha$):
 \begin{align*}
   & \textbf{intermediate-scope aggregation} \\
-  & P_{w}(R_{l}, C) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
+  & P_{i}(R_{l}, C) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
 \end{align*}
 %
 
 \mf{explain conceptual differences}
+
+\subsection{Model fitting}
+\label{sec:model-fitting}
+
+Parameterized predictions $P_{m}(R_{l}, C ; \alpha_{c})$ for models $m \in \set{n,w,i}$ can be assessed in the light of the empirical data from human participants with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
+For each condition $C$ (production and interpretation), we equip each model with an free optimality parameter $\alpha_{C}\sim \text{log-Normal}(0.5,1)$ with a log-Normal prior.
+We also assume that each model has one epsilon parameter per condition, $\epsilon_{C}$, which accounts for random errors in the human data via Laplace smoothing, with a prior $\epsilon_{C} \sim \text{Exponential}(5) T(0;1)$ given by a truncated exponential distribution.
+The resulting likelihood function for model $m$ and data from condition $C$ is a multinomial distribution with central predictor for response $R_{l}$ given by:
+%
+\begin{align*}
+  P(R_{l}) \propto P_{m}(R_{l}, C; \alpha_{c}) +  \epsilon_{c}
+\end{align*}
+
+have a free parameter $\alpha$.
+In order to also
+
 
 \newpage
 
