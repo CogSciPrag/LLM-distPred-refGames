@@ -8,7 +8,7 @@
 #' @return Fit object.
 #'
 #' @export
-fit_data <- function(d, prob, model_name = '../01-code/llm-average-matrix-epsilon-arrayed.stan') {
+fit_data <- function(d, prob, model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan') {
   n_chunk <- dim(prob)[1]
   n_item  <- dim(prob)[2]
   data_list <- list(d=d, n_chunk=n_chunk, n_item=n_item, prob=prob, uniform = c(1/3, 1/3, 1/3))

@@ -238,7 +238,7 @@ Participants first played two of these in the production condition, then the oth
     \hfill
     \includegraphics[width=0.45\linewidth]{00-pics/model-predictions-vanilla.pdf}
 
-  \caption{Counts of choices from reference games with human participants (left-hand side), alongside vanilla model predictions from GPT-3.5 (right-hand side).}
+  \caption{Counts of choices from reference games with human participants (left-hand side), alongside vanilla model predictions from GPT-3.5 (right-hand side). \mf{fix plots}}
   \label{fig:refgame-counts}
 \end{figure}
 
@@ -252,13 +252,82 @@ This is in line with previous experimental results on human reference games.
 % \citep{QingFranke2013:Variations-on-a}.
 For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
 
+
+\newpage
+
 \section{LLM predictions for reference games}
 \label{llm-predictions-for-reference-games}
 
 This section explores different ways of deriving quantitative predictions from an LLM to feed into a statistical model for the human data.
-Section~\ref{sec:vanilla-predictions} first describes ``vanilla predictions'' derived from an LLM.
-Subsequent Sections~\ref{adding-a-link-function-the-alpha-model} and \ref{sec:adding-noise-the-alpha-epsilon-model} use these vanilla predictions to build slightly more complex statistical models.
-All models will be tested for their predictive adequacy, using Bayesian posterior predictive checks.
+Since the reference game descriptions and choice options are all text-based, probabilities for discrete-choice predictions of LLMs can be defined as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the game description.
+The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in term of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
+Using average log-probs for each answer option as a basic score, there are at least three conceivable ways of deriving forced-choice probabilities when averaging over item-level variation. \mf{include figure}
+In the following, we first introduce the relevant notation and terminology, then describe the different options, and finally compare measures as central predictors in probabilistic models for the human choice data.
+
+\subsection{Notation \& terminology}
+\label{sec:notat--term}
+
+Let $C$ be the experimental condition of interest (here: the production or interpretation condition).
+Let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the human experiment for condition $C$.\footnote{
+  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.
+}
+Each item $I_{k}$ consists of a task description $T_{k}$ and $l$ choice options $O_{k1}, \dots, O_{kl}$, which are treated as textual continuations of the task description (see Appendix~\ref{sec:examples-items-llm} for an example).
+For each item $I_{k}$, let $F(R_{l}, I_{k})$ be the choice option $O_{ki}$ that corresponds to \emph{response type} $R_{l}$ (here: target, competitor, distractor).\footnote{In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we take to sum of the log-probabilities for both distractor words.}
+We will define an item-level (non-normalized) score $S(O_{ki})$ for each choice option of a given item $k$, and use this to define a condition-level probabilistic predictions for response types by averaging over all items in a given condition.
+
+\paragraph{Item-level score.}
+If a choice option $O_{ki} = w$ is a single word, like in the production condition, an LLM's prediction can simply be defined as the next-word log probability $\log P_{\text{LLM}} (w \mid T_{k})$.
+But choice options can be strings of more than one word, as in the interpretation condition.
+We therefore follow the previous literature \citep[e.g.,][]{BrownMann2020:Language-Models} and define the \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \dots w_{kin}$ of item $k$, in terms of the average log-probs:
+%
+\begin{align*}
+S(O_{ki}, I_{k}) =  \frac{1}{n} \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+\end{align*}
+%
+The item-level score of response type $R_{l}$ is $S(R_{l}, I_{k}) = S(F(R_{l}, I_{k}))$.
+
+\paragraph{Condition-level predictions.}
+Condition-level predictions are a probability distribution over response types, obtained from item-level scores $S(R_{l}, I_{k})$ by averaging over all items belonging to the relevant condition.
+To map non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$, defined as:
+%
+\begin{align*}
+ \text{SoftMax}(\myvec{s}, \alpha) = \myvec{p}, \text{where } p_{i} \propto \expo \left (\alpha p_{i} \right )
+\end{align*}
+%
+The softmax function can furthermore be decomposed into a first step of mapping scores to probabilities, and subsequently reweighing probabilities via a power-law transformation:
+%
+\begin{align*}
+  \text{SoftMax}(\myvec{s}, \alpha) & = \text{Pow}( \text{SoftMax}(\myvec{s}, 1) ; \alpha) \ \ \  \text{, where} \\
+  \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \ \ \ \text{with: } q_{i} \propto p_{i}^{\alpha}
+\end{align*}
+%
+This means that there are three conceivable scope-sites for aggregating item-level information as shown in Figure XYZ. \mf{make figure}.
+Narrow-scope aggregation first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities:
+%
+\begin{align*}
+  & \textbf{narrow-scope aggregation} \\
+  & P_{n}(R_{l}, C) \propto \expo \left [  \alpha \ \frac{1}{m} \ \sum_{i = k}^{m} S(R_{l}, I_{k})  \right ]
+\end{align*}
+%
+Wide-scope aggregation, first transposes scores into probabilities, scales them and only aggregates over items last.
+\begin{align*}
+  & \textbf{wide-scope aggregation} \\
+  & P_{w}(R_{l}, C) \propto \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( \alpha \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha \ S(R_{l'}, I_{k}) \right )}
+\end{align*}
+%
+Intermediate-scope aggregation performs item-level averaging after mapping scores onto probabilities (using softmax with $\alpha=1$), but before scaling (with a power-law transformation with variable $\alpha$):
+\begin{align*}
+  & \textbf{intermediate-scope aggregation} \\
+  & P_{w}(R_{l}, C) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
+\end{align*}
+%
+
+\mf{explain conceptual differences}
+
+These different conditional-level predictions do not, generally, coincide.
+For example, the right-hand side of Figure~\ref{fig:refgame-counts} shows model predictions for $\alpha=1$, which is the special case where the intermediate- and wide-scope approach do coincide.
+
+\newpage
 
 \subsection{Vanilla predictions}
 \label{sec:vanilla-predictions}
@@ -270,7 +339,8 @@ Each item $I_{k}$ consists of a task description $T_{k}$ and three or four choic
 
 If a choice option $O_{ki} = w$ is a single word, like in the production condition, an LLM's prediction can simply be defined as the (normalized) next-word probability $P_{\text{LLM}} (w \mid T_{k})$.
 But choice options can be strings of more than one word in the interpretation condition.
-The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in term of ``length corrected log probabilities,'' or more crisply: average next-word surprisals, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
+The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in term of \emph{average next-token log probabilities} gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
+
 We therefore define the conditional probability of producing $O_{ki} = w_{ki1}, \dots w_{kin}$ after task description $T_{k}$ in terms of average surprisal \mf{fix formula; conditioning on whole sequence not just last word}:
 %
 \begin{align*}

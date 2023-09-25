@@ -138,7 +138,7 @@ model_predictions_vanilla
 
 ggsave(plot = model_predictions_vanilla, 
        filename = "../04-paper/00-pics/model-predictions-vanilla.pdf", 
-       height = 4, width = 3, scale = 1.1)
+       height = 4, width = 6, scale = 1.1)
 
 #######################################################
 ## prepare data
@@ -213,13 +213,32 @@ produce_summary_prodInt_epsilonAlpha(fit_prod_wide, fit_inter_wide)
 ## get posterior predictives
 #######################################################
 
-pp_prod_narrow <- get_posterior_predictives(fit_prod_narrow, d_prod_global, filename = "post_pred_prod_narrow")
-pp_prod_intermediate <- get_posterior_predictives(fit_prod_intermediate, d_prod_global, filename = "post_pred_prod_intermediate")
-pp_prod_wide <- get_posterior_predictives(fit_prod_wide, d_prod_global, filename = "post_pred_prod_wide")
+pp_prod_narrow <- get_posterior_predictives(fit_prod_narrow, d_prod_global, filename = "post_pred_prod_narrow") |> 
+  mutate(condition = "production", model = "narrow")
+pp_prod_intermediate <- get_posterior_predictives(fit_prod_intermediate, d_prod_global, filename = "post_pred_prod_intermediate") |> 
+  mutate(condition = "production", model = "intermediate")
+pp_prod_wide <- get_posterior_predictives(fit_prod_wide, d_prod_global, filename = "post_pred_prod_wide") |> 
+  mutate(condition = "production", model = "wide")
 
-pp_inter_narrow <- get_posterior_predictives(fit_inter_narrow, d_inter_global, filename = "post_pred_inter_narrow")
-pp_inter_intermediate <- get_posterior_predictives(fit_inter_intermediate, d_inter_global, filename = "post_pred_inter_intermediate")
-pp_inter_wide <- get_posterior_predictives(fit_inter_wide, d_inter_global, filename = "post_pred_inter_wide")
+pp_inter_narrow <- get_posterior_predictives(fit_inter_narrow, d_inter_global, filename = "post_pred_inter_narrow") |> 
+  mutate(condition = "interpretation", model = "narrow")
+pp_inter_intermediate <- get_posterior_predictives(fit_inter_intermediate, d_inter_global, filename = "post_pred_inter_intermediate") |> 
+  mutate(condition = "interpretation", model = "intermediate")
+pp_inter_wide <- get_posterior_predictives(fit_inter_wide, d_inter_global, filename = "post_pred_inter_wide") |> 
+  mutate(condition = "interpretation", model = "wide")
+
+PPC_data = rbind(
+  pp_prod_narrow,
+  pp_prod_intermediate,
+  pp_prod_wide,
+  pp_inter_narrow,
+  pp_inter_intermediate,
+  pp_inter_wide
+) |> select(-row) |> 
+  mutate(
+    condition = factor(condition, levels = c("production", "interpretation")),
+    model     = factor(model, levels = c("narrow", "wide", "intermediate"))
+    )
 
 #######################################################
 ## make posterior predictives plots
@@ -246,9 +265,38 @@ plot_PPC <- function(PP_prod, PP_inter, name = "bla"){
 
 }
 
+# individual plots
 plot_PPC(pp_prod_narrow, pp_inter_narrow)
 plot_PPC(pp_prod_intermediate, pp_inter_intermediate)
 plot_PPC(pp_prod_wide, pp_inter_wide)
+
+# all models in one
+
+PPC_data |> 
+  ggplot() +
+  geom_col(data = PPC_data |> filter(model == "narrow"),
+           aes(x = response, y = observed, fill = response)) +
+  facet_grid(.~condition) +
+  geom_pointrange(aes(x = response, y = mean, ymin = `|95%`, ymax = `95%|`, shape = model, group = model), 
+                  position = position_dodge(width = 0.5), size = 0.7, linewidth = 1, color = "black") +
+  ylab("") + xlab("") +
+  # theme(legend.position="none") +
+  theme(axis.text.x = element_text(angle = 25, vjust = 1, hjust=1)) +
+  theme(strip.text = element_text(size = 12)) +
+  guides(
+    shape = guide_legend(
+      direction = "vertical",
+      title = "model",
+      override.aes = list(
+        # shape = c("narrow" = 1, "wide" = 2, "intermediate" = 3),
+        fill = "black"
+      )
+    ),
+    fill = "none"
+  ) +
+  theme(legend.position = "right")
+
+ggsave(filename = "../03-paper/00-pics/PPC-alpha-eps-model.pdf", width = 8, height = 3.5, scale = 0.9)
 
 #######################################################
 ## Bayesian p-values
@@ -269,11 +317,7 @@ tibble(
 
 
 
-
-
-
-
-
+#####################################################################################
 
 
 
