@@ -302,8 +302,8 @@ To map non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probab
 The softmax function can furthermore be decomposed into a first step of mapping scores to probabilities, and subsequently reweighing probabilities via a power-law transformation:
 %
 \begin{align*}
-  \text{SoftMax}(\myvec{s}, \alpha) & = \text{Pow}( \text{SoftMax}(\myvec{s}, 1) ; \alpha) \ \ \  \text{, where} \\
-  \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \ \ \ \text{with: } q_{i} \propto p_{i}^{\alpha}
+  \text{SoftMax}(\myvec{s}, \alpha) & = \text{Pow}( \text{SoftMax}(\myvec{s}, 1) ; \alpha) \\
+  \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \text{where } q_{i} \propto p_{i}^{\alpha}
 \end{align*}
 %
 This means that there are three conceivable scope-sites for aggregating item-level information as shown in Figure~\ref{fig:measures-overview}.
@@ -311,22 +311,22 @@ Narrow-scope aggregation first aggregates the item-level scores, and then transp
 %
 \begin{align*}
   % & \textbf{narrow-scope aggregation} \\
-  & P_{n}(R_{l}, C) \propto \expo \left [  \alpha \ \frac{1}{m} \ \sum_{i = k}^{m} S(R_{l}, I_{k})  \right ]
-    \tag*{(narrow-scope aggregation)}
+  & P_{n}(R_{l}, C ; \alpha) \propto \expo \left [  \alpha \ \frac{1}{m} \ \sum_{i = k}^{m} S(R_{l}, I_{k})  \right ]
+    \tag*{\textcolor{gray}{[narrow-scope aggregation]}}
 \end{align*}
 %
 Wide-scope aggregation, first transposes scores into probabilities, scales them and only aggregates over items last.
 \begin{align*}
   % & \textbf{wide-scope aggregation} \\
-  & P_{w}(R_{l}, C) \propto \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( \alpha \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha \ S(R_{l'}, I_{k}) \right )}
-    \tag*{(wide-scope aggregation)}
+  & P_{w}(R_{l}, C ; \alpha) \propto \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( \alpha \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha \ S(R_{l'}, I_{k}) \right )}
+    \tag*{\textcolor{gray}{[wide-scope aggregation]}}
 \end{align*}
 %
 Intermediate-scope aggregation performs item-level averaging after mapping scores onto probabilities (using softmax with $\alpha=1$), but before scaling (with a power-law transformation with variable $\alpha$):
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
-  & P_{i}(R_{l}, C) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
-    \tag*{(intermediate-scope aggregation)}
+  & P_{i}(R_{l}, C ; \alpha) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
+    \tag*{\textcolor{gray}{[intermediate-scope aggregation]}}
 \end{align*}
 
 
@@ -338,23 +338,66 @@ Narrow-scope aggregation considers raw scores, not \emph{not} probabilistic pred
 Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
 Similarly, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level.
 
-\subsection{Model fitting}
+\subsection{Model fitting, criticims \& comparison}
 \label{sec:model-fitting}
 
 Parameterized predictions $P_{m}(R_{l}, C ; \alpha_{c})$ for models $m \in \set{n,w,i}$ can be assessed in the light of the empirical data from human participants with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
-For each condition $C$ (production and interpretation), we equip each model with an free optimality parameter $\alpha_{C}\sim \text{log-Normal}(0.5,1)$ with a log-Normal prior.
-We also assume that each model has one epsilon parameter per condition, $\epsilon_{C}$, which accounts for random errors in the human data via Laplace smoothing, with a prior $\epsilon_{C} \sim \text{Exponential}(5) T(0;1)$ given by a truncated exponential distribution.
+For each condition $C$ (production and interpretation), each model has a free optimality parameter $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ with a log-Normal prior.
+We also assume that each model has one epsilon parameter per condition, $\epsilon_{c}$, which accounts for random errors in the human data via Laplace smoothing, with a prior $\epsilon_{c} \sim \text{Beta}(1,5)$ favoring small values.
 The resulting likelihood function for model $m$ and data from condition $C$ is a multinomial distribution with central predictor for response $R_{l}$ given by:
 %
 \begin{align*}
   P(R_{l}) \propto P_{m}(R_{l}, C; \alpha_{c}) +  \epsilon_{c}
 \end{align*}
 
-have a free parameter $\alpha$.
-In order to also
+Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of each $\alpha_{c}$ and $\epsilon_{c}$ for each model.
+The usual Bayesian summary statistics for posteriors over model parameters are shown in Figure~XYZ. \mf{TODO: make and include figure}
+
+To assess goodness-of-fit, Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
+As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
+Figure~\ref{fig:refgame-counts} shows that only the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate.
+To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
+These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
+Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
+Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline on the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
+
+\begin{table}[ht]
+\centering
+
+\begin{tabular}{lrr}
+  \toprule
+  model & production & interpretation \\ \midrule
+  narrow & 0.05 & 0.00 \\
+  wide & 0.51 & 0.00 \\
+  intermediate & 0.49 & 0.26 \\
+  \bottomrule \\
+\end{tabular}
+
+\caption{Sample-based estimates of Bayesian posterior predictive $p$-values for each model and each condition, based on likelihood of the observed data as test statistic.}
+\label{tab:Bppp-values}
+\end{table}
+
+A first important conclusion from these results is that there is at least one model which is able to recover the patterns in the data.
+In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.
+On the other hand, another important lesson from this exploration is that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
+Some approaches clearly fail basic checks for statistical goodness-of-fit.
+
+\bigskip
+
+Next, todo:
+
+\begin{itemize}
+  \item make plot for posterior parameters
+  \item non-triviality of intermediate-scope model
+  \item maybe: comparison to RSA
+  \item predicting item-level data
+\end{itemize}
 
 
 \newpage
+
+\textcolor{red}{from here on: deprecated}
+
 
 \subsection{Vanilla predictions}
 \label{sec:vanilla-predictions}
