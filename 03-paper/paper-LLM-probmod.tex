@@ -397,10 +397,14 @@ Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narr
 \label{tab:Bppp-values}
 \end{table}
 
-A first important conclusion from these results is that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
-In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.
-On the other hand, another important lesson from this exploration is that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
+These results tell us that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
+In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety. \footnote{
+  A potential worry is that the intermediate-scope model is trivial in the sense that it could have predicted \emph{any} data observation.
+  Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
+}
+Moreover, another important lesson from this exploration is that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
+
 
 
 \bigskip
@@ -961,6 +965,34 @@ Your answer:
 
 I would choose the word
 \end{verbatim}
+
+\section{Range of prior predictions of intermediate-scope model}
+\label{sec:range-prior-pred}
+
+It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
+The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
+Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
+There are distributions over response types which the model does not explain predict \emph{ex ante}.
+For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
+
+
+\begin{figure}[t]
+  \centering
+
+  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
+  %
+  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
+
+  \caption{
+    Range of predictions the intermediate-scope model makes for any pair of parameter values $\alpha_{c}$ and $\epsilon_{c}$.
+    The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
+    The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that the probability of choosing the target is bigger than that of the competitor, which in turn is bigger than that of the distractor.
+    The blue area is the subspace of probabilistic predictions the intermediate-scope model makes under any value of its parameters.
+    The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
+    The yellow dot is the ``vanilla prediction'' for $\alpha_{c}=1$ and $\epsilon_{c}=0$.
+  }
+  \label{fig:prediction-range}
+\end{figure}
 
 
 \printbibliography[heading=bibintoc]
