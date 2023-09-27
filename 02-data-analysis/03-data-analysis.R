@@ -42,7 +42,7 @@ refgame_counts <- d_counts |>
 refgame_counts
 
 ggsave(plot = refgame_counts, 
-       filename = "../04-paper/00-pics/refgame-counts.pdf", 
+       filename = "../03-paper/00-pics/refgame-counts.pdf", 
        height = 4, width = 3, scale = 1.1)
 
 #######################################################
@@ -190,24 +190,51 @@ d_inter_item <- d |>
 d_inter_item[is.na(d_inter_item)] = 0
 
 #######################################################
+## RSA model predictions (Vanilla, alpha = 0)
+#######################################################
+
+RSA_pred_prod  <- array(c(0.89, 0.11, 0), dim=c(1,1,3))
+RSA_pred_inter <- array(c(0.82, 0.18, 0), dim=c(1,1,3))
+
+#######################################################
 ## fit data
 #######################################################
 
 fit_prod_narrow <- fit_data(d_prod_global, array(LLM_pred_prod_narrow, dim=c(1,1,3)))
 fit_prod_intermediate <- fit_data(d_prod_global, array(LLM_pred_prod_intermediate, dim=c(1,1,3)))
 fit_prod_wide <- fit_data(d_prod_global, array(LLM_pred_prod_wide, dim=c(1,nrow(LLM_pred_prod_wide),3)))
+fit_prod_RSA  <- fit_data(d_prod_global, RSA_pred_prod)
 
 fit_inter_narrow <- fit_data(d_inter_global, array(LLM_pred_inter_narrow, dim=c(1,1,3)))
 fit_inter_intermediate <- fit_data(d_inter_global, array(LLM_pred_inter_intermediate, dim=c(1,1,3)))
 fit_inter_wide <- fit_data(d_inter_global, array(LLM_pred_inter_wide, dim=c(1,nrow(LLM_pred_inter_wide),3)))
+fit_inter_RSA  <- fit_data(d_inter_global, RSA_pred_inter)
 
 #######################################################
 ## Bayesian stats
 #######################################################
 
-produce_summary_prodInt_epsilonAlpha(fit_prod_narrow, fit_inter_narrow)
-produce_summary_prodInt_epsilonAlpha(fit_prod_intermediate, fit_inter_intermediate)
-produce_summary_prodInt_epsilonAlpha(fit_prod_wide, fit_inter_wide)
+posterior_stats <- rbind(
+  produce_summary_prodInt_epsilonAlpha(fit_prod_narrow, fit_inter_narrow) |> 
+    mutate(model = "narrow"),
+  produce_summary_prodInt_epsilonAlpha(fit_prod_intermediate, fit_inter_intermediate) |> 
+    mutate(model = "intermediate"),
+  produce_summary_prodInt_epsilonAlpha(fit_prod_wide, fit_inter_wide)  |> 
+    mutate(model = "wide"),
+  produce_summary_prodInt_epsilonAlpha(fit_prod_RSA, fit_inter_RSA)  |> 
+    mutate(model = "RSA")
+) |>  mutate(
+  condition = factor(condition, levels = c("production", "interpretation")),
+  model     = factor(model, levels = rev(c("narrow", "wide", "intermediate", "RSA")))
+)
+
+posterior_stats |> 
+  filter(condition != "diff. prod-inter") |> 
+  ggplot() +
+  geom_linerange(aes(x = model, y = mean, ymin = `|95%`, ymax = `95%|`), color = "gray") +
+  geom_point(aes(x = model, y = mean, ymin = `|95%`, ymax = `95%|`)) +
+  facet_grid(condition ~ Parameter, scales = "free") +
+  coord_flip()
 
 #######################################################
 ## get posterior predictives
@@ -219,6 +246,9 @@ pp_prod_intermediate <- get_posterior_predictives(fit_prod_intermediate, d_prod_
   mutate(condition = "production", model = "intermediate")
 pp_prod_wide <- get_posterior_predictives(fit_prod_wide, d_prod_global, filename = "post_pred_prod_wide") |> 
   mutate(condition = "production", model = "wide")
+pp_prod_RSA <- get_posterior_predictives(fit_prod_RSA, d_prod_global, filename = "post_pred_prod_RSA") |> 
+  mutate(condition = "production", model = "RSA")
+
 
 pp_inter_narrow <- get_posterior_predictives(fit_inter_narrow, d_inter_global, filename = "post_pred_inter_narrow") |> 
   mutate(condition = "interpretation", model = "narrow")
@@ -226,18 +256,23 @@ pp_inter_intermediate <- get_posterior_predictives(fit_inter_intermediate, d_int
   mutate(condition = "interpretation", model = "intermediate")
 pp_inter_wide <- get_posterior_predictives(fit_inter_wide, d_inter_global, filename = "post_pred_inter_wide") |> 
   mutate(condition = "interpretation", model = "wide")
+pp_inter_RSA <- get_posterior_predictives(fit_inter_RSA, d_inter_global, filename = "post_pred_inter_RSA") |> 
+  mutate(condition = "interpretation", model = "RSA")
+
 
 PPC_data = rbind(
   pp_prod_narrow,
   pp_prod_intermediate,
   pp_prod_wide,
+  pp_prod_RSA,
   pp_inter_narrow,
   pp_inter_intermediate,
-  pp_inter_wide
+  pp_inter_wide,
+  pp_inter_RSA
 ) |> select(-row) |> 
   mutate(
     condition = factor(condition, levels = c("production", "interpretation")),
-    model     = factor(model, levels = c("narrow", "wide", "intermediate"))
+    model     = factor(model, levels = c("narrow", "wide", "intermediate", "RSA"))
     )
 
 #######################################################
@@ -269,6 +304,7 @@ plot_PPC <- function(PP_prod, PP_inter, name = "bla"){
 plot_PPC(pp_prod_narrow, pp_inter_narrow)
 plot_PPC(pp_prod_intermediate, pp_inter_intermediate)
 plot_PPC(pp_prod_wide, pp_inter_wide)
+plot_PPC(pp_prod_RSA, pp_inter_RSA)
 
 # all models in one
 
@@ -303,21 +339,20 @@ ggsave(filename = "../03-paper/00-pics/PPC-alpha-eps-model.pdf", width = 8, heig
 #######################################################
 
 tibble(
-  condition = rep(c("production", "interpretation"), each = 3),
-  model = rep(c("narrow", "intermediate", "wide"), 2),
+  condition = rep(c("production", "interpretation"), each = 4),
+  model = rep(c("narrow", "wide", "intermediate", "RSA"), 2),
   Bppp_value = c(extract_bayesian_p(fit_prod_narrow),
-                 extract_bayesian_p(fit_prod_intermediate),
                  extract_bayesian_p(fit_prod_wide),
+                 extract_bayesian_p(fit_prod_intermediate),
+                 extract_bayesian_p(fit_prod_RSA),
                  extract_bayesian_p(fit_inter_narrow),
+                 extract_bayesian_p(fit_inter_wide),
                  extract_bayesian_p(fit_inter_intermediate),
-                 extract_bayesian_p(fit_inter_wide))  
-)
+                 extract_bayesian_p(fit_inter_RSA))  
+) |> 
+  pivot_wider(id_cols = model, names_from = condition, values_from = Bppp_value) |> 
+  xtable::xtable()
 
-
-
-
-
-#####################################################################################
 
 
 

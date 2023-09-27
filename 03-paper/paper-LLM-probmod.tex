@@ -260,7 +260,9 @@ This section explores different ways of deriving quantitative predictions from a
 For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
 The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in terms of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
 Using average log-probs for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
-In the following, we first introduce the relevant notation and terminology, then describe the different options, and finally build and compare probabilistic models for the human choice data around the different condition-level predictors.
+In the following, we first describe the different options of deriving LLM-based predictor terms.
+We then introduce a theoretical cognitive model for comparison.
+Finally, we compare all probabilistic models based on their adequacy of explaining the human choice data.
 
 \begin{figure}
   \centering
@@ -270,7 +272,7 @@ In the following, we first introduce the relevant notation and terminology, then
   \label{fig:measures-overview}
 \end{figure}
 
-\subsection{Notation \& terminology}
+\subsection{LLM-based probabilistic predictions for forced-choice data}
 \label{sec:notat--term}
 
 Let $C$ be the experimental condition of interest (here: the production or interpretation condition).
@@ -329,7 +331,6 @@ Intermediate-scope aggregation performs item-level averaging after mapping score
     \tag*{\textcolor{gray}{[intermediate-scope aggregation]}}
 \end{align*}
 
-
 All three condition-level predictors coincide when there is only one item, of course.
 For more items, wide-scope and intermediate-scope aggregation coincide when $\alpha = 1$.
 In all other cases, the predictors are not guaranteed to be identical.
@@ -338,10 +339,16 @@ Narrow-scope aggregation considers raw scores, not \emph{not} probabilistic pred
 Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
 Similarly, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level.
 
+\subsection{Model predictions from probabilistic pragmatics}
+\label{sec:model-pred-from}
+
+\mf{todo: briefly describe RSA; maybe include matrices as figure?}
+
+
 \subsection{Model fitting, criticims \& comparison}
 \label{sec:model-fitting}
 
-Parameterized predictions $P_{m}(R_{l}, C ; \alpha_{c})$ for models $m \in \set{n,w,i}$ can be assessed in the light of the empirical data from human participants with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
+Parameterized predictions $P_{m}(R_{l}, C ; \alpha_{c})$ for models $m \in \set{n,w,i,p}$ can be assessed in the light of the empirical data from human participants with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
 For each condition $C$ (production and interpretation), each model has a free optimality parameter $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ with a log-Normal prior.
 We also assume that each model has one epsilon parameter per condition, $\epsilon_{c}$, which accounts for random errors in the human data via Laplace smoothing, with a prior $\epsilon_{c} \sim \text{Beta}(1,5)$ favoring small values.
 The resulting likelihood function for model $m$ and data from condition $C$ is a multinomial distribution with central predictor for response $R_{l}$ given by:
@@ -351,7 +358,19 @@ The resulting likelihood function for model $m$ and data from condition $C$ is a
 \end{align*}
 
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of each $\alpha_{c}$ and $\epsilon_{c}$ for each model.
-The usual Bayesian summary statistics for posteriors over model parameters are shown in Figure~XYZ. \mf{TODO: make and include figure}
+The usual Bayesian summary statistics for posteriors over model parameters are shown in Figure~\ref{fig:posterior-stats}.
+
+\begin{figure}
+  \centering
+
+  \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
+
+  \caption{
+    Summary statistics of posterior samples.
+    Black dots show means of the posterior samples, gray lines indicate 95\% credible intervals.
+  }
+  \label{fig:posterior-stats}
+\end{figure}
 
 To assess goodness-of-fit, Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
 As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
@@ -366,10 +385,11 @@ Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narr
 
 \begin{tabular}{lrr}
   \toprule
-  model & production & interpretation \\ \midrule
-  narrow & 0.05 & 0.00 \\
-  wide & 0.51 & 0.00 \\
-  intermediate & 0.49 & 0.26 \\
+  model        & production & interpretation \\ \midrule
+  narrow       & 0.05       & 0.00 \\
+  wide         & 0.51       & 0.00 \\
+  intermediate & 0.49       & 0.26 \\
+  RSA          & 0.50       & 0.52 \\
   \bottomrule \\
 \end{tabular}
 
@@ -377,19 +397,18 @@ Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narr
 \label{tab:Bppp-values}
 \end{table}
 
-A first important conclusion from these results is that there is at least one model which is able to recover the patterns in the data.
+A first important conclusion from these results is that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
 In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.
 On the other hand, another important lesson from this exploration is that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
+
 
 \bigskip
 
 Next, todo:
 
 \begin{itemize}
-  \item make plot for posterior parameters
   \item non-triviality of intermediate-scope model
-  \item maybe: comparison to RSA
   \item predicting item-level data
 \end{itemize}
 
