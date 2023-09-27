@@ -1,6 +1,6 @@
 # dependencies etc.
 source("00-premable.r")
-rerun = TRUE
+rerun = FALSE
 source('00-stan-fit-helpers.R')
 
 #######################################################
@@ -236,6 +236,8 @@ posterior_stats |>
   facet_grid(condition ~ Parameter, scales = "free") +
   coord_flip()
 
+ggsave(filename = "../03-paper/00-pics/posterior-stats.pdf", width = 8, height = 4, scale = 1.0)
+
 #######################################################
 ## get posterior predictives
 #######################################################
@@ -353,18 +355,239 @@ tibble(
   pivot_wider(id_cols = model, names_from = condition, values_from = Bppp_value) |> 
   xtable::xtable()
 
+#######################################################
+## item-level analysis (LLM)
+#######################################################
+
+# prepare data (item-level)
+
+d_llm_prob_prod <- d |> 
+  filter(condition == "production") |> 
+  select(item, starts_with("scores_produ")) |> 
+  mutate(scores_production_distractor = 
+           log(exp(scores_production_distractor1) + exp(scores_production_distractor2))) |> 
+  select(-scores_production_distractor1, -scores_production_distractor2) |> 
+  group_by(item) |> 
+  mutate(n = n()) |>  
+  pivot_longer(-c("item", "n")) |> 
+  separate(name, into = c("Variable", "condition", "response"), sep = "_") |> 
+  select(-Variable) |> 
+  mutate(prob = exp(value)) |>
+  group_by(item, condition) |> 
+  mutate(prob = prob / sum(prob) * n) |> 
+  ungroup()
+
+d_llm_prob_inter <- d |> 
+  filter(condition == "interpretation") |> 
+  select(item, starts_with("scores_inter")) |> 
+  group_by(item) |> 
+  mutate(n = n()) |>  
+  pivot_longer(-c("item", "n")) |> 
+  separate(name, into = c("Variable", "condition", "response"), sep = "_") |> 
+  select(-Variable) |> 
+  mutate(prob = exp(value)) |>
+  group_by(item, condition) |> 
+  mutate(prob = prob / sum(prob) * n) |> 
+  ungroup() 
+
+d_item_analysis <- d_llm_prob_prod |>
+  rbind(d_llm_prob_inter) |>
+  mutate(condition = factor(condition, levels = c('production', 'interpretation'))) |>
+  full_join(d |>
+              select(item, feature_set, position_production, position_interpretation) |>
+              unique(),
+            by = 'item') |>
+  mutate(position = case_when(condition == "production" ~ position_production,
+                              TRUE ~ position_interpretation)) |>
+  # filter(response != "distractor") |>
+  unique() |>
+  pivot_wider(id_cols = c(item, condition, feature_set, position_production, position_interpretation, position),
+              names_from = response, values_from = prob) |> 
+  arrange(condition, item)
+
+# prepare data (item-level, production)
+
+d_counts_items <- d |> 
+  count(condition, item, response) |> 
+  group_by(condition, item) |> 
+  mutate(total = sum(n)) |> 
+  ungroup() |> 
+  mutate(proportion = n / total) |> 
+  arrange(condition, item, response)
+
+data_items_prod <- d_counts_items |> 
+  filter(condition == "production") |> 
+  pivot_wider(id_cols = item, names_from = response, values_from = n, values_fill = 0) |> 
+  select(-item) |> 
+  as.matrix()
+
+pred_items_prod <- d_item_analysis |>
+  filter(condition == "production") |> 
+  group_by(item) |> 
+  summarize(
+    target = mean(target),
+    competitor = mean(competitor),
+    distractor = mean(distractor)
+  ) |> 
+  ungroup() |> 
+  select(-item) |> 
+  as.matrix()
+
+# prepare data (item-level, interpretation)
+
+data_items_inter <- d_counts_items |> 
+  filter(condition == "interpretation") |> 
+  pivot_wider(id_cols = item, names_from = response, values_from = n, values_fill = 0) |> 
+  select(-item) |> 
+  as.matrix()
+
+pred_items_inter <- d_item_analysis |>
+  filter(condition == "interpretation") |> 
+  group_by(item) |> 
+  summarize(
+    target = mean(target),
+    competitor = mean(competitor),
+    distractor = mean(distractor)
+  ) |> 
+  ungroup() |> 
+  select(-item) |> 
+  as.matrix()
+
+# fit models
+
+fit_items_prod <- fit_data(
+  data_items_prod, 
+  array(pred_items_prod, dim = c(nrow(pred_items_prod),1, 3)), 
+  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
+
+fit_items_inter <- fit_data(
+  data_items_inter, 
+  array(pred_items_inter, dim = c(nrow(pred_items_inter),1, 3)),
+  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
+
+# summary stats
+
+produce_summary_prodInt_epsilonAlpha(fit_items_prod, fit_items_inter)
+
+# PPC visualization
+
+# production
+post_pred_items_prod <- 
+  get_posterior_predictives(
+    fit_items_prod,
+    d_counts_items_matrix_prod,
+    "post-pred-prod-item"
+  ) |> 
+  group_by(row) |> 
+  mutate(total = sum(observed)) |> 
+  filter(response == "target") |> 
+  mutate(row = factor(row))
+
+post_pred_items_prod |> 
+  ggplot(aes(x = fct_reorder(row, mean/total), y = observed/total)) +
+  geom_pointrange(aes(y = mean/total, ymin = `|95%`/total, ymax = `95%|`/total), 
+                  size = 0.6, linewidth = 1, color = "lightgray") +
+  geom_point(aes(y = mean/total), color = "darkgray") +
+  geom_point(color = project_colors[2]) +
+  coord_flip() +
+  xlab("item") +
+  ylab("proportion of target") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ggtitle("production")
+
+ggsave(filename = "../03-paper/00-pics/item-prod-postPred.pdf", width = 5, height = 4, scale = 1.0)
+
+post_pred_items_prod |> 
+  ggplot(aes(x = mean/total, observed / total)) +
+  geom_segment((aes(x = 0, y = 0, xend = 1, yend=1)), color = "gray") +
+  geom_point(alpha = 0.8) +
+  xlim(c(0,1)) +
+  ylim(c(0,1)) + 
+  ylab("observed") +
+  xlab("predicted") +
+  ggtitle("production")
+
+ggsave(filename = "../03-paper/00-pics/item-prod-obs-pred.pdf", width = 5, height = 4, scale = 1.0)
+
+# interpretation
+post_pred_items_inter <- 
+  get_posterior_predictives(
+    fit_items_inter,
+    d_counts_items_matrix_inter,
+    "post-pred-inter-item"
+  ) |> 
+  group_by(row) |> 
+  mutate(total = sum(observed)) |> 
+  filter(response == "target") |> 
+  mutate(row = factor(row))
+
+post_pred_items_inter |> 
+  ggplot(aes(x = fct_reorder(row, mean/total), y = observed/total)) +
+  geom_pointrange(aes(y = mean/total, ymin = `|95%`/total, ymax = `95%|`/total), 
+                  size = 0.6, linewidth = 1, color = "lightgray") +
+  geom_point(aes(y = mean/total), color = "darkgray") +
+  geom_point(color = project_colors[2]) +
+  coord_flip() +
+  xlab("item") +
+  ylab("proportion of target") +
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ggtitle("interpretation")
+
+ggsave(filename = "../03-paper/00-pics/item-inter-postPred.pdf", width = 5, height = 4, scale = 1.0)
+
+post_pred_items_inter |> 
+  ggplot(aes(x = mean/total, y =  observed/ total)) +
+  # geom_segment(aes(x = `|95%`/total, xend = `95%|`/total, yend = observed/total), color = "gray", alpha = 0.7) +
+  geom_segment((aes(x = 0, y = 0, xend = 1, yend=1)), color = "gray") +
+  geom_point(alpha = 0.8) +
+  xlim(c(0,1)) +
+  ylim(c(0,1)) + 
+  ylab("observed") +
+  xlab("predicted") +
+  ggtitle("interpretation")
+
+ggsave(filename = "../03-paper/00-pics/item-inter-obs-pred.pdf", width = 5, height = 4, scale = 1.0)
+
+rbind(
+  post_pred_items_prod |> mutate(condition = "production"),
+  post_pred_items_inter |> mutate(condition = "interpretation")
+  ) |>
+  mutate(condition = factor(condition, levels = c("production", "interpretation"))) |> 
+  ggplot(aes(x = mean/total, y =  observed/ total)) +
+  geom_segment((aes(x = 0, y = 0, xend = 1, yend=1)), color = "gray") +
+  geom_point(alpha = 0.8) +
+  facet_grid(. ~ condition) +
+  xlim(c(0,1)) +
+  ylim(c(0,1)) + 
+  ylab("observed proportion of target") +
+  xlab("posterior mean of predicted probability for target") 
+
+ggsave(filename = "../03-paper/00-pics/item-combined-obs-pred.pdf", width = 9, height = 4, scale = 1.0)
 
 
+# Bayesian posterior predictive p-values
+
+message("Bayesian p value for production (LLM, by-item):", extract_bayesian_p(fit_items_prod))
+message("Bayesian p value for interpretation (LLM, by-item):", extract_bayesian_p(fit_items_inter))
 
 
+#######################################################
+## item-level analysis (RSA)
+#######################################################
 
+fit_items_prod_RSA <- fit_data(
+  data_items_prod, 
+  array(rep(c(0.89,0.11,0), each = nrow(data_items_prod)), dim = c(nrow(data_items_prod),1, 3)), 
+  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
 
+fit_items_inter_RSA <- fit_data(
+  data_items_inter, 
+  array(rep(c(0.82,0.18,0), each = nrow(data_items_inter)), dim = c(nrow(data_items_inter),1, 3)),
+  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
 
+# Bayesian posterior predictive p-values
 
-
-
-
-
-
-
-
+message("Bayesian p value for production (RSA, by-item):", extract_bayesian_p(fit_items_prod_RSA))
+message("Bayesian p value for interpretation (RSA, by-item):", extract_bayesian_p(fit_items_prod_RSA))

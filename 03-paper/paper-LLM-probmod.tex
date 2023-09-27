@@ -397,215 +397,65 @@ Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narr
 \label{tab:Bppp-values}
 \end{table}
 
-These results tell us that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
+These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
+Some approaches clearly fail basic checks for statistical goodness-of-fit.
+On the positive side, we also find that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
 In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety. \footnote{
   A potential worry is that the intermediate-scope model is trivial in the sense that it could have predicted \emph{any} data observation.
   Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
 }
-Moreover, another important lesson from this exploration is that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
-Some approaches clearly fail basic checks for statistical goodness-of-fit.
+This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions.
 
 
+\section{Item-level predictions}
+\label{sec:item-level-pred}
 
-\bigskip
+The ability to predict a condition-level averages is useful for applications, and may also be theoretically insightful.
+Nevertheless, for human data, averages over item- or individual-level variation can also be misleading \citep[e.g.,][]{StanovichWest2000:Individual-diff,EstesMaddox2005:Risks-of-Drawin,HaafRouder2019:Some-do-and-som}, as aggregate patterns may be artifacts of systematic variation at the subject- or item-level.
+LLMs do not make individual-level predictions, at least not without further intervention, such as special prompting.
+But the question remains whether the variation in item-level predictions made by LLMs is reflected in the human data.
 
-Next, todo:
+To address this question, we fit a model to the human data at the item-level.
+The data to be explained is the set of all response type counts $\tuple{t_{k}, c_{k}, d_{k}}$ for each item $I_{k}$.
+The model's predictions for the data from item $I_{k}$ from condition $C$ (production or interpretation) are:
+%
+\begin{align*}
+  P_{\text{item}}(R_{l}, C, I_{k}, \alpha_{c}, \epsilon_{c}) \propto \frac{\expo \left( \alpha_{c} \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha_{c} \ S(R_{l'}, I_{k}) \right )} + \epsilon_{c}
+\end{align*}
+%
+In words, we use a single pair or parameters $\alpha_{c}$ and $\epsilon_{c}$, one for each condition, take the LLM's item-level scores for each item, and derive the response probabilities in the exact same way as before.
 
-\begin{itemize}
-  \item non-triviality of intermediate-scope model
-  \item predicting item-level data
-\end{itemize}
+Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM predictor predicts variance which is not borne out by the human data.
+Concretely, the plot shows, for each item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data.
+There is ample variation in the model predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
+So, the model itself predicts systematic variability at the item level.
+The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
+In fact, sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
+In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($~0.338$ for each condition).
+These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
+
+\begin{figure}
+  \centering
+
+  \includegraphics[width = 0.9\linewidth]{00-pics/item-combined-obs-pred.pdf}
+
+  \caption{
+    Item-level prediction-observation plot.
+    Each dot represents an item.
+    The $x$-coordinate represents the mean of the posterior prediction for the target choice probability for the given item.
+    The $y$-coordinate represents the observed proportion of target choices for that item.
+    The gray line (identity function) is the ideal prediction.
+  }
+  \label{fig:item-level-obs-pred}
+\end{figure}
+
+
 
 
 \newpage
 
 \textcolor{red}{from here on: deprecated}
 
-
-\subsection{Vanilla predictions}
-\label{sec:vanilla-predictions}
-
-Since the reference game descriptions and choice options are all text-based, probabilities for discrete-choice predictions of LLMs can be defined as a function of the probabilities assigned to the continuations corresponding to each choice option after processing the game description.
-Concretely, consider either the production or the interpretation case (the case is entirely parallel) and let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the human experiment.
-By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of tasks that the participant group saw and so provides the most fitting counterpart to the human data.
-Each item $I_{k}$ consists of a task description $T_{k}$ and three or four choice options $O_{k1}, \dots, O_{kl}$, which are treated as textual continuations of the task description (see Appendix~\ref{sec:examples-items-llm} for an example).
-
-If a choice option $O_{ki} = w$ is a single word, like in the production condition, an LLM's prediction can simply be defined as the (normalized) next-word probability $P_{\text{LLM}} (w \mid T_{k})$.
-But choice options can be strings of more than one word in the interpretation condition.
-The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in term of \emph{average next-token log probabilities} gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
-
-We therefore define the conditional probability of producing $O_{ki} = w_{ki1}, \dots w_{kin}$ after task description $T_{k}$ in terms of average surprisal \mf{fix formula; conditioning on whole sequence not just last word}:
-%
-\begin{align*}
-P(O_{ki} \mid T_{k}) \propto \expo \left [  \frac{1}{n} \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki(j-1)} \right) \right ] \,,
-\end{align*}
-%
-where the normalization is over the different choice options $O_{k1}, \dots, O_{kl}$.
-Notice that this definition in terms of ``log-average-exp'' reduces to simple next-word probability if $O_{ki}$ has only one word.
-
-
-Finally, we determine the non-normalized probability score $S(R_{l})$ of a \emph{response type} $R_{l}$ (target, competitor, or distractor), by averaging, over all items $k$, the probabilities $P(O_{ki} \mid T_{k})$ of all choice options $O_{ki} \in F(R_{l}, I_{k})$ that correspond to this type in item $I_{k}$:
-%
-\begin{align*}
-S(R_{l}) = \frac{1}{m} \sum_{k=1}^{m} \sum_{O_{ki} \in F(R_{l}, I_{k})} P(O_{ki} \mid T_k)\,.
-\end{align*}
-%
-Finally, the model's \textit{vanilla predictions} are obtained by normalizing these scores:
-%
-\begin{align*}
-\text{Prediction}(R_{l}) = \frac{S(R_{l})}{\sum_{l'} S(R_{l'})}\,.
-\end{align*}
-%
-The vanilla predictions obtained from GPT-3.5 in this way are shown on the right-hand side in Figure~\ref{fig:refgame-counts}.
-
-
-
-
-\subsection{Adding a link function: the \(\alpha\)-model}
-\label{adding-a-link-function-the-alpha-model}
-
-% source code (legacy) showing that temperature applies /before/ softmax of logits to probs https://huggingface.co/transformers/v3.1.0/_modules/transformers/generation_utils.html
-
-
-On the surface, the LLM predictions show a similar ordinal pattern as the human data.
-The target option is preferred over the competitor, which is in turn preferred over the distractor option(s).
-Moreover, the amount of target choices is higher in the production condition than in the interpretation condition.
-However, the LLM predictions have lower entropy than the distribution of the human answers.
-The LLM prediction could be said to be more ``optimized'', having far fewer distractor choices and a higher ratio of target choices than the human data.
-
-In statistical modeling, a standard way to capture degrees of variation around a predictor of central tendency is to introduce a suitable parameterized link function.
-Similarly, a common decoding strategy for causal LLMs is to use softmax with non-trivial optimization parameter $\alpha$ when transforming the model's latent logits into probabilities.
-Expressed in terms of probabilities, not logits, this is equivalent to using a power-law link function \citep{WorthyMaddox2008:Ratio-and-Diffe} with variable parameter \(\alpha \ge 0\), so that the $\alpha$-model's predictions are defined as:
-
-\[\text{Prediction}(R_{l}, \alpha) = \frac{P(R_{l})^\alpha}{\sum_{l'} P(R_{l})^\alpha}\]
-
-The predictions of the previous vanilla model are then a special case, assuming a fixed \(\alpha =1\).
-
-Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of \(\alpha\), once for the production data and the model's predictions for the production condition, and once for the interpretation side.
-In both cases, the model uses a single \(\alpha\) with a log-normal prior, \(\alpha \sim \text{log-Normal}(0.5,1)\) and the obvious multinomial likelihood function.
-The usual Bayesian point and interval summary statistics for the two inferences are: \mf{insert proper table with reproducible numbers}
-
-\begin{verbatim}
-# A tibble: 3 x 4
-  Parameter        `|95%`    mean `95%|`
-  <chr>             <dbl>   <dbl>  <dbl>
-1 production        0.343  0.402  0.459
-2 interpretation    0.348  0.414  0.478
-3 diff. prod-inter -0.101 -0.0124 0.0709
-\end{verbatim}
-
-We see that only values for \(\alpha\) below 1 are credible, which is in line with the previous observation that the human data distribution is more entropic than the vanilla model predictions.
-The table also shows posterior summary statistics for a vector of derived samples, capturing the difference between estimated values for $\alpha$ between conditions.
-These differences are not credibly different from zero, suggesting that the same \(\alpha\) parameter might be used for both production and interpretation cases (at least for the data at hand).
-
-Figure~\ref{fig:PPC-alpha-model} shows the posterior predictive distributions from the two model fits.
-The colored bars show the observed counts.
-The black dots are the means of the posterior predictives and the black bars given the 95\% HDI of the posterior predictive distribution.
-The data observations lie inside the posterior predictive 95\% HDI for the interpretation condition, suggesting that the fitted model would predict data that looks similar to what the model was condition on.
-For the production data, on the other hand, this is not the case.
-Even with the ability to fit \(\alpha\) to the data, the model is not able to reproduce the observed pattern in the data.
-
-\begin{figure}[t]
-  \centering
-
-  \includegraphics[width = 0.9 \textwidth]{00-pics/PPC-alpha-model.pdf}
-
-  \caption{(Visual) posterior predictive checks for the $\alpha$-model.
-    The bars show the observed counts for each category.
-    Black dots are means of the posterior predictive distribution.
-    Black lines indicate 95\% HDIs.
-  }
-  \label{fig:PPC-alpha-model}
-\end{figure}
-
-
-Intuitively, there are two reasons for the model's failure on production data.
-First, since the model predicts a very low rate of distractor choices, we would need a rather low \(\alpha\) to increas this probability.
-But, second, for low-ish values of \(\alpha\), the model cannot predict the large probability ratio in favor of target choice over competitor choices.
-In sum, the model is unable to capture the quantitive patter (i.e., the set of probability ratios among choice options) adequately for the production case.
-
-\mf{maybe include: (i) posterior predictive \(p\)-value; (ii) comment that doing soft-max on probabilities (not log-probs) is a far worse model}
-
-\subsection{Adding noise: the \(\alpha \epsilon\)-model}
-\label{sec:adding-noise-the-alpha-epsilon-model}
-
-The $\alpha$-model's  failure to predict the human production is due, at least in part, to under-predicting the rate at which human participants selected the distractor.
-But a human selection of a distractor is, most naturally, explained as an error anyway.
-In experimental modeling work, it is not uncommon to include the possibility that some participants might be random guessers, but to use the data to infer the extent of guessing in the population \citep{LeeWagenmakers2013:Bayesian-Cognit}.
-We therefore extent the previous $\alpha$-model with another parameter \(\epsilon \sim \text{Beta}(1,3)\), indicating the proportion of random guesses in the data set.
-The predictions of the $\alpha-\epsilon$-model are defined as:
-
-\begin{align*}
-  \text{Prediction}(o_i, \alpha, \epsilon) = (1-\epsilon) \ \text{Prediction}(o_i, \alpha) + \epsilon \ \tuple{\frac{1}{3}, \frac{1}{3}, \frac{1}{3}}
-\end{align*}
-
-Summary statistics for the Bayesian posterior are shown in the table below \mf{insert label and ref}.
-We see that \(\alpha\) now has higher estimates for the production model, because \(\epsilon\)-errors can help explain the distractor choices.
-The \(\alpha\) estimated for the production data is now credibly higher than for the interpretation data, which makes sense, given that the production condition is intuitively easier.
-There is no credible difference in estimated \(\epsilon\) between production and interpretation model.
-\mf{insert proper table with reproducible numbers}
-
-\begin{verbatim}
-# A tibble: 6 x 5
-  Parameter     `|95%`   mean `95%|` condition
-  <chr>          <dbl>  <dbl>  <dbl> <chr>
-1 alpha      0.865     1.04   1.24   production
-2 epsilon    0.0306    0.0498 0.0705 production
-3 alpha      0.362     0.483  0.619  interpretation
-4 epsilon    0.0000116 0.0293 0.0657 interpretation
-5 alpha      0.317     0.561  0.784  diff. prod-inter
-6 epsilon   -0.0246    0.0205 0.0603 diff. prod-inter
-\end{verbatim}
-
-\begin{figure}[t]
-  \centering
-
-  \includegraphics[width = 0.9 \textwidth]{00-pics/PPC-alpha-eps-model.pdf}
-
-    \caption{(Visual) posterior predictive checks for the $\alpha\epsilon$-model.
-    The bars show the observed counts for each category.
-    Black dots are means of the posterior predictive distribution.
-    Black lines indicate 95\% HDIs.
-  }
-
-  \label{fig:PPC-alpha-eps-model}
-\end{figure}
-
-Figure~\ref{fig:PPC-alpha-eps-model} shows the posterior predictive checks for the \(\alpha\epsilon\)-model.
-When accommodating for an \(\epsilon\) chance of random error, the LLM-based models do not fail the visual check: once conditioned on the data, they are no longer surprised by it.
-This may be a low bar to pass, but it is nonetheless reassuring that probabilistic predictions obtained from an LLM can serve as input to a probabilistic model predicting quantitative patterns in human choice data.
-
-Moreover, it is not a trivial achievement to capture the human response patterns with an $\alpha\epsilon$-model.
-It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, it is possible to explain \emph{any} data observation.
-But this is not so.
-Figure~\ref{fig:prediction-range} shows the range of predictions that the $\alpha\epsilon$-model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
-There are ranges of parameter values which the model does not explain for the vanilla LLM predictions at hand.
-For example, the model does not predict well cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
-
-
-\begin{figure}[t]
-  \centering
-
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
-  %
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
-
-  \caption{
-    Range of predictions the \(\alpha\epsilon\) model makes for any pair of parameter values under the given vanilla LLM predictions.
-    The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
-    The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that target probability is bigger than competitor probability, which in turn is bigger than distractor probability.
-    The blue area is the subspace of predictions achievable under the $\alpha\epsilon$-model.
-    The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
-    The yellow dot is the vanilla LLM prediction.
-  }
-  \label{fig:prediction-range}
-\end{figure}
-
-
-\newpage
-\mf{FIRST IMPROVED DRAFT UP TO HERE}
-
-\newpage
 
 \section{Item-level variation}
 \label{sec:item-level-variation}
