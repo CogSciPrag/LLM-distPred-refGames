@@ -268,7 +268,7 @@ Finally, we compare all probabilistic models based on their adequacy of explaini
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
   \caption{Schematic overview over three different approaches of obtaining condition-level predictions by aggregating over item-level scores. The basic item-level score is average next-word log probability. This can be taken as-is into averaging (narrow-scope aggregation), or first transformed from log- into probability-space, either with optimization before (wide scope) or after averaging (intermediate scope).
-  The notation for the condition-level options uses pseudo-code to more clearly reflect the relevant operator scope differences (where triangles represent the pipe operator).}
+  The notation for the condition-level options uses pseudo-code to more clearly reflect the relevant operator scope differences (where triangles represent the pipe operator). \mf{include dots in mean function, too}}
   \label{fig:measures-overview}
 \end{figure}
 
@@ -360,17 +360,40 @@ The resulting likelihood function for model $m$ and data from condition $C$ is a
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of each $\alpha_{c}$ and $\epsilon_{c}$ for each model.
 The usual Bayesian summary statistics for posteriors over model parameters are shown in Figure~\ref{fig:posterior-stats}.
 
-\begin{figure}
+\begin{table}[ht]
   \centering
 
-  \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
+  % \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
+
+  \begin{tabular}{lllrrr}
+    \toprule \addlinespace[1ex]
+    model        & condition      & Parameter & $|$95\% & mean & 95\%$|$ \\
+    \midrule  \addlinespace[1ex]
+    narrow       & production     & $\alpha$     & 0.19    & 0.22 & 0.26 \\
+                 &                & $\epsilon$   & 0.00    & 0.04 & 0.11 \\
+                 & interpretation & $\alpha$     & 0.15    & 0.18 & 0.20 \\
+                 &                & $\epsilon$   & 0.00    & 0.02 & 0.06 \\ \addlinespace[0.75ex]
+    intermediate & production     & $\alpha$     & 0.86    & 1.04 & 1.22 \\
+                 &                & $\epsilon$   & 0.08    & 0.13 & 0.18 \\
+                 & interpretation & $\alpha$     & 0.36    & 0.48 & 0.60 \\
+                 &                & $\epsilon$   & 0.00    & 0.05 & 0.12 \\ \addlinespace[0.75ex]
+    wide         & production     & $\alpha$     & 0.22    & 2.69 & 8.79 \\
+                 &                & $\epsilon$   & 0.08    & 0.13 & 0.19 \\
+                 & interpretation & $\alpha$     & 0.19    & 1.08 & 6.03 \\
+                 &                & $\epsilon$   & 0.00    & 0.06 & 0.18 \\ \addlinespace[0.75ex]
+    RSA          & production     & $\alpha$     & 0.86    & 1.05 & 1.23 \\
+                 &                & $\epsilon$   & 0.08    & 0.13 & 0.17 \\
+                 & interpretation & $\alpha$     & 0.09    & 0.20 & 0.30 \\
+                 &                & $\epsilon$   & 0.10    & 0.15 & 0.20 \\ \addlinespace[0.25ex]
+    \bottomrule \\
+  \end{tabular}
 
   \caption{
     Summary statistics of posterior samples.
-    Black dots show means of the posterior samples, gray lines indicate 95\% credible intervals.
+    Number indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
   }
   \label{fig:posterior-stats}
-\end{figure}
+\end{table}
 
 To assess goodness-of-fit, Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
 As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
