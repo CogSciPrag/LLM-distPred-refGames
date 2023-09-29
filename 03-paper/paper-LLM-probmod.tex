@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[fleqn]{article}
 
 \usepackage{arxiv}
 
@@ -253,6 +253,43 @@ For example, in previous forced-choice reference games with human participants w
   \label{fig:refgame-counts}
 \end{figure}
 
+\section{Model predictions from probabilistic pragmatics}
+\label{sec:model-pred-from}
+
+\mf{todo: briefly describe RSA; maybe include matrices as figure?}
+
+
+
+
+Literal listener
+
+\begin{align*}
+ P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u) P(s)
+\end{align*}
+
+Pragmatic speaker
+
+\begin{align*}
+  P_{S}(u \mid s, \alpha) = \text{SoftMax}(\log P_{L_{0}}(s \mid u), \alpha)
+\end{align*}
+
+Pragmatic listener
+
+\begin{align*}
+  P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P(s)
+\end{align*}
+
+Overall model predictions for condition $C$ (interpretation or production)
+
+\begin{figure}
+  \centering
+  \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
+  \caption{
+    Example of predictions from the RSA model (with $\alpha=1$).
+  }
+  \label{fig:RSA-example}
+\end{figure}
+
 \section{LLM predictions for reference games}
 \label{llm-predictions-for-reference-games}
 
@@ -338,12 +375,6 @@ Conceptually, the main difference is what each measure considers to be the basic
 Narrow-scope aggregation considers raw scores, not \emph{not} probabilistic predictions at the item level.
 Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
 Similarly, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level.
-
-\subsection{Model predictions from probabilistic pragmatics}
-\label{sec:model-pred-from}
-
-\mf{todo: briefly describe RSA; maybe include matrices as figure?}
-
 
 \subsection{Model fitting, criticims \& comparison}
 \label{sec:model-fitting}
