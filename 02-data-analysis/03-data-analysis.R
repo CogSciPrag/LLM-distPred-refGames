@@ -1,6 +1,6 @@
 # dependencies etc.
 source("00-premable.r")
-rerun = FALSE
+rerun = TRUE
 source('00-stan-fit-helpers.R')
 
 #######################################################
@@ -137,7 +137,7 @@ model_predictions_vanilla <- d_llm_prob_averages |>
 model_predictions_vanilla
 
 ggsave(plot = model_predictions_vanilla, 
-       filename = "../04-paper/00-pics/model-predictions-vanilla.pdf", 
+       filename = "../03-paper/00-pics/model-predictions-vanilla.pdf", 
        height = 4, width = 6, scale = 1.1)
 
 #######################################################
@@ -193,8 +193,8 @@ d_inter_item[is.na(d_inter_item)] = 0
 ## RSA model predictions (Vanilla, alpha = 0)
 #######################################################
 
-RSA_pred_prod  <- array(c(0.89, 0.11, 0), dim=c(1,1,3))
-RSA_pred_inter <- array(c(0.82, 0.18, 0), dim=c(1,1,3))
+RSA_pred_prod  <- array(c(2/3, 1/3, 0), dim=c(1,1,3))
+RSA_pred_inter <- array(c(0.6, 0.4, 0), dim=c(1,1,3))
 
 #######################################################
 ## fit data
@@ -228,6 +228,7 @@ posterior_stats <- rbind(
   model     = factor(model, levels = rev(c("narrow", "wide", "intermediate", "RSA")))
 )
 
+# plot
 posterior_stats |> 
   filter(condition != "diff. prod-inter") |> 
   ggplot() +
@@ -237,6 +238,14 @@ posterior_stats |>
   coord_flip()
 
 ggsave(filename = "../03-paper/00-pics/posterior-stats.pdf", width = 8, height = 4, scale = 1.0)
+
+# summary stats as table
+
+posterior_stats |> 
+  filter(!is.na(condition)) |> 
+  select(c(6,5,1,2,3,4)) |> 
+  xtable::xtable()
+  
 
 #######################################################
 ## get posterior predictives
@@ -475,7 +484,7 @@ produce_summary_prodInt_epsilonAlpha(fit_items_prod, fit_items_inter)
 post_pred_items_prod <- 
   get_posterior_predictives(
     fit_items_prod,
-    d_counts_items_matrix_prod,
+    data_items_prod,
     "post-pred-prod-item"
   ) |> 
   group_by(row) |> 
@@ -514,7 +523,7 @@ ggsave(filename = "../03-paper/00-pics/item-prod-obs-pred.pdf", width = 5, heigh
 post_pred_items_inter <- 
   get_posterior_predictives(
     fit_items_inter,
-    d_counts_items_matrix_inter,
+    data_items_inter,
     "post-pred-inter-item"
   ) |> 
   group_by(row) |> 
@@ -579,12 +588,12 @@ message("Bayesian p value for interpretation (LLM, by-item):", extract_bayesian_
 
 fit_items_prod_RSA <- fit_data(
   data_items_prod, 
-  array(rep(c(0.89,0.11,0), each = nrow(data_items_prod)), dim = c(nrow(data_items_prod),1, 3)), 
+  array(rep(c(2/3,1/3,0), each = nrow(data_items_prod)), dim = c(nrow(data_items_prod),1, 3)), 
   model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
 
 fit_items_inter_RSA <- fit_data(
   data_items_inter, 
-  array(rep(c(0.82,0.18,0), each = nrow(data_items_inter)), dim = c(nrow(data_items_inter),1, 3)),
+  array(rep(c(0.6,0.4,0), each = nrow(data_items_inter)), dim = c(nrow(data_items_inter),1, 3)),
   model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
 
 # Bayesian posterior predictive p-values
