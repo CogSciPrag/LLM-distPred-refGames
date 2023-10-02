@@ -256,36 +256,57 @@ For example, in previous forced-choice reference games with human participants w
 \section{Model predictions from probabilistic pragmatics}
 \label{sec:model-pred-from}
 
-\mf{todo: briefly describe RSA; maybe include matrices as figure?}
+Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,FrankeDegen2015:Reasoning-in-Re} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
+Common to these approaches is that they derive or define, based on some explicit conceptual motivation, parameterized stochastic policy, $P_{S}(u \mid s; \theta_{S})$ for a speaker's choice of expression or utterance $u$ given a referent or state $s$ to describe, modulated by parameters $\theta_{S}$; and a stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the probability of choosing a referent $s$ for utterance $u$.
+As a concrete example, we introduce the Rational Speech Act (RSA) model first introduced in this form by \citet{FrankGoodman2012:Predicting-Prag} \citep[for overview see][]{FrankeJager2015:Probabilistic-p,GoodmanFrank2016:Pragmatic-Langu,StevensBenz2018:Game-Theoretic-,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
 
-
-
-
-Literal listener
-
+The RSA model defines pragmatic reasoning as a sequence of iterated (soft-)optmization of policies, grounding out in literal interpretation.
+If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping each pair of state $s$ and utterance $u$ to a (binary) truth-value, and if $P_{s}$ is a prior over states, a literal listener policy is defined as:
+%
 \begin{align*}
  P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u) P(s)
 \end{align*}
-
-Pragmatic speaker
-
+%
+The pragmatic speaker soft-optimizes the choice of utterance to minimize the literal listener's surprisal for the to-be-communicated state:
+%
 \begin{align*}
-  P_{S}(u \mid s, \alpha) = \text{SoftMax}(\log P_{L_{0}}(s \mid u), \alpha)
+  P_{S}(u_{i} \mid s, \alpha) & = \text{SoftMax}(\myvec{u}_{s}, \alpha)_{i}\,, \text{ where } \\
+  \myvec{u}_{s} & = \tuple{\log P_{L_{0}}(s \mid u_{1}), \dots , \log P_{L_{0}}(s \mid u_{n})}
 \end{align*}
-
-Pragmatic listener
-
+%
+The softmax function takes a vector of non-normalized scores $\myvec{s}$ and outputs a probability distribution in which odds are proportional to score differences, modulated by optimality parameter $\alpha$:
+%
+\begin{align*}
+ \text{SoftMax}(\myvec{s}, \alpha) = \myvec{p}, \text{where } p_{i} \propto \expo \left (\alpha p_{i} \right )
+\end{align*}
+%
+Finally, the pragmatic listener is defined as the policy resulting from applying Bayes rule, solving the inverse-problem for the previously define speaker policy:
+%
 \begin{align*}
   P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P(s)
 \end{align*}
 
-Overall model predictions for condition $C$ (interpretation or production)
+Figure~\ref{fig:RSA-example} gives example calculations (assuming flat priors and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
+For $\alpha=1$, the model predicts that the probability of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{0.6, 0.4, 0}$ for the interpretation condition.
+Increasing $\alpha$ will increase the odds of target over competitor choices.
+Yet, the model also predicts probability zero for distractor choices, so that the human data, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
+It is therefore common to include a random error probability for each choice \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, such as via Laplace smoothing: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
+\begin{align*}
+  P_{r}(R_{l}, , C; \alpha_{c} \epsilon_{c}) \propto P_{r}(R_{l}, C; \alpha_{c}) +  \frac{\epsilon_{c}}{3}
+\end{align*}
+
+
+\mf{two-parameters, can be fitted by Bayes, results in Figure ...}
+
+
 
 \begin{figure}
   \centering
   \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
   \caption{
     Example of predictions from the RSA model (with $\alpha=1$).
+    The semantic meaning is shown as a matrix of binary truth-values.
+    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents), assume $\alpha=1$ and are shown as row-stochastic matrices.
   }
   \label{fig:RSA-example}
 \end{figure}
@@ -385,7 +406,7 @@ We also assume that each model has one epsilon parameter per condition, $\epsilo
 The resulting likelihood function for model $m$ and data from condition $C$ is a multinomial distribution with central predictor for response $R_{l}$ given by:
 %
 \begin{align*}
-  P(R_{l}) \propto P_{m}(R_{l}, C; \alpha_{c}) +  \epsilon_{c}
+  P(R_{l}, , C; \alpha_{c} \epsilon_{c}) \propto P_{m}(R_{l}, C; \alpha_{c}) +  \frac{\epsilon_{c}}{3}
 \end{align*}
 
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of each $\alpha_{c}$ and $\epsilon_{c}$ for each model.
