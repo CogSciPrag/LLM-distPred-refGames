@@ -36,7 +36,8 @@
 % Statistical models based on LLM predictions
 % LLMs fuel statistical models for full distributional predictions of human experimental data
 % Large language models for full distributional predictions of human experimental data
-\title{Beyond the best guess: Statistical modeling with predictors from large language models}
+% Statistical modeling with predictors from large language models
+\title{Beyond the best guess: Distributional predictions from large language models for human forced-choice data}
 
 % Here you can change the date presented in the paper title
 %\date{September 9, 1985}
@@ -117,55 +118,54 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \maketitle
 
 \begin{abstract}
-	{\textcolor{gray}{\lipsum[1]}}
+	{\textcolor{gray}{fill me}}
 \end{abstract}
 
 
 % keywords can be removed
 % \keywords{First keyword \and Second keyword \and More}
 
-\section{Motivation}
-\label{motivation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-With the advent of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al}, large language models (LLMs) have become powerful technologies that excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun} \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and}, especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
-Recently an increasing number of diverse applications has gone beyond using LLMs out-of-the-box, based on their single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
-
-
-\begin{itemize}
-  \item tool use
-  \item AutoGPT
-  \item prompt-engineering
-  \item structured reasoning
-  \item for translation to programms \citep{WongGrand2023:From-Word-Model}
-\end{itemize}
+The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}, especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
+Recently an increasing number of diverse applications has gone beyond using LLMs out-of-the-box, i.e., based on their single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
+Examples aimed at improving output quality include sophisticated prompting \citep{LiuLiu2022:Generated-Knowl}, structured reasoning or ``neuro-symnolic AI'' \citep{CreswellShanahan2022:Selection-Infer}, or applications of LLMs as scoring functions in open-ended applications \citep{ZhangLehman2023:OMNI:-Open-ende}.
+Other work, uses LLMs as part of bigger programs to build towards something more akin to explanatory cognitive models \citep{WongGrand2023:From-Word-Model}.
+\mf{enlarge briefly, include more references}
 
 For all of these applications, it is crucial to understand what LLMs can or cannot reliable do.
+The prevalent approach towards understanding the performance of LLMs relies on benchmark testing which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``true answer'' exists, averaged over many instances of this task.
+Benchmark-driven assessments are very useful to systematically study the effects of scale, e.g., in an engineering-oriented context \citep[e.g.,][]{srivastava2023-BIGbench}.
+Other recent work is more psychologically oriented and asks to what extent LLM performace is ``human-like.''
+LLM performance is therefore compared to human choice behavior in psychological experiments to investigate whether LLMs predict patterns of human answer behavior qualitatively \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
+Notably, some work goes even further and asks whether LLMs can also make adequate \emph{quantitative predictions}.
+For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as measures of (self-paced) reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
+
+This work seeks to extend the investigation in the human-likeness of LLM predictions even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
 
 \begin{itemize}
-  \item benchmarks don't give us that
-  \item mechanistic
-  \item behavioral probing
+  \item distributional predictions are more informative, so beneficial for ``understanding'' and for ``applications''
+  \item for ``understanding LLMs'' more informative, richer predictions can be more diagnostic about LLM capabilities (risks and potentials)
+  \item reliable full-distributional predictions from LLMs can be useful in applications, e.g., relative scoring based on elusive intuitive concepts like ``relevance'' or ``interestingness''
 \end{itemize}
 
-Not yet addressed: derive full distribution over choice options and use for explanatory modeling.
-
-\bigskip
-
-\begin{color}{gray}
-\textbf{SNIPPETS}
-
-Recent work comparing LLMs to human choice behavior in psychological experiments has focused on whether LLMs predict patterns of human answer behavior qualitatively.
-The bulk of this work looks at the answers generated by the LLMs.
-In general, much less attention has been payed to whether LLMs can also make adequate \emph{quantitative predictions} that match human choice probabilities in suitable experiments.
-(Notable exceptions at the interface of NLP and computational psycholinguistics (Linzen, Hu, Rabovsky \ldots).)
-
-This work looks at whether probabilistic predictions of GTP-3.5 match human answer patterns also quantitatively.
-Rather than looking at LLMs as behavior-generating black box, which we want to understand based on its input-output behvaior, we explore whether we can use LLMs as a predictive probabilistic model, or at least as a component of one, aiming to predict the full distribution of human experimental data.
-\end{color}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+\label{motivation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment: Reference games}
 \label{experiment-reference-games}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}
   \centering
@@ -253,8 +253,11 @@ For example, in previous forced-choice reference games with human participants w
   \label{fig:refgame-counts}
 \end{figure}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Model predictions from probabilistic pragmatics}
 \label{sec:model-pred-from}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,FrankeDegen2015:Reasoning-in-Re} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
 Common to these approaches is that they derive or define, based on some explicit conceptual motivation, a parameterized stochastic policy, $P_{S}(u \mid s; \theta_{S})$, modulated by parameters $\theta_{S}$, for a speaker's choice of expression or utterance $u$ given a referent or state $s$, which the speaker wants to communicate;
@@ -309,8 +312,11 @@ It is therefore common to include a random error probability for each choice \ci
 where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
 The result is a four-parameter model, one pair of parameters per condition, which provides a likelihood function for the categorical choice data and so can be fitted to the data and compared against other probabilistic models providing a likelihood function for the same data.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{LLM predictions for reference games}
 \label{llm-predictions-for-reference-games}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 This section explores different ways of deriving a probabilistic likelihood function for the human data from a Large Language Model.
 For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
@@ -492,8 +498,10 @@ In other words, there is a way of deriving predictor values for condition-level 
 This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Item-level predictions}
 \label{sec:item-level-pred}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The ability to predict a condition-level averages is useful for applications, and may also be theoretically insightful.
 Nevertheless, for human data, averages over item- or individual-level variation can also be misleading \citep[e.g.,][]{StanovichWest2000:Individual-diff,EstesMaddox2005:Risks-of-Drawin,HaafRouder2019:Some-do-and-som}, as aggregate patterns may be artifacts of systematic variation at the subject- or item-level.
@@ -534,8 +542,11 @@ These results suggest that LLM-based probabilistic predictions may imply item-le
   \label{fig:item-level-obs-pred}
 \end{figure}
 
-\hypertarget{Discussion}{%
-\section{Conclusion}\label{conclusion}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+\label{conclusion}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 It is not entirely ludicrous to use numerical predictions from LLMs are
 part of predictive probabilistic models. But we have to be careful.
@@ -555,8 +566,11 @@ LLMs are models or individual- or item-level predictors.
 \newpage
 \appendix
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Screenshots from the online experiment with human participants}
 \label{sec:scre-from-online}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Figure~\ref{fig:refgame-screenshot-production} shows a trial from the production condition, Figure~\ref{fig:refgame-screenshot-interpretation} one for the interpretation condition of the online experiment.
 
@@ -609,8 +623,11 @@ Your answer:
 I would choose the word
 \end{verbatim}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Range of prior predictions of intermediate-scope model}
 \label{sec:range-prior-pred}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
 The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
