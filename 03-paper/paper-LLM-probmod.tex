@@ -153,11 +153,48 @@ This work seeks to extend the investigation in the human-likeness of LLM predict
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Motivation}
+\section{Motivation: Why care for distributional predictions?}
 \label{motivation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+The prevalent approach to assessing LLM performance based on benchmark-testing quantifies accuracy for a task based on a ``winner-takes-all'' (WTS) strategy.
+Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances all belonging to the same task, or items belonging to the same (logical) condition in a behavioral experiment.
+% For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
+Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice alternatives $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
+The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:
+%
+\begin{align*}
+  S\left( y_{ki}, x_{k} \right) = \log P_{\text{LLM}} \left(y_{ki} \mid x_{k} \right) =  \sum_{j=1}^{|y_{ki}|} \log P_{\text{LLM}} \left(w_{kij} \mid x_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+\end{align*}
+%
+The WTS approach considers item $I_{k}$ to be answered correctly if the designated ``goal answer'' $y_{ki}$ is among the options that maximize the item-level score.
+The accuracy of the LLM on the given task is the proportion of items in which the correct answer is selected.
 
+While generally a pragmatic and useful approach, there are several reasons why going beyond the best guess can be beneficial.
+Consider first a high-level conceptual argument.
+If task performance is categorical (in the most extreme case: binary), somewhere along the path from a numerical item-level score to accuracy a discontinuity has to be introduced.
+Every such discontinuity bottleneck entails loss of information.
+As this information might be useful, discontinuity should ideally happen as late as possible; or even better: not at all, unless it is irrelevant.
+Consequently, the question becomes: when is the additional information inherent in the scores (not) relevant for assessing LLM performance?
+
+Imagine that there are two options, and that the goal answer is a small $\epsilon$ better in 80\% of the $m$ items, and otherwise worse.
+The WTS strategy predicts an accuracy of 0.8.
+This number is useful as a performance measure for applications in which the LLM is used in exactly the way the WTS strategy describes, e.g., any implementation which is outcome equivalent to greedy decoding with rejection sampling on a domain that contains only the available options.
+For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
+As only the best option will be chosen, that information is irrelevant.
+But if an application uses anything other than greedy-like responses, the accuracy score of 0.8 may be misleading.
+If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy with virtual certainty, so the accuracy for choosing the goal answer in such an application scenario would around 0.4.\footnote{The probability of the second option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 1 in the remaining 20\%.}
+This is a categorical shift from predominantly goal answer to predominantly non-goal answer.
+The argument holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two accuracy scores would in principle be more favorable for selecting the goal answers.
+Two things matter:
+(i)
+whether the LLM would be more likely used in cases where greedy-like evaluation is required; and
+(ii)
+what the nature of the item-level variation is.
+
+\bigskip
+
+\mf{to be continued}
 
 
 
