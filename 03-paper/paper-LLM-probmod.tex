@@ -130,7 +130,8 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}, especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
+The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
+% especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
 Recently an increasing number of diverse applications has gone beyond using LLMs out-of-the-box, i.e., based on their single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
 Examples aimed at improving output quality include sophisticated prompting \citep{LiuLiu2022:Generated-Knowl}, structured reasoning or ``neuro-symnolic AI'' \citep{CreswellShanahan2022:Selection-Infer}, or applications of LLMs as scoring functions in open-ended applications \citep{ZhangLehman2023:OMNI:-Open-ende}.
 Other work, uses LLMs as part of bigger programs to build towards something more akin to explanatory cognitive models \citep{WongGrand2023:From-Word-Model}.
@@ -139,12 +140,12 @@ Other work, uses LLMs as part of bigger programs to build towards something more
 For all of these applications, it is crucial to understand what LLMs can or cannot reliable do.
 The prevalent approach towards understanding the performance of LLMs relies on benchmark testing which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``true answer'' exists, averaged over many instances of this task.
 Benchmark-driven assessments are very useful to systematically study the effects of scale, e.g., in an engineering-oriented context \citep[e.g.,][]{srivastava2023-BIGbench}.
-Other recent work is more psychologically oriented and asks to what extent LLM performace is ``human-like.''
+Other recent work is more psychologically oriented and asks to what extent LLM performance is ``human-like.''
 LLM performance is therefore compared to human choice behavior in psychological experiments to investigate whether LLMs predict patterns of human answer behavior qualitatively \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
-Notably, some work goes even further and asks whether LLMs can also make adequate \emph{quantitative predictions}.
+There is also some work investigating whether LLMs can make adequate \emph{quantitative predictions}.
 For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as measures of (self-paced) reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
 
-This work seeks to extend the investigation in the human-likeness of LLM predictions even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
+This work seeks to extend the investigation of the human-likeness of LLM predictions even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
 
 \begin{itemize}
   \item distributional predictions are more informative, so beneficial for ``understanding'' and for ``applications''
@@ -157,11 +158,15 @@ This work seeks to extend the investigation in the human-likeness of LLM predict
 \label{motivation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The prevalent approach to assessing LLM performance based on benchmark-testing quantifies accuracy for a task based on a ``winner-takes-all'' (WTS) strategy.
-Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances all belonging to the same task, or items belonging to the same (logical) condition in a behavioral experiment.
+The prevalent approach to assessing LLM performance based on benchmark-testing quantifies accuracy for a multiple-choice task with a ``winner-takes-all'' (WTS) strategy.
+Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
 Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice alternatives $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
-The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:
+The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
+  More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
+  From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
+  For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
+}
 %
 \begin{align*}
   S\left( y_{ki}, x_{k} \right) = \log P_{\text{LLM}} \left(y_{ki} \mid x_{k} \right) =  \sum_{j=1}^{|y_{ki}|} \log P_{\text{LLM}} \left(w_{kij} \mid x_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
@@ -177,7 +182,7 @@ Every such discontinuity bottleneck entails loss of information.
 As this information might be useful, discontinuity should ideally happen as late as possible; or even better: not at all, unless it is irrelevant.
 Consequently, the question becomes: when is the additional information inherent in the scores (not) relevant for assessing LLM performance?
 
-Imagine that there are two options, and that the goal answer is a small $\epsilon$ better in 80\% of the $m$ items, and otherwise worse.
+Imagine that there are two options, and that the goal answer is a small $\epsilon$ better in 80\% of the task's items, and otherwise worse.
 The WTS strategy predicts an accuracy of 0.8.
 This number is useful as a performance measure for applications in which the LLM is used in exactly the way the WTS strategy describes, e.g., any implementation which is outcome equivalent to greedy decoding with rejection sampling on a domain that contains only the available options.
 For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
@@ -185,10 +190,10 @@ As only the best option will be chosen, that information is irrelevant.
 But if an application uses anything other than greedy-like responses, the accuracy score of 0.8 may be misleading.
 If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy with virtual certainty, so the accuracy for choosing the goal answer in such an application scenario would around 0.4.\footnote{The probability of the second option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 1 in the remaining 20\%.}
 This is a categorical shift from predominantly goal answer to predominantly non-goal answer.
-The argument holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two accuracy scores would in principle be more favorable for selecting the goal answers.
-Two things matter:
+The argument holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the goal answers.
+Consequently, this example shows that two things matter to the question of whether a WTS strategy provides a good signal for LLM performance in a task:
 (i)
-whether the LLM would be more likely used in cases where greedy-like evaluation is required; and
+whether the designated applications are foremost cases where greedy-like evaluation is required; and
 (ii)
 what the nature of the item-level variation is.
 
