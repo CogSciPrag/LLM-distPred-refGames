@@ -1,6 +1,6 @@
 # dependencies etc.
 source("00-premable.r")
-rerun = TRUE
+rerun = FALSE
 source('00-stan-fit-helpers.R')
 
 #######################################################
@@ -583,8 +583,27 @@ message("Bayesian p value for interpretation (LLM, by-item):", extract_bayesian_
 
 
 #######################################################
-## item-level analysis (RSA)
+## item-level analysis (w/ condition-level predictors)
 #######################################################
+
+get_Bpppv_itemLevel_glbPredictor <- function(pred_prod, pred_inter) {
+  
+  fit_items_prod_glblPredictor <- fit_data(
+    data_items_prod, 
+    array(rep(pred_prod, each = nrow(data_items_prod)), dim = c(nrow(data_items_prod),1, 3)), 
+    model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
+  
+  fit_items_inter_glblPredictor <- fit_data(
+    data_items_inter, 
+    array(rep(pred_inter, each = nrow(data_items_inter)), dim = c(nrow(data_items_inter),1, 3)),
+    model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
+  
+  return(list(
+    production     = extract_bayesian_p(fit_items_prod_glblPredictor), 
+    interpretation = extract_bayesian_p(fit_items_inter_glblPredictor)))
+}
+
+get_Bpppv_itemLevel_glbPredictor
 
 fit_items_prod_RSA <- fit_data(
   data_items_prod, 

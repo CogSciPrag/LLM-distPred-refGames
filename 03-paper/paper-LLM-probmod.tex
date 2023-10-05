@@ -371,8 +371,8 @@ The result is a four-parameter model, one pair of parameters per condition, whic
 
 This section explores different ways of deriving a probabilistic likelihood function for the human data from a Large Language Model.
 For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
-The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in terms of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
-Using average log-probs for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
+% The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in terms of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
+Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
 In the following, we first describe the different options of deriving LLM-based predictor terms.
 We then compare all probabilistic models based on their adequacy of explaining the human choice data.
 
@@ -397,14 +397,13 @@ Let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the huma
 }
 Each item $I_{k}$ consists of a task description $T_{k}$ and $l$ choice options $O_{k1}, \dots, O_{kl}$, which are treated as textual continuations of the task description (see Appendix~\ref{sec:examples-items-llm} for an example).
 For each item $I_{k}$, let $F(R_{l}, I_{k})$ be the choice option $O_{ki}$ that corresponds to \emph{response type} $R_{l}$ (here: target, competitor, distractor).\footnote{In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we lump both of the distractor words together and treat them as a single option by taking the sum of the log-probabilities for both distractor words.}
-We will define an item-level (non-normalized) score $S(O_{ki})$ for each choice option of a given item $k$, and use this to define a condition-level probabilistic predictions for response types by averaging over all items in a given condition.
+We will define an item-level (non-normalized) score $S(R_{l}, I_{k})$ for each response type $R_{l}$ and item $I_{k}$, and use this to define a condition-level probabilistic predictions for response types by averaging over all items in a given condition.
 
 \paragraph{Item-level score.}
-If a choice option $O_{ki} = w$ is a single word, like in the production condition, an LLM's item-level prediction can simply be defined as the next-word log probability $\log P_{\text{LLM}} (w \mid T_{k})$.
-If choice options are strings of more than one word, as in the interpretation condition, we follow the previous literature \citep[e.g.,][]{BrownMann2020:Language-Models} and define the \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \dots w_{kin}$ of item $k$, in terms of the average log-probs:
+The \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \dots w_{kin}$ of item $k$ is defined as the log-probability of continuation $O_{ki}$ after prompt $I_{k}$:\footnote{Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
 %
 \begin{align*}
-S(O_{ki}, I_{k}) =  \frac{1}{n} \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+S(O_{ki}, I_{k}) =  \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
 \end{align*}
 %
 The item-level score of response type $R_{l}$ is $S(R_{l}, I_{k}) = S(F(R_{l}, I_{k}))$.
@@ -451,9 +450,10 @@ All three condition-level predictors coincide when there is only one item, of co
 For more items, wide-scope and intermediate-scope aggregation coincide when $\alpha = 1$.
 In all other cases, the predictors are not guaranteed to be identical.
 Conceptually, the main difference is what each measure considers to be the basic item-level unit to aggregate over.
-Narrow-scope aggregation considers raw scores, not \emph{not} probabilistic predictions at the item level.
+Narrow-scope aggregation considers raw scores, which are \emph{not} probabilistic predictions at the item level.
 Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
-Similarly, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level.
+Wide-scope aggregation contains the ``winner-takes-all'' procedure for accuracy scoring in common benchmark test for $\alpha \rightarrow \infty$.
+Finally, like wide-scope aggregation, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level and reserves the scaling of probability distributions to a stage \emph{after} aggregation.
 
 \subsection{Model fitting, criticims \& comparison}
 \label{sec:model-fitting}
@@ -554,7 +554,7 @@ This implies that using LLM predictors for probabilistic predictions, such as in
 \label{sec:item-level-pred}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The ability to predict a condition-level averages is useful for applications, and may also be theoretically insightful.
+The ability to predict a condition-level average is useful for applications, and may also be theoretically insightful.
 Nevertheless, for human data, averages over item- or individual-level variation can also be misleading \citep[e.g.,][]{StanovichWest2000:Individual-diff,EstesMaddox2005:Risks-of-Drawin,HaafRouder2019:Some-do-and-som}, as aggregate patterns may be artifacts of systematic variation at the subject- or item-level.
 LLMs do not make individual-level predictions, at least not without further intervention, such as special prompting.
 But the question remains whether the variation in item-level predictions made by LLMs is reflected in the human data.
@@ -564,10 +564,11 @@ The data to be explained is the set of all response type counts $\tuple{t_{k}, c
 The model's predictions for the data from item $I_{k}$ from condition $C$ (production or interpretation) are:
 %
 \begin{align*}
-  P_{\text{item}}(R_{l}, C, I_{k}, \alpha_{c}, \epsilon_{c}) \propto \frac{\expo \left( \alpha_{c} \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha_{c} \ S(R_{l'}, I_{k}) \right )} + \epsilon_{c}
+  P_{\text{item}}(R_{l}, C, I_{k}, \alpha_{c}, \epsilon_{c}) \propto \frac{\expo \left( \alpha_{c} \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha_{c} \ S(R_{l'}, I_{k}) \right )} + \epsilon_{c}\,.
 \end{align*}
 %
-In words, we use a single pair or parameters $\alpha_{c}$ and $\epsilon_{c}$, one for each condition, take the LLM's item-level scores for each item, and derive the response probabilities in the exact same way as before.
+In words, we use a single pair of parameters $\alpha_{c}$ and $\epsilon_{c}$, one for each condition, take the LLM's item-level scores for each item, and derive the response probabilities in the exact same way as before.
+Notice that item-level scores are the same for all three types of models introduced and compared in the previous section, so that this by-item analysis applies to the raw LLM prediction irrespective of down-stream aggregation.
 
 Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM predictor predicts variance which is not borne out by the human data.
 Concretely, the plot shows, for each item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data.
@@ -575,7 +576,7 @@ There is ample variation in the model predictions, especially visible in the pro
 So, the model itself predicts systematic variability at the item level.
 The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
 In fact, sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
-In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($~0.338$ for each condition).
+In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($~0.338$ for production, $~0.252$ for interpretation).
 These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
 
 \begin{figure}
