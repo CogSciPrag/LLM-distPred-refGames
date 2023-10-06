@@ -242,7 +242,7 @@ In other words, we should ask whether modern LLMs can predict aggregate human da
   \label{fig:ref-game}
 \end{figure}
 
-To keep matters simple, we use an established, well-understood and austere experimental paradigm to test human decision making in abstract communicative tasks, so-called \textbf{reference games} \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,SikosVenhuizen2021:Reevaluating-pr}.
+Reference games are an established, well-understood and austere experimental paradigm to test human decision making in abstract communicative tasks \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,SikosVenhuizen2021:Reevaluating-pr}.
 A reference game consists of two players, a speaker and an interpreter, who jointly observe a set of objects, usually referred to as context (see Figure~\ref{fig:ref-game}).
 In the \textbf{production condition}, the speaker is assigned a \emph{target object} from the context set which they have to describe to the interpreter.
 In the \textbf{interpretation condition}, the interpreter observes a description, here called \emph{trigger word}, and chooses one of the objects from the context set.
@@ -297,7 +297,7 @@ Participants first played two of these in the production condition, then the oth
 
 \subsection{Results}\label{results}
 
-The overall distribution of choices that correspond to the target, competitor, and distractor states is shown in Figure~\ref{fig:refgame-counts} on the left.\footnote{
+The overall distribution of choices that correspond to the target, competitor, and distractor states is shown in Figure~\ref{fig:refgame-counts}.\footnote{
   The production condition actually has two distractor choices.
   Here and in the following, these are lumped together as a single category, also when modeling random errors in later models.
   This is a simplification but does not change anything of substance.}
@@ -307,13 +307,13 @@ This is in line with previous experimental results on human reference games.
 % \citep{QingFranke2013:Variations-on-a}.
 For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
 
-\begin{figure}
+\begin{figure}[t]
   \centering
 
     \includegraphics[width=0.9\linewidth]{00-pics/PPC-alpha-eps-model.pdf}
 
-    \caption{Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of three models (shapes and error bars).
-      Shapes show the mean of the posterior predictive distributions of three models, differing in the scope of the item-level aggregation with respect to soft-maximizing and scaling.
+    \caption{Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of four models (shapes and error bars).
+      Shapes show the mean of the posterior predictive distributions of the RSA model and three further models derived from item-level LLM-supplied scores.
       Error-bars show corresponding 95\% credible intervals of the posterior predictive.
     }
   \label{fig:refgame-counts}
@@ -325,8 +325,8 @@ For example, in previous forced-choice reference games with human participants w
 \label{sec:model-pred-from}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,FrankeDegen2015:Reasoning-in-Re} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
-Common to these approaches is that they derive or define, based on some explicit conceptual motivation, a parameterized stochastic policy, $P_{S}(u \mid s; \theta_{S})$, modulated by parameters $\theta_{S}$, for a speaker's choice of expression or utterance $u$ given a referent or state $s$, which the speaker wants to communicate;
+Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
+Common to these approaches is that they derive or define, based on some explicit conceptual motivation, a parameterized stochastic speaker policy, $P_{S}(u \mid s; \theta_{S})$, modulated by parameters $\theta_{S}$, for a speaker's choice of expression or utterance $u$ given a referent or state $s$, which the speaker wants to communicate;
 and a stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the probability of choosing a referent $s$ for utterance $u$.
 
 As a concrete example, we introduce the Rational Speech Act (RSA) model first described in this form by \citet{FrankGoodman2012:Predicting-Prag} \citep[for overview see][]{FrankeJager2015:Probabilistic-p,GoodmanFrank2016:Pragmatic-Langu,StevensBenz2018:Game-Theoretic-,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
@@ -349,7 +349,7 @@ Finally, the pragmatic listener is defined as the policy resulting from applying
   P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P(s) \,.
 \end{align*}
 
-\begin{figure}
+\begin{figure}[t]
   \centering
   \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
   \caption{
@@ -361,9 +361,9 @@ Finally, the pragmatic listener is defined as the policy resulting from applying
 \end{figure}
 
 Figure~\ref{fig:RSA-example} gives example calculations (assuming flat priors and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
-For $\alpha=1$, the model predicts that the probability of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{0.6, 0.4, 0}$ for the interpretation condition.
+For $\alpha=1$, the model predicts that the probabilities of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{0.6, 0.4, 0}$ for the interpretation condition.
 Increasing $\alpha$ will increase the odds of target over competitor choices.
-Yet, the model also predicts probability zero for distractor choices, so that the human data shown in Figur~\ref{fig:refgame-counts}e, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
+Yet, the model also predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
 It is therefore common to include a random error probability for each choice \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, such as via Laplace smoothing: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
 \begin{align*}
   P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c}) \propto P_{r}(R_{l}, C; \alpha_{c}) +  \frac{\epsilon_{c}}{3}\,,
@@ -371,15 +371,95 @@ It is therefore common to include a random error probability for each choice \ci
 where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
 The result is a four-parameter model, one pair of parameters per condition, which provides a likelihood function for the categorical choice data and so can be fitted to the data and compared against other probabilistic models providing a likelihood function for the same data.
 
+Parameterized predictions like $P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
+Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
+Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{fig:posterior-stats}).
+
+To assess goodness-of-fit, we can use the posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
+As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
+Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models to be introduced later).
+We see that the RSA model passes this ``visual posterior predictive check'' \citep{Kruschke2021:Bayesian-Analys} for both conditions.
+To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
+These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
+Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
+The results from Table~\ref{tab:Bppp-values} show that the RSA model passes this numerical test of model adequacy.
+
+The following sections apply these test of Bayesian model criticism also to models built around predictor values from LLMs.
+Section~\ref{sec:item-level-pred} first looks at the data from each item individually, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{LLM predictions for reference games}
+\section{Item-level predictions from LLMs}
+\label{sec:item-level-pred}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Figure~\ref{fig:refgame-counts} shows the condition-level counts for choices for all of the 100 different items combined.
+An LLM, on the other hand, first and foremost makes predictions about each item.
+The items of the reference game experiment differ in the task-relevant features (color, shape, texture), as well as the order of presentation of states and words.
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelvant material \citep{DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references from the NLP literature on effects of prompt variation?}
+The main question to be addressed in this section is whether a standard item-level score from LLMs provides a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
+
+For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
+Let $C$ be the experimental condition of interest (here: the production or interpretation condition).
+Let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the human experiment for condition $C$.\footnote{
+  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.
+}
+Each item $I_{k}$ consists of a task description $T_{k}$ and $l$ choice options $O_{k1}, \dots, O_{kl}$, which are treated as textual continuations of the task description (see Appendix~\ref{sec:examples-items-llm} for an example).
+For each item $I_{k}$, let $F(R_{l}, I_{k})$ be the choice option $O_{ki}$ that corresponds to \emph{response type} $R_{l}$ (here: target, competitor, distractor).\footnote{In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we lump both of the distractor words together and treat them as a single option by taking the sum of the log-probabilities for both distractor words.}
+The \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \dots w_{kin}$ of item $I_{k}$ is defined as the log-probability of continuation $O_{ki}$ after prompt $T_{k}$:\footnote{Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
+%
+\begin{align*}
+S(O_{ki}, I_{k}) =  \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+\end{align*}
+%
+The item-level score of response type $R_{l}$ is $S(R_{l}, I_{k}) = S(F(R_{l}, I_{k}))$.
+
+Using item-level scores from GPT-3.5, we fit a model to the human data at the item-level.
+The data to be explained is the set of all triples of response type counts $\tuple{t_{k}, c_{k}, d_{k}}$ (target, competitor, distractor), separately for each item $I_{k}$.
+The model's predictions for the data from item $I_{k}$ from condition $C$ (production or interpretation) are:
+%
+\begin{align*}
+  P_{\text{item}}(R_{l}, C, I_{k}, \alpha_{c}, \epsilon_{c}) \propto \frac{\expo \left( \alpha_{c} \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha_{c} \ S(R_{l'}, I_{k}) \right )} + \epsilon_{c}\,.
+\end{align*}
+%
+In words, we use a single pair of parameters $\alpha_{c}$ and $\epsilon_{c}$, one for each condition, take the LLM's item-level scores for each item, and derive the response probabilities in the exact same way as before.
+% Notice that item-level scores are the same for all three types of models introduced and compared in the previous section, so that this by-item analysis applies to the raw LLM prediction irrespective of down-stream aggregation.
+Priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}.
+
+\begin{figure}[t]
+  \centering
+
+  \includegraphics[width = 0.9\linewidth]{00-pics/item-combined-obs-pred.pdf}
+
+  \caption{
+    Item-level prediction-observation plot.
+    Each dot represents an item.
+    The $x$-coordinate represents the mean of the posterior prediction for the target choice probability for the given item.
+    The $y$-coordinate represents the observed proportion of target choices for that item.
+    The gray line (identity function) is the ideal prediction.
+  }
+  \label{fig:item-level-obs-pred}
+\end{figure}
+
+Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM scores predict variance which is not borne out by the human data.
+Concretely, the plot shows, for each item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data ($y$-axis).
+There is ample variation in the model's predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
+So, the model itself predicts systematic variability at the item level.
+The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
+
+Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
+In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($\sim 0.338$ for production, $\sim 0.252$ for interpretation).
+These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
+Put more strongly, a model that seeks to predict what human participants choose on a by-item level, based on the most obvious item-level score, is ruled out by experimental data.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Condition-level predictions}
 \label{llm-predictions-for-reference-games}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This section explores different ways of deriving a probabilistic likelihood function for the human data from a Large Language Model.
-For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
-% The previous literature has shown that scoring longer sequences of text for an autoregressive LLM in terms of \emph{average next-token log probabilities}, or \emph{average log-probs} for short, gives improved predictions in relevant benchmark tests \citep[e.g.,][]{BrownMann2020:Language-Models}.
+This section explores different ways of deriving a probabilistic likelihood function for the human data from a Large Language Model at the aggregate, condition-level.
 Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
 In the following, we first describe the different options of deriving LLM-based predictor terms.
 We then compare all probabilistic models based on their adequacy of explaining the human choice data.
@@ -396,27 +476,6 @@ We then compare all probabilistic models based on their adequacy of explaining t
   \label{fig:measures-overview}
 \end{figure}
 
-\subsection{LLM-based probabilistic predictions for forced-choice data}
-\label{sec:notat--term}
-
-Let $C$ be the experimental condition of interest (here: the production or interpretation condition).
-Let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the human experiment for condition $C$.\footnote{
-  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.
-}
-Each item $I_{k}$ consists of a task description $T_{k}$ and $l$ choice options $O_{k1}, \dots, O_{kl}$, which are treated as textual continuations of the task description (see Appendix~\ref{sec:examples-items-llm} for an example).
-For each item $I_{k}$, let $F(R_{l}, I_{k})$ be the choice option $O_{ki}$ that corresponds to \emph{response type} $R_{l}$ (here: target, competitor, distractor).\footnote{In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we lump both of the distractor words together and treat them as a single option by taking the sum of the log-probabilities for both distractor words.}
-We will define an item-level (non-normalized) score $S(R_{l}, I_{k})$ for each response type $R_{l}$ and item $I_{k}$, and use this to define a condition-level probabilistic predictions for response types by averaging over all items in a given condition.
-
-\paragraph{Item-level score.}
-The \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \dots w_{kin}$ of item $k$ is defined as the log-probability of continuation $O_{ki}$ after prompt $I_{k}$:\footnote{Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
-%
-\begin{align*}
-S(O_{ki}, I_{k}) =  \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
-\end{align*}
-%
-The item-level score of response type $R_{l}$ is $S(R_{l}, I_{k}) = S(F(R_{l}, I_{k}))$.
-
-\paragraph{Condition-level predictions.}
 Condition-level predictions are a probability distribution over response types, obtained from item-level scores $S(R_{l}, I_{k})$ by averaging over all items belonging to the relevant condition.
 To map non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$:
 %
@@ -460,25 +519,10 @@ In all other cases, the predictors are not guaranteed to be identical.
 Conceptually, the main difference is what each measure considers to be the basic item-level unit to aggregate over.
 Narrow-scope aggregation considers raw scores, which are \emph{not} probabilistic predictions at the item level.
 Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
-Wide-scope aggregation contains the ``winner-takes-all'' procedure for accuracy scoring in common benchmark test for $\alpha \rightarrow \infty$.
+Wide-scope aggregation contains the ``winner-takes-all'' procedure for accuracy scoring in common benchmark tests for $\alpha \rightarrow \infty$.
 Finally, like wide-scope aggregation, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level and reserves the scaling of probability distributions to a stage \emph{after} aggregation.
 
-\subsection{Model fitting, criticims \& comparison}
-\label{sec:model-fitting}
-
-Parameterized predictions $P_{m}(R_{l}, C ; \alpha_{c})$ for models $m \in \set{n,w,i,r}$, where $r$ is the RSA model introduced in Section~\ref{sec:model-pred-from}, can be assessed in the light of the empirical data from human participants with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
-For each condition $C$ (production and interpretation), each model has a free optimality parameter $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ with a log-Normal prior.
-Following the rationale from Section~\ref{llm-predictions-for-reference-games}, we also assume that each model has one epsilon parameter per condition, $\epsilon_{c}$, which accounts for random errors in the human data via Laplace smoothing, with a prior $\epsilon_{c} \sim \text{Beta}(1,5)$ favoring small values.
-The resulting likelihood function for model $m$ and data from condition $C$ is a multinomial distribution with predictor for response $R_{l}$ given by:
-%
-\begin{align*}
-  P_{m}(R_{l}, C; \alpha_{c}, \epsilon_{c}) \propto P_{m}(R_{l}, C; \alpha_{c}) +  \frac{\epsilon_{c}}{3}
-\end{align*}
-
-Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of each $\alpha_{c}$ and $\epsilon_{c}$ for each model.
-The usual Bayesian summary statistics for posteriors over model parameters are shown in Figure~\ref{fig:posterior-stats}.
-
-\begin{table}[ht]
+\begin{table}[t]
   \centering
 
   % \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
@@ -509,17 +553,20 @@ The usual Bayesian summary statistics for posteriors over model parameters are s
   \caption{
     Summary statistics of posterior samples.
     Number indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
-    \mf{maybe not necessary, but can we explain the high values for $\alpha$ in the wide model?}
   }
   \label{fig:posterior-stats}
 \end{table}
 
-To assess goodness-of-fit, Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
-As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
+The three condition-level predictions yield three different probabilistic models, each with two pairs of condition-dependent parameters $\alpha_{c}$, and $\epsilon_{c}$.
+Using priors and Bayesian posterior estimation as previously for the RSA (see Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and posterior predictive distributions.
+The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{fig:posterior-stats}.
+Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
+What is noteworthy about these estimates is that the $\alpha_{c}$ parameters for the wide-scope model have a very large credible range in both conditions.
+This is because, already for values of $\alpha_{c} = 1$, the item-level predictions are virtually ``winner-takes-all'' choices, selecting the option with the maximum score with probability almost 1 for almost all items.
+This implies that, by studying the posterior predictive distribution of the wide-scope model, we are virtually testing condition-level predictions from the standard WTA-strategy used for benchmark testing (see Section~\ref{motivation}).
+
 Figure~\ref{fig:refgame-counts} shows that only the theoretical model (RSA) and the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate.
 To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
-Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
 Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline compatible with the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
 
 \begin{table}[ht]
@@ -555,52 +602,6 @@ In other words, there is a way of deriving predictor values for condition-level 
   Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
 }
 This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Item-level predictions}
-\label{sec:item-level-pred}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-The ability to predict a condition-level average is useful for applications, and may also be theoretically insightful.
-Nevertheless, for human data, averages over item- or individual-level variation can also be misleading \citep[e.g.,][]{StanovichWest2000:Individual-diff,EstesMaddox2005:Risks-of-Drawin,HaafRouder2019:Some-do-and-som}, as aggregate patterns may be artifacts of systematic variation at the subject- or item-level.
-LLMs do not make individual-level predictions, at least not without further intervention, such as special prompting.
-But the question remains whether the variation in item-level predictions made by LLMs is reflected in the human data.
-
-To address this question, we fit a model to the human data at the item-level.
-The data to be explained is the set of all response type counts $\tuple{t_{k}, c_{k}, d_{k}}$ for each item $I_{k}$.
-The model's predictions for the data from item $I_{k}$ from condition $C$ (production or interpretation) are:
-%
-\begin{align*}
-  P_{\text{item}}(R_{l}, C, I_{k}, \alpha_{c}, \epsilon_{c}) \propto \frac{\expo \left( \alpha_{c} \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha_{c} \ S(R_{l'}, I_{k}) \right )} + \epsilon_{c}\,.
-\end{align*}
-%
-In words, we use a single pair of parameters $\alpha_{c}$ and $\epsilon_{c}$, one for each condition, take the LLM's item-level scores for each item, and derive the response probabilities in the exact same way as before.
-Notice that item-level scores are the same for all three types of models introduced and compared in the previous section, so that this by-item analysis applies to the raw LLM prediction irrespective of down-stream aggregation.
-
-Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM predictor predicts variance which is not borne out by the human data.
-Concretely, the plot shows, for each item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data.
-There is ample variation in the model predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
-So, the model itself predicts systematic variability at the item level.
-The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
-In fact, sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
-In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($~0.338$ for production, $~0.252$ for interpretation).
-These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
-
-\begin{figure}
-  \centering
-
-  \includegraphics[width = 0.9\linewidth]{00-pics/item-combined-obs-pred.pdf}
-
-  \caption{
-    Item-level prediction-observation plot.
-    Each dot represents an item.
-    The $x$-coordinate represents the mean of the posterior prediction for the target choice probability for the given item.
-    The $y$-coordinate represents the observed proportion of target choices for that item.
-    The gray line (identity function) is the ideal prediction.
-  }
-  \label{fig:item-level-obs-pred}
-\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
