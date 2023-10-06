@@ -132,26 +132,32 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 
 The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
 % especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
-Recently an increasing number of diverse applications has gone beyond using LLMs out-of-the-box, i.e., based on their single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
-Examples aimed at improving output quality include sophisticated prompting \citep{LiuLiu2022:Generated-Knowl}, structured reasoning or ``neuro-symnolic AI'' \citep{CreswellShanahan2022:Selection-Infer}, or applications of LLMs as scoring functions in open-ended applications \citep{ZhangLehman2023:OMNI:-Open-ende}.
-Other work, uses LLMs as part of bigger programs to build towards something more akin to explanatory cognitive models \citep{WongGrand2023:From-Word-Model}.
-\mf{enlarge briefly, include more references}
+Recent works increasingly go beyond using LLMs based on single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
+Examples include sophisticated prompting strategies \citep[e.g.,][]{LiuLiu2022:Generated-Knowl}, or structured reasoning models \citep[e.g.,][]{CreswellShanahan2022:Selection-Infer,GaoMadaan2023:PAL:-Program-ai,ParanjapeLundberg2023:ART:-Automatic-}.
+Information from LLMs is also used  to rank or numerically score options in open-ended applications, e.g., to mimic human judgements of relevance or interestingness \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
+Other work, uses LLMs as part of bigger programs to build towards something more akin to explanatory cognitive models \citep[e.g.,][]{WongGrand2023:From-Word-Model}.
 
 For all of these applications, it is crucial to understand what LLMs can or cannot reliable do.
-The prevalent approach towards understanding the performance of LLMs relies on benchmark testing which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``true answer'' exists, averaged over many instances of this task.
+The prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' exists, averaged over many instances of this task.
 Benchmark-driven assessments are very useful to systematically study the effects of scale, e.g., in an engineering-oriented context \citep[e.g.,][]{srivastava2023-BIGbench}.
 Other recent work is more psychologically oriented and asks to what extent LLM performance is ``human-like.''
 LLM performance is therefore compared to human choice behavior in psychological experiments to investigate whether LLMs predict patterns of human answer behavior qualitatively \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
-There is also some work investigating whether LLMs can make adequate \emph{quantitative predictions}.
+Going further, there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
 For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as measures of (self-paced) reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
 
-This work seeks to extend the investigation of the human-likeness of LLM predictions even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
 
-\begin{itemize}
-  \item distributional predictions are more informative, so beneficial for ``understanding'' and for ``applications''
-  \item for ``understanding LLMs'' more informative, richer predictions can be more diagnostic about LLM capabilities (risks and potentials)
-  \item reliable full-distributional predictions from LLMs can be useful in applications, e.g., relative scoring based on elusive intuitive concepts like ``relevance'' or ``interestingness''
-\end{itemize}
+This work seeks to extend the investigation of the human-likeness of quantitative information derived from LLMs even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
+The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
+Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
+
+A major contribution of this work is methodological.
+By embedding numerical scores from LLMs into probabilistic models for human multiple-choice data, we can use Bayesian data analysis to train, test and compare different LLM-derived predictor scores.
+Concretely, after motivating the desire to assess quantitative information from LLMs in Section~\ref{motivation}, Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a salient probabilistic cognitive model \citep{FrankGoodman2012:Predicting-Prag}.
+Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though a condition-level predictor from the RSA model is.
+Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the task- or condition-level and compares them against the human data and each other.
+We find that not every way of constructing condition-level predictions from item-level scores is equally good.
+\mf{grant conclusion?}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Motivation: Why care for distributional predictions?}
