@@ -130,6 +130,8 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\mf{would be good to add references here}
+
 The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
 % especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
 Recent works increasingly go beyond using LLMs based on single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
@@ -143,18 +145,22 @@ Benchmark-driven assessments are very useful to systematically study the effects
 Other recent work is more psychologically oriented and asks to what extent LLM performance is ``human-like.''
 LLM performance is therefore compared to human choice behavior in psychological experiments to investigate whether LLMs predict patterns of human answer behavior qualitatively \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
 Going further, there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
-For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as measures of (self-paced) reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
+For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
 
 
 This work seeks to extend the investigation of the human-likeness of quantitative information derived from LLMs even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
 The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
+Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
 
 A major contribution of this work is methodological.
 By embedding numerical scores from LLMs into probabilistic models for human multiple-choice data, we can use Bayesian data analysis to train, test and compare different LLM-derived predictor scores.
-Concretely, after motivating the desire to assess quantitative information from LLMs in Section~\ref{motivation}, Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a salient probabilistic cognitive model \citep{FrankGoodman2012:Predicting-Prag}.
+\mf{describe high-level results here}.
+
+The paper is structured as follows.
+Section~\ref{motivation} further motivates the desire to assess quantitative information from LLMs, and it introduces the distinction between item-level and condition-level predictions.
+Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a salient probabilistic cognitive model \citep{FrankGoodman2012:Predicting-Prag}.
 Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though a condition-level predictor from the RSA model is.
-Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the task- or condition-level and compares them against the human data and each other.
+Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
 We find that not every way of constructing condition-level predictions from item-level scores is equally good.
 \mf{grant conclusion?}
 
@@ -166,12 +172,10 @@ We find that not every way of constructing condition-level predictions from item
 
 The prevalent approach to assessing LLM performance is based on benchmark-testing, using large data sets for tasks in which a designated goal answer exists.
 Tasks often contain multiple-choice options, and accuracy for a task is determined with a ``winner-takes-all'' (WTA) strategy \citep[e.g.,][]{srivastava2023-BIGbench}.
-
 Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
 Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
 Among the choice options is a designated \emph{target option} $y_{ki^{*}}$ that is assumed to be the ``true'' or to-be-selected goal answer.
-
 The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
   More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
@@ -374,12 +378,16 @@ The result is a four-parameter model, one pair of parameters per condition, whic
 Parameterized predictions like $P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
 Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{fig:posterior-stats}).
+\mf{include information on MCMC, samples, warm-up etc.; follow Kruschke recipe}
 
-To assess goodness-of-fit, we can use the posterior predictive distribution, i.e., the model's predictions about data of the same size and structure as the training data.
+
+To assess goodness-of-fit, we can use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
+\mf{maybe insert formal definition of post-pred distribution?}
 As a minimal bar, we would require a model trained on observed data $D_{\text{obs}}$ to not be surprised by $D_{\text{obs}}$.
 Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models to be introduced later).
-We see that the RSA model passes this ``visual posterior predictive check'' \citep{Kruschke2021:Bayesian-Analys} for both conditions.
+We see that the RSA model passes this ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-} for both conditions.
 To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
+\mf{maybe insert formal definition of BPPPV?}
 These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
 Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
 The results from Table~\ref{tab:Bppp-values} show that the RSA model passes this numerical test of model adequacy.
@@ -396,7 +404,7 @@ Section~\ref{sec:item-level-pred} first looks at the data from each item individ
 Figure~\ref{fig:refgame-counts} shows the condition-level counts for choices for all of the 100 different items combined.
 An LLM, on the other hand, first and foremost makes predictions about each item.
 The items of the reference game experiment differ in the task-relevant features (color, shape, texture), as well as the order of presentation of states and words.
-We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelvant material \citep{DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references from the NLP literature on effects of prompt variation?}
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelvant material \citep{DegenHawkins2020:When-redundancy} \mf{more refs on (color) over-specification}; and machines may be susceptible to the presentation of the order of choice options. \mf{references from the NLP literature on effects of prompt variation?}
 The main question to be addressed in this section is whether a standard item-level score from LLMs provides a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
 For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
@@ -448,7 +456,7 @@ So, the model itself predicts systematic variability at the item level.
 The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
 
 Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
-In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($\sim 0.338$ for production, $\sim 0.252$ for interpretation).
+In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($0.338$ for production, $0.252$ for interpretation).
 These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
 Put more strongly, a model that seeks to predict what human participants choose on a by-item level, based on the most obvious item-level score, is ruled out by experimental data.
 
@@ -459,7 +467,7 @@ Put more strongly, a model that seeks to predict what human participants choose 
 \label{llm-predictions-for-reference-games}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-This section explores different ways of deriving a probabilistic likelihood function for the human data from a Large Language Model at the aggregate, condition-level.
+This section explores different ways of deriving a probabilistic likelihood function for the human data from an LLM at the aggregate, condition-level.
 Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
 In the following, we first describe the different options of deriving LLM-based predictor terms.
 We then compare all probabilistic models based on their adequacy of explaining the human choice data.
@@ -558,14 +566,14 @@ Finally, like wide-scope aggregation, intermediate-scope aggregation is also com
 \end{table}
 
 The three condition-level predictions yield three different probabilistic models, each with two pairs of condition-dependent parameters $\alpha_{c}$, and $\epsilon_{c}$.
-Using priors and Bayesian posterior estimation as previously for the RSA (see Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and posterior predictive distributions.
+Using priors and Bayesian posterior estimation as previously described for the RSA (see Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
 The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{fig:posterior-stats}.
-Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
-What is noteworthy about these estimates is that the $\alpha_{c}$ parameters for the wide-scope model have a very large credible range in both conditions.
+What is noteworthy about these estimates is that the $\alpha_{c}$ parameters for the wide-scope model have a very large credible range.
 This is because, already for values of $\alpha_{c} = 1$, the item-level predictions are virtually ``winner-takes-all'' choices, selecting the option with the maximum score with probability almost 1 for almost all items.
 This implies that, by studying the posterior predictive distribution of the wide-scope model, we are virtually testing condition-level predictions from the standard WTA-strategy used for benchmark testing (see Section~\ref{motivation}).
 
-Figure~\ref{fig:refgame-counts} shows that only the theoretical model (RSA) and the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate.
+Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
+We find that only the theoretical model (RSA) and the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
 To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
 Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline compatible with the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
 
