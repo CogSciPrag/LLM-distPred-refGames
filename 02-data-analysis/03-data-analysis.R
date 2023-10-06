@@ -603,19 +603,10 @@ get_Bpppv_itemLevel_glbPredictor <- function(pred_prod, pred_inter) {
     interpretation = extract_bayesian_p(fit_items_inter_glblPredictor)))
 }
 
-get_Bpppv_itemLevel_glbPredictor
+# Bpppc_item_wide <- get_Bpppv_itemLevel_glbPredictor(c(2/3,1/3,0), c(0.6,0.4,0))
+Bpppc_item_RSA  <- get_Bpppv_itemLevel_glbPredictor(c(2/3,1/3,0), c(0.6,0.4,0))
 
-fit_items_prod_RSA <- fit_data(
-  data_items_prod, 
-  array(rep(c(2/3,1/3,0), each = nrow(data_items_prod)), dim = c(nrow(data_items_prod),1, 3)), 
-  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
+# # Bayesian posterior predictive p-values
 
-fit_items_inter_RSA <- fit_data(
-  data_items_inter, 
-  array(rep(c(0.6,0.4,0), each = nrow(data_items_inter)), dim = c(nrow(data_items_inter),1, 3)),
-  model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
-
-# Bayesian posterior predictive p-values
-
-message("Bayesian p value for production (RSA, by-item):", extract_bayesian_p(fit_items_prod_RSA))
-message("Bayesian p value for interpretation (RSA, by-item):", extract_bayesian_p(fit_items_prod_RSA))
+message("Bayesian p value for production (RSA, by-item):", Bpppc_item_RSA$production)
+message("Bayesian p value for interpretation (RSA, by-item):", Bpppc_item_RSA$interpretation)
