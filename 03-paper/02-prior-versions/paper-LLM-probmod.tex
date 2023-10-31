@@ -2,6 +2,18 @@
 
 \usepackage{arxiv}
 
+% \usepackage[style=authoryear-comp, % Citation marks as [Jef65]
+%             natbib=true,      % Natbib-style cite macros \citeauthor &c.
+%             hyperref=true,    % Cites in pdf are links to bib
+%                               % (hyperref conf.)
+%             maxnames=3,       % truncate name lists if more than 2
+%                               % names appear
+%             doi=false,        % no doi's
+%             url=false,        % no url's
+%             sortcites=false,  % do NOT sort cites in the style of the
+%                               % bibliography
+%             %backref=true     % insert backrefs in reference section
+%             ]{biblatex}
 \usepackage{mypackages}
 \bibliography{~/Desktop/icloud/MyRefGlobal}
 \usepackage{mycommands}
@@ -21,8 +33,15 @@
 
 \usepackage{float}
 
-\title{Language models as probabilistic cognitive models}
+% Statistical models based on LLM predictions
+% LLMs fuel statistical models for full distributional predictions of human experimental data
+% Large language models for full distributional predictions of human experimental data
+% Statistical modeling with predictors from large language models
+\title{Beyond the best guess: Distributional predictions from large language models for human forced-choice data}
 
+% Here you can change the date presented in the paper title
+%\date{September 9, 1985}
+% Or remove it
 \date{}
 
 \newif\ifuniqueAffiliation
@@ -45,6 +64,21 @@
 	ILLC\\
 	University of Amsterdam\\
 	\texttt{fausto.carcassi@gmail.com} \\
+	%% \AND
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
+	%% \And
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
+	%% \And
+	%% Coauthor \\
+	%% Affiliation \\
+	%% Address \\
+	%% \texttt{email} \\
 }
 \else
 % Multiple affiliations variant of author block
@@ -78,22 +112,7 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \maketitle
 
 \begin{abstract}
-  State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks.
-  Beyond benchmark testing, a more sobering picture of the human-likeness of LLMs' capabilities emerges from targeted assessment adopting tools from experimental psychology.
-  Going even a step further, we here approach LLMs from the perspective of probabilistic cognitive modeling.
-  We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
-  Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level).
-  Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs fail to capture the variance in the human data at the item-level.
-  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, similar to those that a probabilistic cognitive model might make, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits.
-
-
-
-  % Nevertheless, recent work incorporates LLMs into complex applications, where they may take on the role of supplying human intuitive judgements.
-
-
-
-
-  
+	{\textcolor{gray}{fill me}}
 \end{abstract}
 
 
