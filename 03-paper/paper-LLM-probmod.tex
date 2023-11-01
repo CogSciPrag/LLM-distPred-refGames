@@ -79,21 +79,13 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 
 \begin{abstract}
   State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks.
-  Beyond benchmark testing, a more sobering picture of the human-likeness of LLMs' capabilities emerges from targeted assessment adopting tools from experimental psychology.
-  Going even a step further, we here approach LLMs from the perspective of probabilistic cognitive modeling.
+  But targeted assessment with methods inspired by experimental psychology highlight dissimilarities between human behavior and LLM predictions.
+  Going even a step further, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of probabilistic cognitive modeling.
   We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
   Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level).
   Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs fail to capture the variance in the human data at the item-level.
-  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, similar to those that a probabilistic cognitive model might make, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits.
-
-
-
-  % Nevertheless, recent work incorporates LLMs into complex applications, where they may take on the role of supplying human intuitive judgements.
-
-
-
-
-  
+  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, similar to those that a probabilistic cognitive model might make, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to our data.
+  These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at an aggregate level, for which they are, however, not designed to make predictions in the first place.
 \end{abstract}
 
 
@@ -105,39 +97,46 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \label{sec:introduction}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\mf{would be good to add references here}
-
-The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and} which excel on standard benchmarks and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
+The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} has enabled a new generation of powerful large language models (LLMs) \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and}.
+State-of-the-art LLMs excel on many benchmark tests \mf{refs for standard and non-standard tests here} and promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
 % especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
 Recent works increasingly go beyond using LLMs based on single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
 Examples include sophisticated prompting strategies \citep[e.g.,][]{LiuLiu2022:Generated-Knowl}, or structured reasoning models \citep[e.g.,][]{CreswellShanahan2022:Selection-Infer,GaoMadaan2023:PAL:-Program-ai,ParanjapeLundberg2023:ART:-Automatic-}.
 Information from LLMs is also used  to rank or numerically score options in open-ended applications, e.g., to mimic human judgements of relevance or interestingness \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
 Other work, uses LLMs as part of bigger programs to build towards something more akin to explanatory cognitive models \citep[e.g.,][]{WongGrand2023:From-Word-Model}.
 
-For all of these applications, it is crucial to understand what LLMs can or cannot reliable do.
+For all of these applications, it is crucial to understand what LLMs can or cannot reliably do.
 The prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' exists, averaged over many instances of this task.
 Benchmark-driven assessments are very useful to systematically study the effects of scale, e.g., in an engineering-oriented context \citep[e.g.,][]{srivastava2023-BIGbench}.
 Other recent work is more psychologically oriented and asks to what extent LLM performance is ``human-like.''
 LLM performance is therefore compared to human choice behavior in psychological experiments to investigate whether LLMs predict patterns of human answer behavior qualitatively \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
 Going further, there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
 For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of common EEG signals like the N400 component \citep{LindborgRabovsky2021:Meaning-in-brai}.
+This work seeks to extend the investigation of the human-likeness of LLMs even further, by comparing quantitative predictions derivable from LLMs for empirical data from human multiple-choice behavior to the predictions of probabilistic cognitive models, which are usually used to analyze, or explain, these data.
+In slogan form, while a lot of previous work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the perspective of the cognitive modeller.
 
-
-This work seeks to extend the investigation of the human-likeness of quantitative information derived from LLMs even further, by exploring whether LLM-derived measures can feed into probabilistic models predicting the full distribution of human answers in a forced-choice tasks.
-The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
+For the purposes of this investigation, a probabilistic cognitive model (PCM) is characterized by providing a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each observable data $D_{C}$ for any experimental condition $C$ and numerical parameters $\theta$ \citep{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
+Usually, conditions $C$ provide a categorization of different tasks which is meaningful against the theoretical background of experimental investigation, and parameters $\theta$ modulate the predicted likelihood of the data in human interpretable ways (see Section~\ref{motivation} for more detail).
+There are non-trivial, insightful differences between LLMs and PCMs, both at the conceptual level and in terms of common practices in evaluation, which we will explore in this paper to help better delineate the potential and limitations of LLMs.
+For one, the ``primitive predictions'' that LLMs provide are not at the level of a condition $C$, but at a lower item-based level.
+In this sense, LLMs could be said to be less explanatory than PCMs by their very nature.
+For another, LLMs are often just assessed based on their ability to identify a target answer, not to predict the full distribution observed in the data.
+Nevertheless, distributional predictions for condition-level data can in principle be derived from LLMs, but there are many ways of doing so, yet with little consensus of how to do so.
+In this paper, we therefore introduce and systematically compare different ways of carving numerical information obtained from an LLM into a parameterized PCM for condition-level data.
 
 A major contribution of this work is methodological.
-By embedding numerical scores from LLMs into probabilistic models for human multiple-choice data, we can use Bayesian data analysis to train, test and compare different LLM-derived predictor scores.
-\mf{describe high-level results here}.
+We subjected human participants and an LLM (OpenAI's GPT-3.5 model \mf{add ref}) to the same forced-choice task, a simple reference game \citep{FrankGoodman2012:Predicting-Prag}.
+We use standard tools of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A} to train, test and compare different LLM-derived PCMs, which we also compare to an established, theoretically informed PCM based on standard likelihood-based measures of statistical goodness-of-fit.
+This is quite different, and arguably more stringent and insightful, than the standard practice of evaluating LLMs based on accuracy scores, determined by a winner-takes-all strategy to identify a single target response.
+We find that variability predicted by the LLM at the item-level is not borne out by the human data, and that some but not all ways of constructing condition-level predictions are equally good.
+These results suggest that it is not impossible to build predictive models for condition-level data, similar to PCMs, but that seemingly subtle details in the derivation of likelihoods matter.
+The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not.
 
 The paper is structured as follows.
-Section~\ref{motivation} further motivates the desire to assess quantitative information from LLMs, and it introduces the distinction between item-level and condition-level predictions.
+Section~\ref{motivation} further elaborates on the conceptual differences between LLMs and PCMs and the practical differences between prevalent evaluation methods for the two.
 Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a salient probabilistic cognitive model \citep{FrankGoodman2012:Predicting-Prag}.
 Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though a condition-level predictor from the RSA model is.
 Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
-We find that not every way of constructing condition-level predictions from item-level scores is equally good.
-\mf{grant conclusion?}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -698,8 +697,20 @@ For example, the model does not predict cases where the number of competitor cho
   \label{fig:prediction-range}
 \end{figure}
 
-
 \printbibliography[heading=bibintoc]
+
+\newpage
+
+\section*{Snippets}
+
+\begin{itemize}
+  \item for conclusion?
+  \begin{itemize}
+    \item The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
+    Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
+  \end{itemize}
+\end{itemize}
+
 
 
 \end{document}
