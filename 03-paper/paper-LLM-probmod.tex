@@ -126,7 +126,7 @@ In this paper, we therefore introduce and systematically compare different ways 
 
 A major contribution of this work is methodological.
 We introduce different ways of defining condition-level, distributional predictions based on LLM-provided numerical measures, and compare these LLM-fuelled probabilistic models against each other, but also against an established, theoretically informed PCM, the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
-To obtain data for this investigation, we subjected human participants and an LLM (OpenAI's GPT-3.5 model \mf{add ref}) to the same forced-choice task, a simple reference game \citep{FrankGoodman2012:Predicting-Prag}.
+To obtain data for this investigation, we subjected human participants and an LLM (OpenAI's GPT-3.5 model \mf{which model exactly, when assessed, cite paper}) to the same forced-choice task, a simple reference game \citep{FrankGoodman2012:Predicting-Prag}.
 We use standard tools of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A} to train, test and compare PCMs based on standard likelihood-based measures of statistical goodness-of-fit to experimental data.
 This is quite different, and arguably more stringent and insightful, than the standard practice of evaluating LLMs based on accuracy scores, determined by a winner-takes-all strategy to identify a single target response.
 We find that variability predicted by the LLM at the item-level is not borne out by the human data, and that some but not all ways of constructing condition-level predictions are equally good.
@@ -135,8 +135,8 @@ The conceptual comparison of LLMs and PCMs also clearly identifies a sense in wh
 
 The paper is structured as follows.
 Section~\ref{motivation} motivates the investigation in this paper, by enlarging on the importance of deriving distributional predictions for conditional-level forced-choice data, and further elaborating on the conceptual differences between LLMs and PCMs and the practical differences between prevalent evaluation methods for the two.
-Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a salient probabilistic cognitive model \citep{FrankGoodman2012:Predicting-Prag}.
-Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though a condition-level predictor from the RSA model is.
+Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a commonly used, theoretically-motivate PCM, namely the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
+Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though the theoretically-motivated RSA model is.
 Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
 
 
@@ -206,7 +206,7 @@ For $\alpha \rightarrow \infty$, this softmax strategy converges to the WTA stra
 
 WTA-based accuracy measures can differ form accuracy measures obtained from the more general softmax-based strategy.
 Whether there is a difference, depends on the variation in item-level scores, in particular the relation between score-ordering and score-differences.
-Imagine that there are two options, and that the target option's score is a small $\epsilon$ better in 80\% of the task's items, and otherwise worse.
+Imagine that there are two options, and that the target option's score is a small $\epsilon$ higher in 80\% of the task's items, and otherwise lower.
 The WTA-based accuracy is 0.8.
 This number is useful as a performance measure for applications in which the LLM is used in exactly the way the WTA strategy describes, e.g., any implementation which is outcome equivalent to greedy decoding with rejection sampling on a domain that contains only the available options.
 For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
@@ -236,25 +236,25 @@ We should therefore address the also the empirical question of which, if any, of
 
   \includegraphics[width = 0.8\textwidth]{00-pics/reference-game.png}
 
-  \caption{Structure of a reference game with human participants. Each trial consists of a set of objects, the so-called context. In production trials, participants choose a single word to describe a target object from the context. In interpretation trials, an object is selected as the likely object a trigger word referring to.}
+  \caption{Structure of a reference game with human participants. Each trial consists of a set of objects, the so-called context. In production trials, participants choose a single word to describe a trigger object from the context. In interpretation trials, an object is selected as the likely object a trigger word referring to.}
   \label{fig:ref-game}
 \end{figure}
 
 Reference games are an established, well-understood and austere experimental paradigm to test human decision making in abstract communicative tasks \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,SikosVenhuizen2021:Reevaluating-pr}.
 A reference game consists of two players, a speaker and an interpreter, who jointly observe a set of objects, usually referred to as context (see Figure~\ref{fig:ref-game}).
-In the \textbf{production condition}, the speaker is assigned a \emph{target object} from the context set which they have to describe to the interpreter.
+In the \textbf{production condition}, the speaker is assigned a \emph{trigger object} from the context set which they have to describe to the interpreter.
 In the \textbf{interpretation condition}, the interpreter observes a description, here called \emph{trigger word}, and chooses one of the objects from the context set.
-The goal of the game is, for the speaker, to choose a description that enables the interpreter to choose the target object; and, for the interpreter, to guess correctly which object the speaker had in mind.
+The goal of the game is, for the speaker, to choose a description that enables the interpreter to choose the trigger object; and, for the interpreter, to guess correctly which object the speaker had in mind when using the trigger word.
 
-The example in Figure~\ref{fig:ref-game} is a standard case, which we will use throughout, where choices are informative about the pragmatic reasoning that decision makers engage in.
+The example in Figure~\ref{fig:ref-game} is a standard case, which we will use throughout, where human choices are informative about the pragmatic reasoning that human decision makers engage in.
 In this example, there are two features that differ across three objects (here shape and color).
 One object shares both its color and shape with one other object, while the two other objects have one unique feature (e.g., being the only circle, or the only green object).
 %
-In a critical production trial, the target object to describe is one of the two objects with a unique feature.
+In a critical production trial, the trigger object to describe is one of the two objects with a unique feature.
 The speaker has four words to choose from.
-The \textbf{target utterance} is the word which uniquely describes the target object.
-The \textbf{distractor utterance} is the word that is true of the target object, but also true of another object.
-The other utterances, both of which are false of the target are \textbf{competitor utterance}.
+The \textbf{target utterance} is the word which uniquely describes the trigger object.
+The \textbf{distractor utterance} is the word that is true of the trigger object, but also true of another object.
+The other utterances, both of which are false of the trigger object are \textbf{competitor utterance}.
 %
 In a critical interpretation trial, the trigger word is one that is true of two of the three objects.
 If participants engage in pragmatic thought, they might reason that \emph{if} the speaker had wanted to refer to one of the two objects of which the trigger word is true (blue square and blue circle in Figure~\ref{fig:ref-game}), the speaker could have used a more informative word for exactly one of those two objects (``circle''), so they are more likely to refer to the \textbf{target object} (the blue square in Figure~\ref{fig:ref-game}).
@@ -262,7 +262,7 @@ The \textbf{competitor object} is the other object of which the trigger word is 
 The \textbf{distractor object} is the object of which the trigger word is false.
 
 We replicated a simple reference game with human participants in which each trial instantiated the structure of the example shown in Figure~\ref{fig:ref-game}.
-While previous reference games with human participants used pictorial representations of objects, and sometimes even pictorial representations of messages, we implemented a text-only version in order to be able to compare the predictions of LLMs for the exact same stimuli.
+While previous reference games with human participants used pictorial representations of objects, and sometimes even pictorial representations of messages, we implemented a text-only version in order to be able to compare the predictions of LLMs for human data, when both LLMs and humans processed the same textual representation of the stimuli.
 The experiment was realized as an online task using \texttt{magpie} \citep{FrankeJi:magpie:-Minimal}.\footnote{
   The code for the experiment can be found at \href{https://github.com/magpie-ea/magpie3-text-refgame}{https://github.com/magpie-ea/magpie3-text-refgame}, and a live version of the experiment can be tested at \href{https://magpie-ea.github.io/magpie3-text-refgame/}{https://magpie-ea.github.io/magpie3-text-refgame/}.
 }
@@ -281,7 +281,7 @@ All participants self-identified as native speakers of English.
 We created 100 different items as stimulus material via a stochastic process.
 Each item is a different textual description of a reference game with the same logical structure as the example from Figure~\ref{fig:ref-game}.
 For each item, the context consisted of three objects.
-Objects are defined by a triple of properties, namely a color, a shape and a texture.
+As in the original paper by \citet{FrankGoodman2012:Predicting-Prag}, objects are defined by a triple of properties, namely a color, a shape and a texture.
 For each property, there were four possible values, e.g., blue, green, red, and orange for color.
 The sampled items differed in terms of the properties of the objects in the context set, and in terms of the order in which the objects and expression alternatives were presented in the text.
 Figures~\ref{fig:refgame-screenshot-production} and \ref{fig:refgame-screenshot-interpretation} from Appendix~\ref{sec:scre-from-online} show example screenshots from the experiment.
@@ -303,7 +303,7 @@ It is interesting that the distractor options were chosen rather often.
 We also see that the number of target choices is higher in the production condition than in the interpretation condition.
 This is in line with previous experimental results on human reference games.
 % \citep{QingFranke2013:Variations-on-a}.
-For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
+For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions of target, competitor and distractor options: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
 
 \begin{figure}[t]
   \centering
@@ -335,7 +335,7 @@ If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping 
  P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u) P(s)\,.
 \end{align*}
 %
-The pragmatic speaker soft-optimizes the choice of utterance to minimize the literal listener's surprisal for the to-be-communicated state:
+The pragmatic speaker policy is defined as soft-optimizing the choice of utterance to minimize the literal listener's surprisal for the state to be communicated (e.g., the trigger object/nicefra):
 %
 \begin{align*}
   P_{S}(u_{i} \mid s, \alpha) & \propto \expo \left [ \log P_{L_{0}}(s \mid u_{i}) \right ] \,.
@@ -353,20 +353,20 @@ Finally, the pragmatic listener is defined as the policy resulting from applying
   \caption{
     Example of predictions from the RSA model (with $\alpha=1$).
     The semantic meaning is shown as a matrix of binary truth-values.
-    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents), assume $\alpha=1$ and are shown as row-stochastic matrices.
+    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents) for $\alpha=1$ are shown as row-stochastic matrices.
   }
   \label{fig:RSA-example}
 \end{figure}
 
-Figure~\ref{fig:RSA-example} gives example calculations (assuming flat priors and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
-For $\alpha=1$, the model predicts that the probabilities of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{0.6, 0.4, 0}$ for the interpretation condition.
+Figure~\ref{fig:RSA-example} gives example calculations (assuming a flat prior $P(s)$ and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
+For $\alpha=1$, the model predicts that the probabilities of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{\nicefrac{3}{5}, \nicefrac{2}{5}, 0}$ for the interpretation condition.
 Increasing $\alpha$ will increase the odds of target over competitor choices.
 Yet, the model also predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
-It is therefore common to include a random error probability for each choice \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, such as via Laplace smoothing: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
+It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
 \begin{align*}
-  P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c}) \propto P_{r}(R_{l}, C; \alpha_{c}) +  \frac{\epsilon_{c}}{3}\,,
+  P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
-where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
+where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.\mf{FC objected to ``condition-specificity'' which is fair, but I leave it as it was; my reasoning: we use model checking to rule out models; in this setting the conservative strategy is to err on the side of making the models too powerful (even at the cost of conceptual plausibility)}
 The result is a four-parameter model, one pair of parameters per condition, which provides a likelihood function for the categorical choice data and so can be fitted to the data and compared against other probabilistic models providing a likelihood function for the same data.
 
 Parameterized predictions like $P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
@@ -381,12 +381,11 @@ As a minimal bar, we would require a model trained on observed data $D_{\text{ob
 Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models to be introduced later).
 We see that the RSA model passes this ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-} for both conditions.
 To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-\mf{maybe insert formal definition of BPPPV?}
 These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
-Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
-The results from Table~\ref{tab:Bppp-values} show that the RSA model passes this numerical test of model adequacy.
+% Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
+% The results from Table~\ref{tab:Bppp-values} show that the RSA model passes this numerical test of model adequacy.
 
-The following sections apply these test of Bayesian model criticism also to models built around predictor values from LLMs.
+The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
 Section~\ref{sec:item-level-pred} first looks at the data from each item individually, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
 
 
@@ -395,10 +394,10 @@ Section~\ref{sec:item-level-pred} first looks at the data from each item individ
 \label{sec:item-level-pred}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Figure~\ref{fig:refgame-counts} shows the condition-level counts for choices for all of the 100 different items combined.
+Figure~\ref{fig:refgame-counts} shows the condition-level counts for human choices for all of the 100 different items combined.
 An LLM, on the other hand, first and foremost makes predictions about each item.
-The items of the reference game experiment differ in the task-relevant features (color, shape, texture), as well as the order of presentation of states and words.
-We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelvant material \citep{DegenHawkins2020:When-redundancy} \mf{more refs on (color) over-specification}; and machines may be susceptible to the presentation of the order of choice options. \mf{references from the NLP literature on effects of prompt variation?}
+As mentioned previously, the items of the reference game experiment differ in the task-relevant features (color, shape, texture), as well as the order of presentation of states and words.
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelevant material \citep{DegenHawkins2020:When-redundancy} \mf{more refs on (color) over-specification}; and machines may be susceptible to the presentation of the order of choice options. \mf{@PT references from the NLP literature on effects of prompt variation?}
 The main question to be addressed in this section is whether a standard item-level score from LLMs provides a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
 For a set-up in which the task descriptions and choice options are all text-based, predictions of LLMs at the item-level can be derived as a function of the (log) probabilities assigned to the continuations corresponding to each choice option after processing the task description.
@@ -414,6 +413,7 @@ The \emph{item-level score} $S(O_{{ki}}, I_{k})$ for option $O_{ki} = w_{ki1}, \
 S(O_{ki}, I_{k}) =  \sum_{j=1}^n \log P_{\text{LLM}} \left(w_{kij} \mid T_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
 \end{align*}
 %
+\mf{check if formula is redundant; already introduced?}
 The item-level score of response type $R_{l}$ is $S(R_{l}, I_{k}) = S(F(R_{l}, I_{k}))$.
 
 Using item-level scores from GPT-3.5, we fit a model to the human data at the item-level.
@@ -463,7 +463,7 @@ Put more strongly, a model that seeks to predict what human participants choose 
 
 This section explores different ways of deriving a probabilistic likelihood function for the human data from an LLM at the aggregate, condition-level.
 Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
-In the following, we first describe the different options of deriving LLM-based predictor terms.
+In the following, we first describe the different options of deriving LLM-based predictors.
 We then compare all probabilistic models based on their adequacy of explaining the human choice data.
 
 \begin{figure}
@@ -555,6 +555,7 @@ Finally, like wide-scope aggregation, intermediate-scope aggregation is also com
   \caption{
     Summary statistics of posterior samples.
     Number indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
+    \mf{make wide format}
   }
   \label{fig:posterior-stats}
 \end{table}
@@ -695,7 +696,7 @@ I would choose the word
 It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
 The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
 Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
-There are distributions over response types which the model does not explain predict \emph{ex ante}.
+There are distributions over response types which the model does not predict \emph{ex ante}.
 For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
 
 
@@ -729,6 +730,9 @@ For example, the model does not predict cases where the number of competitor cho
     \item The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
     Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
   \end{itemize}
+  \item PT: the high-level take-away that item-level LLM predictions don't fit human predictions well might, as always, be met with the comment that the task is rather artificial. maybe this should go into the discussion
+  \item FC: The fact that the aggregate predictions track aggregate human behaviour means that the discrepancies are washing out. But there's also the interesting question of finding the systematic differences between LLMs and people. The task then would be to find sets of stimuli where the differences do \emph{not} wash out and ask: What if anything do these stimuli share? This paper could also be a jumping board for this line of research.
+  \item PT: maybe a conclusion in the spirit of "cogmod in the age of LLMs"/ "computational psycholinguistics \& careful assessment of reasoning / linguistic abilities of LLMs against human performance" might be not entirely ludicrous too
 \end{itemize}
 
 
