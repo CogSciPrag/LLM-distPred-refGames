@@ -98,7 +98,7 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al} has enabled a new generation of powerful large language models  \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and}.
-State-of-the-art LLMs excel on many benchmark data sets \citep{srivastava2023-BIGbench,PerezRinger2023:Discovering-Lan}, and so promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
+State-of-the-art LLMs excel on many benchmark data sets \citep[e.g.,][]{srivastava2023-BIGbench,PerezRinger2023:Discovering-Lan}, and so promise to serve as foundation models for a vast and diverse set of applications \citep{BommasaniHudson2021:On-the-opportun}.
 % especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
 Recent works increasingly go beyond using LLMs based on single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
 Examples include sophisticated prompting strategies \citep[e.g.,][]{LiuLiu2022:Generated-Knowl}, or structured reasoning models \citep[e.g.,][]{CreswellShanahan2022:Selection-Infer,GaoMadaan2023:PAL:-Program-ai,ParanjapeLundberg2023:ART:-Automatic-}.
@@ -107,38 +107,36 @@ Other work, uses LLMs as part of bigger programs to build towards something more
 
 For all of these applications, it is crucial to understand what LLMs can or cannot reliably do.
 The prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' exists, averaged over many instances of this task.
-Benchmark-driven assessments are very useful for a systematic study of the effects of scale, e.g., in an engineering-oriented context \citep[e.g.,][]{srivastava2023-BIGbench}.
-Other recent work is more psychologically oriented and asks to what extent LLM performance is ``human-like.''
-LLM performance is therefore compared to human choice behavior in psychological experiments and investigates whether LLMs predict patterns of human answer behavior \emph{qualitatively} \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
-Going further, there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
+Benchmark-driven assessments are very useful for engineering purposes, e.g., to systematically study of the effects of scale \citep[e.g.,][]{srivastava2023-BIGbench}, but is also used to ask to what extent LLM performance is ``human-like.''
+In more psychologically oriented work, LLM performance is therefore compared to human choice behavior in psychological experiments and investigates whether LLMs predict patterns of human answer behavior  \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
+The main focus is often to compare qualitative patterns in LLM predictions and human data, but there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
 For example, work at the interface between NLP and computational psycholinguistics \citep{MarvinLinzen2018:Targeted-Syntac,HuGauthier2020:A-Systematic-As} has evolved into investigations of whether quantitative predictions by LLMs match quantitative aspects in human experimental data, such as reading times \citep{WilcoxVani2021:A-Targeted-Asse} or the amplitude of the N400 component of event-related-potentials in EEG measurements \citep{LindborgRabovsky2021:Meaning-in-brai}.
-The work presented in this paper seeks to extend the investigation of the human-likeness of LLMs by looking at empirical data from human multiple-choice behavior and comparing an established PCM, which is commonly use to predict or explain this kind of data, to structurally similar quantitative predictions derived from LLMs.
-In slogan form, while a lot of previous work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the perspective of the cognitive modeller.
+The work presented in this paper seeks to extend the investigation of the human-likeness of LLMs by looking at empirical data from human multiple-choice behavior and comparing an established, theoretically motivated probabilistic cognitive model, which is commonly use to predict or explain this kind of data, to structurally similar quantitative predictions derived from LLMs.
+In short, while a lot of previous work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the more specific perspective of the cognitive modeller.
 
-For the purposes of this investigation, a probabilistic cognitive model (PCM) is characterized by providing a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each observable data $D_{C}$ for any experimental condition $C$ and parameter values $\theta$ \citep{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
+For the purposes of this investigation, a probabilistic cognitive model (PCM) is characterized by providing a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each possible data observation $D_{C}$ for any experimental condition $C$ and parameter values $\theta$ \citep[e.g.,][]{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
 % Usually, conditions $C$ provide a categorization of different tasks which is meaningful against the theoretical background of experimental investigation, and parameters $\theta$ modulate the predicted likelihood of the data in human interpretable ways (see Section~\ref{motivation} for more detail).
 There are non-trivial, insightful differences between LLMs and PCMs, both at the conceptual level and in terms of common practices in evaluation, which we will explore in this paper in order to contribute to a better delineation of the potential and limitations of LLMs.
 For one, the ``primitive predictions'' that LLMs provide are not at the level of a condition $C$, but at a lower item-based level.
 % In this sense, LLMs could be said to be less explanatory than PCMs by their very nature (see Section~\ref{motivation}).
 For another, LLMs are often just assessed based on their ability to identify a target answer, not to predict the full distribution observed in the data.
-Nevertheless, distributional predictions for condition-level data can in principle be derived from LLMs, but there are many ways of doing so, yet with little consensus of how to do so.
-In this paper, we therefore introduce and systematically compare different ways of carving numerical information obtained from an LLM into a parameterized PCM for condition-level data.
+% Nevertheless, distributional predictions for condition-level data can in principle be derived from LLMs, but there are many ways of doing so, yet with little consensus of how to do so.
 
-A major contribution of this work is methodological.
-We introduce different ways of defining condition-level, distributional predictions based on LLM-provided numerical measures, and compare these LLM-fuelled probabilistic models against each other, but also against an established, theoretically informed PCM, the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
+% A major contribution of this work is methodological.
+This paper introduces and systematically compare different ways of carving numerical information obtained from an LLM into a structure similar to a parameterized PCM and address the empirical question of whether such an ``LLM-based PCM'' adequately captures the distribution of human forced-choice data at different levels of aggregation.
 To obtain data for this investigation, we subjected human participants and an LLM (a version of OpenAI's GPT-3.5; see Section~\ref{sec:item-level-pred}) to the same forced-choice task, a simple reference game \citep{FrankGoodman2012:Predicting-Prag}.
-We use standard tools of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A} to train, test and compare PCMs based on standard likelihood-based measures of statistical goodness-of-fit to experimental data.
+We introduce different ways of defining condition-level, distributional predictions based on LLM-provided numerical measures.
+We use standard tools of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A} to train, test and compare these ``LLM-based PCMs'' against each other, and against an established, theoretically informed PCM, namely the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
 This is quite different, and arguably more stringent and insightful, than the standard practice of evaluating LLMs based on accuracy scores, determined by a winner-takes-all strategy to identify a single target response.
 We find that variability predicted by the LLM at the item-level is not borne out by the human data, and that some but not all ways of constructing condition-level predictions are equally good.
 These results suggest that it is not impossible to build predictive models for condition-level data, similar to PCMs, on top of LLM-supplied information, but that seemingly subtle details in the derivation of likelihoods matter.
-The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not.
+The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not. \mf{double-check formulation of results}
 
 The paper is structured as follows.
-Section~\ref{motivation} motivates the investigation in this paper, by enlarging on the importance of deriving distributional predictions for conditional-level forced-choice data, and further elaborating on the conceptual differences between LLMs and PCMs and the practical differences between prevalent evaluation methods for the two.
+Section~\ref{motivation} motivates the investigation in this paper, by enlarging on the importance of deriving distributional predictions for conditional-level forced-choice data, and further elaborating on the relevant differences between LLMs and PCMs.
 Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a commonly used, theoretically-motivate PCM, namely the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
 Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though the theoretically-motivated RSA model is.
 Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Motivation: Distributional predictions for condition-level forced-choice data}
