@@ -143,86 +143,119 @@ Section~\ref{llm-predictions-for-reference-games} then discusses different ways 
 \label{motivation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Psychological research into the workings of the human mind aims to find generalizable, systematic patterns in information processing in different domains of cognition.
-Experimental work therefore often compares human performance in different \emph{experimental conditions}, which reflect the general factors that are hypothesized to influence behavior, but might instantiate each experimental condition with different \emph{experimental items}, which are not under scrutiny for any systematic, predictable effect on the observed measurements.
+Psychological research into the workings of the human mind aims to find generalizable patterns in the way information is processed within or across different domains of cognition.
+Experimental work therefore often compares human performance in different \emph{experimental conditions}, which reflect the general factors that are hypothesized to influence behavior.
+Yet a single experimental condition is often instantiated with different \emph{experimental items}, which are not under scrutiny for any systematic, predictable effect on the observed measurements.
 For example, classical research on human memory \citep{AtkinsonShiffrin1968:Human-memory:-A} investigated the effect of rehearsal on memory consolidation.
-Relevant experiments compare recall with and without rehearsal (experimental conditions), while using different items (words, numbers, etc., to be memorized) in each instantiation of a memory task.
-Likewise, when studying how hearing a color word can facilitate a same-or-different judgement of color swatches \citep{Rosch1975:The-Nature-of-M}, the main experimental manipulation, reflected in different experimental conditions, concerns the typicality of shown color swatches, while the variability between different color words like ``blue'' or ``green'', is less important to this research question and so treated as \emph{item-level variation}.
+Relevant experiments compare recall with and without rehearsal (experimental conditions), while using different items (words, numbers, etc., to be memorized) in each instantiation of the same memory task.
+Likewise, when studying how hearing a color word can facilitate a same-or-different judgement of color swatches \citep{Rosch1975:The-Nature-of-M}, the main experimental manipulation concerns the typicality of shown color swatches, while the variability between different color words like ``blue'' or ``green'', is less important to this research question and so treated as \emph{item-level variation}.
 Consequently, a typical psychological experiment is mainly interested in assessing behavior at the level of the experimental condition, because that is where the distinctions relevant to the research question reside.
-Nevertheless, each experimental condition $C$ can be, and often is, instantiated with different instantiations of $C$, variation among which is deemed less relevant to the research question at hand.
+Nevertheless, each experimental condition can be, and often is, instantiated with different items, variation among which is deemed less relevant to the research question at hand.
 
 Data from human participants for experiments of this kind usually shows some variability between items, and also variability between participants.
 This variability is commonly incorporated in statistical analyses as random stochastic variation, e.g., by using hierarchical (regression) models \citep{Jaeger2008:Categorical-dat,barr2013,SorensenHohensteinb2016:Bayesian-linear}.
 Still, the focus of interest usually remains at the condition-level effects, because it is this more abstract level of behavioral aggregation that is relevant for generalizable theory building.
 Similarly, when analyzing or explaining data from psychological experiments with a probabilistic cognitive model (PCM), the PCM will naturally be set-up to predict data at the level of the relevant experimental manipulation, i.e., at the condition-level.
-Even though item-level (and individual-level) variation can, and sometimes should, be incorporated into probabilistic cognitive modeling \citep[e.g.,][]{NilsonRieskamp2011:Hierarchical-Ba,Lee2011:How-Cognitive-M,ScheibehenneRieskamp2013:Testing-the-Ada,FrankeDablander2016:What-does-the-c}, the focus of cognitive modeling is likewise to predict or explain systematic variation between experimental conditions.
+Even though item-level (and individual-level) variation can, and sometimes should, be incorporated into probabilistic cognitive modeling \citep[e.g.,][]{NilsonRieskamp2011:Hierarchical-Ba,Lee2011:How-Cognitive-M,ScheibehenneRieskamp2013:Testing-the-Ada}, the focus of cognitive modeling is to explain systematic variation between experimental conditions.
 Therefore, a basic PCM is essentially characterized by a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each logically possible data observation $D_{C}$ for any experimental condition $C$ and numerical parameters $\theta$ \citep{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
 The difference between a theory-driven PCM and a standard, theory-neutral statistical model (like a regression model), which may also define a parameterized likelihood function of condition-level data, is that the PCM's likelihood function is defined in terms that are considered to be conceptually meaningful for the research domain at hand (see Section~\ref{sec:model-pred-from} for a concrete example).
 
-PCMs, thus construed, differ strongly from LLMs.
+PCMs, thus construed, differ markedly from LLMs.
 LLMs make predictions about the likelihood of words given a preceding or surrounding text.
 They do not, without further derivation, provide predictions at a conceptually meaningful level of abstraction, similar to experimental conditions.
-In this way, LLMs are not explanatory models in the same sense as PCMs might be: they simply do not operate at the level of generalizable abstraction necessary for a common understanding of ``explanation.'' \mf{refs from PhilOScience?}
+In this way, LLMs are not explanatory models in the same sense as PCMs might be: they simply do not operate at a level of generalizable abstraction which is arguably necessary for increasing human understanding of the phenomenon in question \citep{Dellsen2020:Beyond-Explanat,Grimm2021:Understanding}.
 Nevertheless, we can derive predictions from LLM's word-level predictions, first at the item-level and also at the condition-level.
-Indeed, this is what standard benchmark-testing does, albeit with a focus on a winner-take-all strategy, and not with an eye towards deriving a full likelihood function for empirical data.
+Whether or not these predictions are deemed explanatory, the empirical question arises of whether any of these predictions are empirically adequate.
+This empirical question can be addressed by subjecting ``LLM-based PCMs'' to the same statistical model checking as the more usual theoretically motivated PCMs.
 
-The prevalent approach to assessing LLM performance is based on benchmark-testing, using large data sets for tasks in which a designated goal answer exists.
-Tasks often contain multiple-choice options, and accuracy for a task is determined with a ``winner-takes-all'' (WTA) strategy \citep[e.g.,][]{srivastava2023-BIGbench}.
+Standard benchmark-testing on multiple-choice tasks usually uses a winner-take-all (WTA) strategy \citep[e.g.,][]{srivastava2023-BIGbench} to define accuracy scores.
+The WTA-strategy can also be used to derive probabilistic item-level and condition-level predictions from LLMs.
 Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
-Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
-Among the choice options is a designated \emph{target option} $y_{ki^{*}}$ that is assumed to be the ``true'' or to-be-selected goal answer.
+Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$, and each of which .
+For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same answer category $R_{i}$, e.g., that $y_{k1}$ is always the designated \emph{target option} that is assumed to be the ``true'' or to-be-selected goal answer, and that the other choice options are equally assignable into meaningful categories of answer types.
+
 The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
+  \mf{How to extend to masked language models?}
   More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
   For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
 }
 %
 \begin{align*}
-  S\left( y_{ki}, x_{k} \right) = \log P_{\text{LLM}} \left(y_{ki} \mid x_{k} \right) =  \sum_{j=1}^{|y_{ki}|} \log P_{\text{LLM}} \left(w_{kij} \mid x_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+  % S\left( y_{ki}, x_{k} \right) =
+  S_{ki}
+  % = \log P_{\text{LLM}} \left(y_{ki} \mid x_{k} \right)
+  =  \sum_{j=1}^{|y_{ki}|} \log P_{\text{LLM}} \left(w_{kij} \mid x_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
 \end{align*}
 %
-The WTA approach considers item $I_{k}$ to be answered correctly if the target option $y_{ki^{*}}$ is the option that maximizes the item-level score.
-The WTA-based accuracy of the LLM on the given task is the proportion of items which are answered correctly.
-
-While generally a pragmatic and useful approach, assessing LLM performance with a WTA-based accuracy measure can misleading, because it ignores potentially relevant distributional information.
-At an abstract level, the problem is that if task performance is categorical (in the most extreme case: binary), somewhere along the path from a numerical item-level score to accuracy a discontinuity has to be introduced.
-Every such discontinuity bottleneck entails loss of information.
-As this information might be useful, discontinuity should ideally happen as late as possible; or even better: not at all, unless we can be sure that it is always irrelevant.
-But since we hardly can be sure that it is irrelevant for all circumstances, we should better assess performance based on a models' full distributional predictions.
-
-The WTA approach implicitly assumes that item-level choices are resolved by a greedy-like choice of the best alternative.
-% It is therefore a good measure of accuracy when the LLM's main use cases are of a greedy-like nature as well.
-To generalize to less extreme sampling scenarios, the WTA approach can be generalized to softmax sampling, where the probability of choosing option $y_{ki}$ for item $I_{k}$ is:
+The WTA-based approach selects answers that maximize the item-level score (with random tie-breaking).
+Concretely, if $B_{k} = \arg \max_{i} S_{ki}$ is the set of all options that maximize the item-level score for item $k$, then the \emph{item-level prediction} for item $I_{k}$ of the WTA is:
 %
 \begin{align*}
-P_{\text{choose}}(y_{ki}) \propto \expo \left [ \alpha \ S \left( y_{ki}, x_{k} \right) \right ]\,,
+  P_{\text{item}}^{\text{WTA}} =
+  \begin{cases}
+    \frac{1}{\card{B_{k}}} & \text{if } y_{ki} \in B_{k} \text{, and} \\
+    0                     & \text{otherwise.}
+  \end{cases}
 \end{align*}
 %
-and the accuracy is the average probability of choosing the designated target option $y_{ki^{*}}$.
-For $\alpha \rightarrow \infty$, this softmax strategy converges to the WTA strategy.
+Notice that the item-level WTA-prediction is usually a degenerate probability distribution placing all probability mass on a single choice option.
 
-WTA-based accuracy measures can differ form accuracy measures obtained from the more general softmax-based strategy.
-Whether there is a difference, depends on the variation in item-level scores, in particular the relation between score-ordering and score-differences.
-Imagine that there are two options, and that the target option's score is a small $\epsilon$ higher in 80\% of the task's items, and otherwise lower.
-The WTA-based accuracy is 0.8.
-This number is useful as a performance measure for applications in which the LLM is used in exactly the way the WTA strategy describes, e.g., any implementation which is outcome equivalent to greedy decoding with rejection sampling on a domain that contains only the available options.
-For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
-As only the best option will be chosen, that information is irrelevant.
-But if an application uses anything other than greedy-like responses, the accuracy score of 0.8 may be misleading.
-If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy, where $\alpha = 1$, with virtual certainty, so the softmax-based accuracy would around 0.4.\footnote{The probability of the target option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 0 in the remaining 20\% of the cases. This gives an expected rate of: $\nicefrac{4}{5} \ \nicefrac{1}{2} + \nicefrac{1}{5} \ 0 = \nicefrac{2}{5}$.}
-This is a categorical shift from predominantly goal answer to predominantly non-goal answer.
-The argument holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
+The \emph{condition-level prediction} of the WTA approach is obtained by averaging over the item-level predictions for each answer category:
+%
+\begin{align*}
+  P_{\text{cond}}^{\text{WTA}}\left(R_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{WTA}} \left(y_{ki} \right)\,.
+\end{align*}
+%
+The \emph{WTA-based accuracy} is the probability $P_{\text{cond}}^{\text{WTA}}\left(R_{1} \right)$ of selecting the target option over all instances of the task.
+This is the most prevalent measure of the quality of LLM predictions.
 
+% While generally a pragmatic and useful approach, assessing LLM performance with a WTA-based accuracy measure can misleading, because it ignores potentially relevant distributional information.
+% At an abstract level, the problem is that if task performance is categorical (in the most extreme case: binary), somewhere along the path from a numerical item-level score to accuracy a discontinuity has to be introduced.
+% Every such discontinuity bottleneck entails loss of information.
+% As this information might be useful, discontinuity should ideally happen as late as possible; or even better: not at all, unless we can be sure that it is always irrelevant.
+% But since we hardly can be sure that it is irrelevant for all circumstances, we should better assess performance based on a models' full distributional predictions.
+
+The WTA approach implicitly assumes that item-level choices are resolved by a greedy-like choice of the best alternatives.
+This procedure ignores information about relative differences between scores among choice options; information which may be conceptually and practically relevant.
+To generalize to less extreme sampling scenarios, the WTA approach can be generalized to softmax sampling, where the \emph{item-level prediction} of choosing option $y_{ki}$ is:
+%
+\begin{align*}
+P_{\text{item}}^{\text{SM}}\left ( y_{ki} \right ) \propto \expo \left [ \alpha \ S \left( y_{ki}, x_{k} \right) \right ]\,.
+\end{align*}
+%
+The \emph{condition-level prediction} can be defined analogously to the above by averaging over items:
+\begin{align*}
+  P_{\text{cond}}^{\text{SM}}\left(R_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{ki} \right)\,.
+\end{align*}
+As before, the \emph{softmax-based accuracy}, $P_{\text{cond}}^{\text{SM}}\left(R_{i} \right)$, is the average probability of choosing the designated target option $y_{k1}$.
+For $\alpha \rightarrow \infty$, the softmax strategy converges to the WTA strategy, but for finite $\alpha$ the approaches differ.
+This has interesting entailments for accuracy assessment in more engineering-oriented contexts, as well as for questions of exploring the ``human-likeness'' of LLM predictions.
+
+Looking at accuracy assessment, WTA-based accuracy measures can even differ qualitatively from accuracy measures obtained from the more general softmax-based strategy.
+Differences in accuracy measures depend on the variation in item-level scores, in particular the relation between score-ordering and score-differences.
+The example below shows that categorically different results are, in principle, possible when using WTA- or softmax based accuracy.
+The example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
+%
+\begin{quote}
+  % \ex \label{bsp:exmpl-diff-WTA-SM}
+  \textbf{Example:}
+  Imagine that there are two options, and that the target option's score is a small $\epsilon$ higher in 80\% of the task's items, and otherwise lower.
+  The WTA-based accuracy is 0.8.
+  This number is useful as a performance measure for applications in which the LLM is used in exactly the way the WTA strategy describes, e.g., any implementation which is outcome equivalent to greedy decoding with rejection sampling on a domain that contains only the available options.
+  For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
+  As only the best option will be chosen, that information is irrelevant.
+  But if an application uses anything other than greedy-like responses, the accuracy score of 0.8 may be misleading.
+  If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy, where $\alpha = 1$, with virtual certainty, so the softmax-based accuracy would around 0.4.\footnote{The probability of the target option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 0 in the remaining 20\% of the cases. This gives an expected rate of: $\nicefrac{4}{5} \ \nicefrac{1}{2} + \nicefrac{1}{5} \ 0 = \nicefrac{2}{5}$.}
+\end{quote}
+%
 The upshot of these considerations is that the standard practice of WTA-based performance assessment for LLMs gives false, or at least misleading or inaccurate results, whenever not all downstream applications use a greedy-like sampling strategy (which is almost certainly the case), and there is variability in item-level predictions.
-Instead, the alternative softmax-based strategy conservatively generalizes WTA-based performance assessment, but also yields full distributional predictions at the item-level, i.e., a non-degenerate likelihood prediction for \emph{all} choice options, whenever $\alpha$ is not infinite.
-When aspiring to predict experimental data with LLMs, the WTA-based strategy may almost sure be ruled out as a predictor of human-level choice behavior for a simple item: for many experimental set-ups, it is highly unlikely that, for each item, there is a single choice option that (almost) \emph{all} participants will choose.
-But whether the softmax-based item-level predictions, with variable $\alpha$, align with item-level variation in human choice data is an empirical question that has to be addressed by explicit modeling and comparison; an exercise that this paper starts to take on (see Section~\ref{sec:item-level-pred}).
 
-Whether item-level predictions by an LLM are empirically vindicated or not, they may serve as the backbone for deriving condition-level predictions, just as the usual accuracy scores are obtained by averaging over all items belonging to a task or experimental condition.
-However, if we generalize to softmax-based distributional predictions, we find that there are different ways of deriving condition-level predictions (see Section~\ref{llm-predictions-for-reference-games}).
-We should therefore address the also the empirical question of which, if any, of these constructions of condition-level predictions provides a good fit to human data.
-
+When aspiring to predict experimental data from human participants with LLMs, the WTA-based strategy makes very strong predictions at the item-level, where it usually predicts a degenerate probability distribution according to which every data observation for a particular item should fall into the exact same response category.
+This may seem like an \emph{a priori} unlikely prediction, but needs to be tested empirically, just as the item-level predictions by the softmax-based approach should (see Section~\ref{sec:item-level-pred}).
+Whether item-level predictions by an LLM are empirically vindicated or not, is logically independent of whether these item-level predictions serve well as the backbone for deriving condition-level predictions.
+We therefore also need to test, against empirical data, whether different ways of deriving condition-level predictions are adequate (see Section~\ref{llm-predictions-for-reference-games}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment: Reference games}
