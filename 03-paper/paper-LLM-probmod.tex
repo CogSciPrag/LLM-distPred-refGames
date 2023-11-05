@@ -395,31 +395,45 @@ Increasing $\alpha$ will increase the odds of target over competitor choices.
 Yet, the model also predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
 It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
 \begin{align*}
-  P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
+  P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
 where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
 \mf{FC objected to ``condition-specificity'' which is fair, but I leave it as it was; my reasoning: we use model checking to rule out models; in this setting the conservative strategy is to err on the side of making the models too powerful (even at the cost of conceptual plausibility)}
-The result is a four-parameter model, one pair of parameters per condition, which provides a likelihood function for the categorical choice data and so can be fitted to the data and compared against other probabilistic models providing a likelihood function for the same data.
+The data $D_{C}$ from condition $C$, see Figure~\ref{fig:refgame-counts}, consists of counts for each response category.
+The parameterized likelihood function entailed by the RSA model for $D_{C}$ is:
+%
+\begin{align*}
+ P_{r}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \text{Multinomial}(D_{C}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
+\end{align*}
+%
+The result is a four-parameter model, one pair of parameters per condition.
 
-Parameterized predictions like $P_{r}(R_{l}, , C; \alpha_{c}, \epsilon_{c})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
+Parameterized predictions like $P_{r}(D_{C} \mid C, \alpha_{C}, \epsilon_{C})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
 Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{fig:posterior-stats}).\footnote{
   Posterior samples where generated for four chains with 2000 samples each, after a warm-up of 1000 samples. The ``adapt-delta'' value was set to 0.99. Converge was checked with $\hat{R}$-statistics \citep{GelmanRubin1992:Inference-from-}.
 }
 
-To assess goodness-of-fit, we can use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
+To assess goodness-of-fit, we use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
 Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models, which are to be introduced later).
-We see that the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-} for both conditions, in the sense that, when trained on the data, the predictions the model would generate include the observed choice rates for each answer option.
+We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, namely that the distribution of posterior predictions includes the observed choice rates for each answer option.
 To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
 These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
 A very small value indicates that the model might be inadequate for reproducing the data it was trained on.
-This is clearly not the case for the RSA model.
-% Low values therefore indicate that the trained model would be highly surprised by the data it was trained on; an indication that it failed to capture something essential about the training data.
-% The results from Table~\ref{tab:Bppp-values} show that the RSA model passes this numerical test of model adequacy.
+This is clearly not the case for the RSA model with posterior predictive $p$-values close to 0.5.
+In sum, the condition-level predictions by the RSA model, a theoretically motivated PCM, are not discredited by the condition-level data.
+
+We can also use the condition-level predictions for predicting the item-level data.
+If the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, the likelihood function for analysis at the item-level uses the same (condition-level) predictor to separately predict data from each item:
+%
+\begin{align*}
+ P_{r}^{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial}(D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
+\end{align*}
+Fitting for the partitioned data set, and estimates of posterior predictive $p$-values that do not discredit the model ($0.338$ for production, $0.252$ for interpretation).
+This suggests that the item-level variation in the human data is reasonably well captured by a single condition-level predictor from a theoretically motivated PCM.
 
 The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
 Section~\ref{sec:item-level-pred} first looks at the data from each item individually, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Item-level predictions from LLMs}
