@@ -360,23 +360,25 @@ and a stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the p
 
 As a concrete example, we introduce the Rational Speech Act (RSA) model first described in this form by \citet{FrankGoodman2012:Predicting-Prag} \citep[for overview see][]{FrankeJager2015:Probabilistic-p,GoodmanFrank2016:Pragmatic-Langu,StevensBenz2018:Game-Theoretic-,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
 The RSA model defines pragmatic reasoning as a sequence of iterated (soft-)optmization of policies, grounding out in literal interpretation.
-If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping each pair of state $s$ and utterance $u$ to a (binary) truth-value, and if $P_{s}$ is a prior over states, a literal listener policy is defined as:
+If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping each pair of state $s$ and utterance $u$ to a (binary) truth-value, and if $P_{\text{prior}}(s)$ is a prior over states, a literal listener policy is defined as:
 %
 \begin{align*}
- P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u) P(s)\,.
+ P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u)\  P_{\text{prior}}(s)\,.
 \end{align*}
 %
-The pragmatic speaker policy is defined as soft-optimizing the choice of utterance to minimize the literal listener's surprisal for the state to be communicated, i.e., the trigger object:
+The pragmatic speaker policy is defined as soft-optimizing the choice of utterance to minimize the literal listener's surprisal for the state to be communicated, i.e., to maximize the log-probability of the trigger object:
 %
-\begin{align*}
+\begin{align}
+  \label{eq:RSA-speaker}
   P_{S}(u_{i} \mid s, \alpha) & \propto \expo \left [ \log P_{L_{0}}(s \mid u_{i}) \right ] \,.
-\end{align*}
+\end{align}
 %
 Finally, the pragmatic listener is defined as the policy resulting from applying Bayes rule, solving the inverse-problem for the previously defined speaker policy:
 %
-\begin{align*}
-  P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P(s) \,.
-\end{align*}
+\begin{align}
+  \label{eq:RSA-interpreter}
+  P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P_{\text{prior}}(s) \,.
+\end{align}
 
 \begin{figure}[t]
   \centering
@@ -389,38 +391,44 @@ Finally, the pragmatic listener is defined as the policy resulting from applying
   \label{fig:RSA-example}
 \end{figure}
 
-Figure~\ref{fig:RSA-example} gives example calculations (assuming a flat prior $P(s)$ and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
+Figure~\ref{fig:RSA-example} gives example calculations (assuming a flat prior and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
 For $\alpha=1$, the model predicts that the probabilities of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{\nicefrac{3}{5}, \nicefrac{2}{5}, 0}$ for the interpretation condition.
 Increasing $\alpha$ will increase the odds of target over competitor choices.
-Yet, the model also predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
-It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}: if $P_{r}(R_{l}, C, \alpha_{c})$ is the RSA model's probabilistic prediction for response category $R_{l}$ (target, competitor, or distractor) for condition $C$ (production or interpretation) and condition-specific optimality $\alpha_{c}$, the random-error smoothed prediction is:
+In sum, the condition-level predictions of the RSA model are a parameterized function $P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c})$, assigning a probability to each response category $R_{l}$ in each condition $C$ (production or interpretation).
+
+The model constructed so far predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
+It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, so that we get:
+%
 \begin{align*}
   P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
+%
 where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
 \mf{FC objected to ``condition-specificity'' which is fair, but I leave it as it was; my reasoning: we use model checking to rule out models; in this setting the conservative strategy is to err on the side of making the models too powerful (even at the cost of conceptual plausibility)}
+
 The data $D_{C}$ from condition $C$, see Figure~\ref{fig:refgame-counts}, consists of counts for each response category.
-The parameterized likelihood function entailed by the RSA model for $D_{C}$ is:
+The parameterized likelihood function entailed by the RSA model for condition-level data $D_{C}$ is:
 %
-\begin{align*}
+\begin{align}
+  \label{eq:RSA-likelihood}
  P^{\text{RSA}}_{\text{cond}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \text{Multinomial}(D_{C}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
-\end{align*}
+\end{align}
 %
 The result is a four-parameter model, one pair of parameters per condition.
 
-Parameterized predictions like $P_{r}(D_{C} \mid C, \alpha_{C}, \epsilon_{C})$ can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
+Parameterized predictions, like in Equation~(\ref{eq:RSA-likelihood}), can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
 Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
-Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{fig:posterior-stats}).\footnote{
+Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{tab:sumStats}).\footnote{
   Posterior samples where generated for four chains with 2000 samples each, after a warm-up of 1000 samples. The ``adapt-delta'' value was set to 0.99. Converge was checked with $\hat{R}$-statistics \citep{GelmanRubin1992:Inference-from-}.
 }
 
 To assess goodness-of-fit, we use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
 Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models, which are to be introduced later).
 We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, namely that the distribution of posterior predictions includes the observed choice rates for each answer option.
-To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
+To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
 These values approximate the probability that a model trained on $D_{\text{obs}}$ would predict future data of the same size and format that is at least as unlikely as the data $D_{\text{obs}}$ itself.
 A very small value indicates that the model might be inadequate for reproducing the data it was trained on.
-This is clearly not the case for the RSA model with posterior predictive $p$-values close to 0.5.
+This is clearly not the case for the RSA model with posterior predictive $p$-values close to 0.5, as shown in Table~\ref{tab:sumStats}.
 In sum, the condition-level predictions by the RSA model, a theoretically motivated PCM, are not discredited by the condition-level data.
 
 We can also use the condition-level predictions for predicting the item-level data.
@@ -430,11 +438,43 @@ If the whole data set for condition $C$ is chunked into item-level data, $D_{C} 
  P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial}(D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
 \end{align*}
 %
-Fitting for the partitioned data set, and estimates of posterior predictive $p$-values that do not discredit the model ($0.338$ for production, $0.252$ for interpretation).
+Fitting for the partitioned data set, and estimates of posterior predictive $p$-values that do not discredit the model (see Table~\ref{tab:sumStats}).
 This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from a theoretically motivated PCM.
 
 The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
 Section~\ref{sec:item-level-pred} first looks at the data from each item individually, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{llllcrlcrcl}
+  \toprule
+  &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
+  data & condition & model & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
+  \midrule
+
+  cond.-level & avg. scores        & production     & 0.19 & 0.00 & 0.22 & 0.04 & 0.26 & 0.11 & 0.05 & * \\
+  cond.-level & avg. scores        & interpretation & 0.15 & 0.00 & 0.18 & 0.02 & 0.20 & 0.06 & 0.00 & * \\
+  cond.-level & avg. probabilities & production     & 0.86 & 0.08 & 1.04 & 0.13 & 1.22 & 0.18 & 0.51 &  \\
+  cond.-level & avg. probabilities & interpretation & 0.36 & 0.00 & 0.48 & 0.05 & 0.60 & 0.12 & 0.00 & * \\
+  cond.-level & avg. WTA           & production     & 0.87 & 0.08 & 1.04 & 0.13 & 1.23 & 0.17 & 0.49 &  \\
+  cond.-level & avg. WTA           & interpretation & 0.17 & 0.10 & 0.39 & 0.15 & 0.61 & 0.20 & 0.26 &  \\
+  cond.-level & RSA                & production     & 2.59 & 0.08 & 3.16 & 0.13 & 3.71 & 0.18 & 0.49 &  \\
+  cond.-level & RSA                & interpretation & 0.24 & 0.10 & 0.66 & 0.15 & 1.07 & 0.20 & 0.52 &  \\
+  item-level  & LLM                & production     & 0.15 & 0.00 & 0.21 & 0.10 & 0.29 & 0.21 & 0.00 & * \\
+  item-level  & LLM                & interpretation & 0.08 & 0.00 & 0.13 & 0.17 & 0.18 & 0.33 & 0.00 & * \\
+  item-level  & RSA                & production     & 2.62 & 0.08 & 3.15 & 0.13 & 3.69 & 0.17 & 0.34 &  \\
+  item-level  & RSA                & interpretation & 0.24 & 0.10 & 0.66 & 0.15 & 1.05 & 0.20 & 0.25 & \\
+
+
+   \bottomrule \\
+\end{tabular}
+\caption{
+  Summary statistics for model fits.
+  Columns show the means and 95\% credible intervals for posterior samples for each parameter, as well as the Bayesian posterior predictive $p$-value for each model, condition and data level.
+  Asterisks mark $p$-values not above $0.05$, flagging relative inability to capture the structure of the data.
+}
+\label{tab:sumStats}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Item-level predictions from LLMs}
@@ -494,19 +534,7 @@ Priors on parameters are as for the RSA model described in Section~\ref{sec:mode
 
 Posterior credible values for parameters are.
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{rlrrrrrr}
-  \toprule
- && $\alpha$ &&& \(\epsilon\) & \\
- & condition & $|$95 & mean & 95\%$|$ & $|$95\% & mean\_epsilon & 95\%$|$\_epsilon \\ \midrule
-1 & production & 0.15 & 0.21 & 0.29 & 0.00 & 0.10 & 0.21 \\
-  2 & interpretation & 0.08 & 0.13 & 0.18 & 0.00 & 0.17 & 0.33 \\
-   \bottomrule
-\end{tabular}
-\end{table}
 
-\mf{Posteriors over $\alpha$ and $\epsilon$}
 
 
 Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM scores predict variance which is not borne out by the human data.
@@ -602,78 +630,78 @@ Wide-scope aggregation considers $\alpha$-optimized probabilities at the item le
 Wide-scope aggregation contains the ``winner-takes-all'' procedure for accuracy scoring in common benchmark tests for $\alpha \rightarrow \infty$.
 Finally, like wide-scope aggregation, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level and reserves the scaling of probability distributions to a stage \emph{after} aggregation.
 
-\begin{table}[t]
-  \centering
+% \begin{table}[t]
+%   \centering
 
-  % \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
+%   % \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
 
-  \begin{tabular}{llllcr}
-    \toprule \addlinespace[1ex]
-    model        & condition      & Parameter  & $|$95\% & mean & 95\%$|$ \\
-    \midrule  \addlinespace[1ex]
-    narrow       & production     & $\alpha$   & 0.19    & 0.22 & 0.26 \\
-                 &                & $\epsilon$ & 0.00    & 0.04 & 0.11 \\
-                 & interpretation & $\alpha$   & 0.15    & 0.18 & 0.20 \\
-                 &                & $\epsilon$ & 0.00    & 0.02 & 0.06 \\ \addlinespace[0.75ex]
-    intermediate & production     & $\alpha$   & 0.86    & 1.04 & 1.22 \\
-                 &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
-                 & interpretation & $\alpha$   & 0.36    & 0.48 & 0.60 \\
-                 &                & $\epsilon$ & 0.00    & 0.05 & 0.12 \\ \addlinespace[0.75ex]
-    wide         & production     & $\alpha$   & 0.22    & 2.69 & 8.79 \\
-                 &                & $\epsilon$ & 0.08    & 0.13 & 0.19 \\
-                 & interpretation & $\alpha$   & 0.19    & 1.08 & 6.03 \\
-                 &                & $\epsilon$ & 0.00    & 0.06 & 0.18 \\ \addlinespace[0.75ex]
-    RSA          & production     & $\alpha$   & 2.59    & 3.16 & 3.71 \\
-                 &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
-                 & interpretation & $\alpha$   & 0.24    & 0.66 & 1.07 \\
-                 &                & $\epsilon$ & 0.10    & 0.15 & 0.20 \\ \addlinespace[0.25ex]
-    \bottomrule \\
-  \end{tabular}
+%   \begin{tabular}{llllcr}
+%     \toprule \addlinespace[1ex]
+%     model        & condition      & Parameter  & $|$95\% & mean & 95\%$|$ \\
+%     \midrule  \addlinespace[1ex]
+%     narrow       & production     & $\alpha$   & 0.19    & 0.22 & 0.26 \\
+%                  &                & $\epsilon$ & 0.00    & 0.04 & 0.11 \\
+%                  & interpretation & $\alpha$   & 0.15    & 0.18 & 0.20 \\
+%                  &                & $\epsilon$ & 0.00    & 0.02 & 0.06 \\ \addlinespace[0.75ex]
+%     intermediate & production     & $\alpha$   & 0.86    & 1.04 & 1.22 \\
+%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
+%                  & interpretation & $\alpha$   & 0.36    & 0.48 & 0.60 \\
+%                  &                & $\epsilon$ & 0.00    & 0.05 & 0.12 \\ \addlinespace[0.75ex]
+%     wide         & production     & $\alpha$   & 0.22    & 2.69 & 8.79 \\
+%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.19 \\
+%                  & interpretation & $\alpha$   & 0.19    & 1.08 & 6.03 \\
+%                  &                & $\epsilon$ & 0.00    & 0.06 & 0.18 \\ \addlinespace[0.75ex]
+%     RSA          & production     & $\alpha$   & 2.59    & 3.16 & 3.71 \\
+%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
+%                  & interpretation & $\alpha$   & 0.24    & 0.66 & 1.07 \\
+%                  &                & $\epsilon$ & 0.10    & 0.15 & 0.20 \\ \addlinespace[0.25ex]
+%     \bottomrule \\
+%   \end{tabular}
 
-  \caption{
-    Summary statistics of posterior samples.
-    Numbers indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
-    \mf{make wide format}
-  }
-  \label{fig:posterior-stats}
-\end{table}
+%   \caption{
+%     Summary statistics of posterior samples.
+%     Numbers indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
+%     \mf{make wide format}
+%   }
+%   \label{fig:posterior-stats}
+% \end{table}
 
 The three condition-level predictions yield three different probabilistic models, each with two pairs of condition-dependent parameters $\alpha_{c}$, and $\epsilon_{c}$.
 Using priors and Bayesian posterior estimation as previously described for the RSA (see Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
-The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{fig:posterior-stats}.
+The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
 What is noteworthy about these estimates is that the $\alpha_{c}$ parameters for the wide-scope model have a very large credible range.
 This is because, already for values of $\alpha_{c} = 1$, the item-level predictions are virtually ``winner-takes-all'' choices, selecting the option with the maximum score with probability almost 1 for almost all items.
 This implies that, by studying the posterior predictive distribution of the wide-scope model, we are virtually testing condition-level predictions from the standard WTA-strategy used for benchmark testing (see Section~\ref{motivation}).
 
 Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
 We find that only the theoretical model (RSA) and the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
-To corroborate the visual impression, Table~\ref{tab:Bppp-values} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-Consequently, the results from Table~\ref{tab:Bppp-values} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline compatible with the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
+To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
+Consequently, the results from Table~\ref{tab:sumStats} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline compatible with the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
 
-\begin{table}[ht]
-\centering
+% \begin{table}[ht]
+% \centering
 
-% \begin{tabular}{lrr}
+% % \begin{tabular}{lrr}
+% %   \toprule
+% %   model        & production & interpretation \\ \midrule
+% %   narrow       & 0.05       & 0.00 \\
+% %   wide         & 0.51       & 0.00 \\
+% %   intermediate & 0.49       & 0.26 \\
+% %   RSA          & 0.49       & 0.52 \\
+% %   \bottomrule \\
+% % \end{tabular}
+
+% \begin{tabular}{lrrrr}
 %   \toprule
-%   model        & production & interpretation \\ \midrule
-%   narrow       & 0.05       & 0.00 \\
-%   wide         & 0.51       & 0.00 \\
-%   intermediate & 0.49       & 0.26 \\
-%   RSA          & 0.49       & 0.52 \\
-%   \bottomrule \\
+%   & narrow & wide & intermediate & RSA \\ \midrule
+%   production & 0.05 & 0.51 & 0.49 & 0.49 \\
+%   interpretation & 0.00 & 0.00 & 0.26 & 0.52 \\ \bottomrule \\
 % \end{tabular}
 
-\begin{tabular}{lrrrr}
-  \toprule
-  & narrow & wide & intermediate & RSA \\ \midrule
-  production & 0.05 & 0.51 & 0.49 & 0.49 \\
-  interpretation & 0.00 & 0.00 & 0.26 & 0.52 \\ \bottomrule \\
-\end{tabular}
 
-
-\caption{Sample-based estimates of Bayesian posterior predictive $p$-values for each model and each condition, based on likelihood of the observed data as test statistic.}
-\label{tab:Bppp-values}
-\end{table}
+% \caption{Sample-based estimates of Bayesian posterior predictive $p$-values for each model and each condition, based on likelihood of the observed data as test statistic.}
+% \label{tab:Bppp-values}
+% \end{table}
 
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
