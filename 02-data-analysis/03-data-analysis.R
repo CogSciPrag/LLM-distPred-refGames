@@ -283,9 +283,9 @@ pp_prod_RSA <- get_posterior_predictives(fit_prod_RSA, d_prod_global, filename =
 pp_inter_narrow <- get_posterior_predictives(fit_inter_narrow, d_inter_global, filename = "post_pred_inter_narrow") |> 
   mutate(condition = "interpretation", model = "avg. scores")
 pp_inter_intermediate <- get_posterior_predictives(fit_inter_intermediate, d_inter_global, filename = "post_pred_inter_intermediate") |> 
-  mutate(condition = "interpretation", model = "avg. probabilities")
+  mutate(condition = "interpretation", model = "intermediate")
 pp_inter_wide <- get_posterior_predictives(fit_inter_wide, d_inter_global, filename = "post_pred_inter_wide") |> 
-  mutate(condition = "interpretation", model = "wide")
+  mutate(condition = "interpretation", model = "avg. probabilities")
 pp_inter_WTA <- get_posterior_predictives(fit_inter_WTA, d_inter_global, filename = "post_pred_inter_WTA") |> 
   mutate(condition = "interpretation", model = "avg. WTA")
 pp_inter_RSA <- get_posterior_predictives(fit_inter_RSA, d_inter_global, filename = "post_pred_inter_RSA") |> 
@@ -344,10 +344,13 @@ plot_PPC(pp_prod_RSA, pp_inter_RSA)
 
 # all models in one
 
+d_counts
+
 PPC_data |> 
   ggplot() +
-  geom_col(data = PPC_data |> filter(model == "narrow"),
-           aes(x = response, y = observed, fill = response)) +
+  # geom_col(data = PPC_data |> filter(model == "narrow"),
+  #          aes(x = response, y = observed, fill = response)) +
+  geom_col(data = d_counts, aes(x= response, y = n, fill = response)) +
   facet_grid(.~condition) +
   geom_pointrange(aes(x = response, y = mean, ymin = `|95%`, ymax = `95%|`, shape = model, group = model), 
                   position = position_dodge(width = 0.75), size = 0.6, linewidth = 0.8, color = project_colors[6]) +
