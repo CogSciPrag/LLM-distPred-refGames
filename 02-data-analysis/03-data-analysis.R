@@ -49,11 +49,21 @@ ggsave(plot = refgame_counts,
 ## prepare model predictions (-> move to prep script?)
 #######################################################
 
-softmax_row <- function(matrix, alpha = 1) {
-  exp_matrix <- exp(alpha * matrix)
+softmax_row <- function(matrix_of_scores, alpha = 1) {
+  exp_matrix <- exp(alpha * matrix_of_scores)
   row_sums <- rowSums(exp_matrix)
   softmax_matrix <- exp_matrix / row_sums
   return(softmax_matrix)
+}
+
+wta_row <- function(matrix_of_scores) {
+  result_matrix <- matrix(0, nrow = nrow(matrix_of_scores), ncol = ncol(matrix_of_scores))
+  for (i in 1:nrow(matrix_of_scores)) {
+    max_val <- max(matrix_of_scores[i, ])
+    max_indices <- which(matrix_of_scores[i, ] == max_val)
+    result_matrix[i, max_indices] <- 1/length(max_indices)
+  }
+  return(result_matrix)
 }
 
 #################
@@ -61,7 +71,7 @@ softmax_row <- function(matrix, alpha = 1) {
 #################
 
 # wrangle data
-x <- d |> 
+x_prod <- d |> 
   filter(condition == "production") |> 
   select(submission_id, trial_nr, item, condition, starts_with("scores_produ")) |> 
   mutate(scores_production_distractor = 
@@ -69,41 +79,43 @@ x <- d |>
   select(-scores_production_distractor1, -scores_production_distractor2)
 
 # narrow- and intermediate-scope predictions for production
-matrix_global <- x |> 
+matrix_global_prod <- x_prod |> 
   select(starts_with("scores_produ")) |> as.matrix()
-LLM_pred_prod_narrow       <- softmax_row(matrix(apply(matrix_global, 2, mean), nrow = 1))
-LLM_pred_prod_intermediate <- matrix(apply(softmax_row(matrix_global), 2, mean), nrow = 1)
+LLM_pred_prod_narrow       <- softmax_row(matrix(apply(matrix_global_prod, 2, mean), nrow = 1))
+LLM_pred_prod_intermediate <- matrix(apply(softmax_row(matrix_global_prod), 2, mean), nrow = 1)
+LLM_pred_prod_WTA          <- matrix(apply(wta_row(matrix_global_prod), 2, mean), nrow = 1)
 
 # wide-scope predictions
-matrix_itemLevel <- x |> 
+matrix_itemLevel_prod <- x_prod |> 
   select(item, starts_with("scores_produ")) |> 
   unique() |> 
   arrange(item) |> 
   select(starts_with("scores_produ")) |> as.matrix()
-LLM_pred_prod_wide  <- softmax_row(matrix_itemLevel)
+LLM_pred_prod_wide  <- softmax_row(matrix_itemLevel_prod)
 
 #################
 # interpretation
 #################
 
 # wrangle data
-x <- d |> 
+x_inter <- d |> 
   filter(condition == "interpretation") |> 
   select(submission_id, trial_nr, item, condition, starts_with("scores_inter"))
 
 # narrow- and intermediate-scope predictions for production
-matrix_global <- x |> 
+matrix_global_inter <- x_inter |> 
   select(starts_with("scores_inter")) |> as.matrix()
-LLM_pred_inter_narrow       <- softmax_row(matrix(apply(matrix_global, 2, mean), nrow = 1))
-LLM_pred_inter_intermediate <- matrix(apply(softmax_row(matrix_global), 2, mean), nrow = 1)
+LLM_pred_inter_narrow       <- softmax_row(matrix(apply(matrix_global_inter, 2, mean), nrow = 1))
+LLM_pred_inter_intermediate <- matrix(apply(softmax_row(matrix_global_inter), 2, mean), nrow = 1)
+LLM_pred_inter_WTA          <- matrix(apply(wta_row(matrix_global_inter), 2, mean), nrow = 1)
 
 # wide-scope predictions
-matrix_itemLevel <- x |> 
+matrix_itemLevel_inter <- x_inter |> 
   select(item, starts_with("scores_inter")) |> 
   unique() |> 
   arrange(item) |> 
   select(starts_with("scores_inter")) |> as.matrix()
-LLM_pred_inter_wide  <- softmax_row(matrix_itemLevel)
+LLM_pred_inter_wide  <- softmax_row(matrix_itemLevel_inter)
 
 ######################################################
 ## plot model predictions for (alpha=1)
@@ -202,11 +214,13 @@ RSA_pred_inter <- array(c(0.6, 0.4, 0), dim=c(1,1,3))
 
 fit_prod_narrow <- fit_data(d_prod_global, array(LLM_pred_prod_narrow, dim=c(1,1,3)))
 fit_prod_intermediate <- fit_data(d_prod_global, array(LLM_pred_prod_intermediate, dim=c(1,1,3)))
+fit_prod_WTA <- fit_data(d_prod_global, array(LLM_pred_prod_WTA, dim=c(1,1,3)))
 fit_prod_wide <- fit_data(d_prod_global, array(LLM_pred_prod_wide, dim=c(1,nrow(LLM_pred_prod_wide),3)))
 fit_prod_RSA  <- fit_data(d_prod_global, RSA_pred_prod)
 
 fit_inter_narrow <- fit_data(d_inter_global, array(LLM_pred_inter_narrow, dim=c(1,1,3)))
 fit_inter_intermediate <- fit_data(d_inter_global, array(LLM_pred_inter_intermediate, dim=c(1,1,3)))
+fit_inter_WTA <- fit_data(d_inter_global, array(LLM_pred_inter_WTA, dim=c(1,1,3)))
 fit_inter_wide <- fit_data(d_inter_global, array(LLM_pred_inter_wide, dim=c(1,nrow(LLM_pred_inter_wide),3)))
 fit_inter_RSA  <- fit_data(d_inter_global, RSA_pred_inter)
 
@@ -216,16 +230,19 @@ fit_inter_RSA  <- fit_data(d_inter_global, RSA_pred_inter)
 
 posterior_stats <- rbind(
   produce_summary_prodInt_epsilonAlpha(fit_prod_narrow, fit_inter_narrow) |> 
-    mutate(model = "narrow"),
+    mutate(model = "avg. scores"),
   produce_summary_prodInt_epsilonAlpha(fit_prod_intermediate, fit_inter_intermediate) |> 
-    mutate(model = "intermediate"),
-  produce_summary_prodInt_epsilonAlpha(fit_prod_wide, fit_inter_wide)  |> 
-    mutate(model = "wide"),
+    mutate(model = "avg. probabilities"),
+  produce_summary_prodInt_epsilonAlpha(fit_prod_WTA, fit_inter_WTA)  |> 
+    mutate(model = "avg. WTA"),
+  # produce_summary_prodInt_epsilonAlpha(fit_prod_wide, fit_inter_wide)  |> 
+  #   mutate(model = "wide"),
   produce_summary_prodInt_epsilonAlpha(fit_prod_RSA, fit_inter_RSA)  |> 
     mutate(model = "RSA")
 ) |>  mutate(
   condition = factor(condition, levels = c("production", "interpretation")),
-  model     = factor(model, levels = rev(c("narrow", "wide", "intermediate", "RSA")))
+  model     = factor(model, levels = rev(c("avg. scores", "avg. probabilities","avg. WTA", "RSA")))
+  # model     = factor(model, levels = rev(c("narrow", "wide", "intermediate", "WTA", "RSA")))
 )
 
 # plot
@@ -252,38 +269,45 @@ posterior_stats |>
 #######################################################
 
 pp_prod_narrow <- get_posterior_predictives(fit_prod_narrow, d_prod_global, filename = "post_pred_prod_narrow") |> 
-  mutate(condition = "production", model = "narrow")
+  mutate(condition = "production", model = "avg. scores")
 pp_prod_intermediate <- get_posterior_predictives(fit_prod_intermediate, d_prod_global, filename = "post_pred_prod_intermediate") |> 
   mutate(condition = "production", model = "intermediate")
 pp_prod_wide <- get_posterior_predictives(fit_prod_wide, d_prod_global, filename = "post_pred_prod_wide") |> 
-  mutate(condition = "production", model = "wide")
+  mutate(condition = "production", model = "avg. probabilities")
+pp_prod_WTA <- get_posterior_predictives(fit_prod_WTA, d_prod_global, filename = "post_pred_prod_WTA") |> 
+  mutate(condition = "production", model = "avg. WTA")
 pp_prod_RSA <- get_posterior_predictives(fit_prod_RSA, d_prod_global, filename = "post_pred_prod_RSA") |> 
   mutate(condition = "production", model = "RSA")
 
 
 pp_inter_narrow <- get_posterior_predictives(fit_inter_narrow, d_inter_global, filename = "post_pred_inter_narrow") |> 
-  mutate(condition = "interpretation", model = "narrow")
+  mutate(condition = "interpretation", model = "avg. scores")
 pp_inter_intermediate <- get_posterior_predictives(fit_inter_intermediate, d_inter_global, filename = "post_pred_inter_intermediate") |> 
-  mutate(condition = "interpretation", model = "intermediate")
+  mutate(condition = "interpretation", model = "avg. probabilities")
 pp_inter_wide <- get_posterior_predictives(fit_inter_wide, d_inter_global, filename = "post_pred_inter_wide") |> 
   mutate(condition = "interpretation", model = "wide")
+pp_inter_WTA <- get_posterior_predictives(fit_inter_WTA, d_inter_global, filename = "post_pred_inter_WTA") |> 
+  mutate(condition = "interpretation", model = "avg. WTA")
 pp_inter_RSA <- get_posterior_predictives(fit_inter_RSA, d_inter_global, filename = "post_pred_inter_RSA") |> 
   mutate(condition = "interpretation", model = "RSA")
 
 
 PPC_data = rbind(
   pp_prod_narrow,
-  pp_prod_intermediate,
+  # pp_prod_intermediate,
   pp_prod_wide,
+  pp_prod_WTA,
   pp_prod_RSA,
   pp_inter_narrow,
-  pp_inter_intermediate,
+  # pp_inter_intermediate,
   pp_inter_wide,
+  pp_inter_WTA,
   pp_inter_RSA
 ) |> select(-row) |> 
   mutate(
     condition = factor(condition, levels = c("production", "interpretation")),
-    model     = factor(model, levels = c("narrow", "wide", "intermediate", "RSA"))
+    model     = factor(model, levels = rev(c("avg. scores", "avg. probabilities","avg. WTA", "RSA")))
+    # model     = factor(model, levels = c("narrow", "wide", "intermediate", "WTA", "RSA"))
     )
 
 #######################################################
@@ -314,6 +338,7 @@ plot_PPC <- function(PP_prod, PP_inter, name = "bla"){
 # individual plots
 plot_PPC(pp_prod_narrow, pp_inter_narrow)
 plot_PPC(pp_prod_intermediate, pp_inter_intermediate)
+plot_PPC(pp_prod_WTA, pp_inter_WTA)
 plot_PPC(pp_prod_wide, pp_inter_wide)
 plot_PPC(pp_prod_RSA, pp_inter_RSA)
 
@@ -325,7 +350,7 @@ PPC_data |>
            aes(x = response, y = observed, fill = response)) +
   facet_grid(.~condition) +
   geom_pointrange(aes(x = response, y = mean, ymin = `|95%`, ymax = `95%|`, shape = model, group = model), 
-                  position = position_dodge(width = 0.5), size = 0.7, linewidth = 1, color = "black") +
+                  position = position_dodge(width = 0.75), size = 0.6, linewidth = 0.8, color = project_colors[6]) +
   ylab("") + xlab("") +
   # theme(legend.position="none") +
   theme(axis.text.x = element_text(angle = 25, vjust = 1, hjust=1)) +
@@ -478,6 +503,7 @@ fit_items_inter <- fit_data(
 
 produce_summary_prodInt_epsilonAlpha(fit_items_prod, fit_items_inter)
 
+
 # PPC visualization
 
 # production
@@ -583,7 +609,7 @@ message("Bayesian p value for interpretation (LLM, by-item):", extract_bayesian_
 
 
 #######################################################
-## item-level analysis (w/ condition-level predictors)
+## item-level analysis (w/ cond-level predict. by RSA)
 #######################################################
 
 get_Bpppv_itemLevel_glbPredictor <- function(pred_prod, pred_inter) {
@@ -599,14 +625,124 @@ get_Bpppv_itemLevel_glbPredictor <- function(pred_prod, pred_inter) {
     model_name = '00-stan-files/llm-average-matrix-epsilon-arrayed.stan')
   
   return(list(
-    production     = extract_bayesian_p(fit_items_prod_glblPredictor), 
-    interpretation = extract_bayesian_p(fit_items_inter_glblPredictor)))
+    production_Bpppv     = extract_bayesian_p(fit_items_prod_glblPredictor), 
+    interpretation_Bpppv = extract_bayesian_p(fit_items_inter_glblPredictor),
+    production_fit       = fit_items_prod_glblPredictor,
+    interpretation_fit   = fit_items_inter_glblPredictor
+    ))
 }
 
 # Bpppc_item_wide <- get_Bpppv_itemLevel_glbPredictor(c(2/3,1/3,0), c(0.6,0.4,0))
-Bpppc_item_RSA  <- get_Bpppv_itemLevel_glbPredictor(c(2/3,1/3,0), c(0.6,0.4,0))
+fit_item_RSA  <- get_Bpppv_itemLevel_glbPredictor(c(2/3,1/3,0), c(0.6,0.4,0))
 
 # # Bayesian posterior predictive p-values
 
-message("Bayesian p value for production (RSA, by-item):", Bpppc_item_RSA$production)
-message("Bayesian p value for interpretation (RSA, by-item):", Bpppc_item_RSA$interpretation)
+message("Bayesian p value for production (RSA, by-item):", fit_item_RSA$production_Bpppv)
+message("Bayesian p value for interpretation (RSA, by-item):", fit_item_RSA$interpretation_Bpppv)
+
+#######################################################
+## table with summary statistics for all fits 
+#######################################################
+
+
+sumStats_cond <- posterior_stats |> 
+  filter(!is.na(condition)) |> 
+  mutate(data = "cond.-level") |> 
+  select(c(7,6,5,1,2,3,4))
+
+sumStats_item <- produce_summary_prodInt_epsilonAlpha(fit_items_prod, fit_items_inter) |> 
+  mutate(model = "LLM") |>
+  rbind(
+    produce_summary_prodInt_epsilonAlpha(fit_item_RSA$production_fit, fit_item_RSA$interpretation_fit) |> 
+      mutate(model = "RSA")) |> 
+  filter(condition != "diff. prod-inter") |> 
+  mutate(data = "item-level") |> 
+  select(c(7,6,5,1,2,3,4))
+
+sumStats_item_xtable <- 
+  rbind(sumStats_cond, sumStats_item) |> 
+  pivot_wider(id_cols = c("data", "model", "condition"), names_from = Parameter, values_from = 5:7) |> 
+  select(c(1,2,3,4,6,8,5,7,9)) |>
+  mutate(condition = factor(condition, levels = c("production", "interpretation"))) |> 
+  mutate(data = factor(condition, levels = c("item-level", "condition-level"))) |> 
+  mutate(model = factor(model, levels = c(
+    "RSA",
+    "LLM", 
+    "avg. scores", 
+    "avg. probabilities",
+    "avg. WTA"
+    ))) |> 
+  arrange(data, model, condition) |> 
+  mutate(
+    Bpppv = c(
+      extract_bayesian_p(fit_prod_narrow),
+      extract_bayesian_p(fit_inter_narrow),
+      extract_bayesian_p(fit_prod_wide),
+      extract_bayesian_p(fit_inter_wide),
+      extract_bayesian_p(fit_prod_intermediate),
+      extract_bayesian_p(fit_inter_intermediate),
+      extract_bayesian_p(fit_prod_RSA),
+      extract_bayesian_p(fit_inter_RSA),
+      extract_bayesian_p(fit_items_prod),
+      extract_bayesian_p(fit_items_inter),
+      fit_item_RSA$production_Bpppv,
+      fit_item_RSA$interpretation_Bpppv
+      )
+  ) |> 
+  mutate(significant = ifelse(Bpppv <= 0.05, "*", "")) |> 
+  xtable::xtable() 
+
+# sumStats_item_xtable
+  
+capture.output(print(sumStats_item_xtable))|> 
+  str_replace_all(pattern = "_alpha", "") |> 
+  str_replace_all(pattern = "_epsilon", "") |> 
+  paste(collapse = "\n") |> cat()
+
+
+#######################################################
+## interpreting alpha-fits for item-level analysis
+#######################################################
+
+mean_target_prob <- function(alpha) {
+  mean(softmax_row(matrix_itemLevel_prod, alpha)[as.logical(wta_row(matrix_itemLevel_prod))])
+}
+
+make_alpha_plot <- function(current_condition = "production") {
+  sumStats <- sumStats_item |> 
+    filter(model == "LLM") |> 
+    filter(Parameter == "alpha") |> 
+    filter(condition == current_condition) |> 
+    select(`|95%`,  mean, `95%|`) |> 
+    as.numeric()
+  
+  plot_data <- tibble(
+    alpha = c(sumStats,seq(0,0.5, length.out = 1000)),
+    mean_target_prob = map_dbl(alpha, mean_target_prob)
+  ) 
+  
+  plot_data |> 
+    ggplot(aes(x = alpha, y = mean_target_prob)) +
+    geom_area(
+      # aes(xmin = 1/3), 
+      data = filter(plot_data, alpha >= sumStats[1] & alpha <= sumStats[3]), 
+      fill = "gray", alpha = 0.5) +
+    geom_segment(aes(y = 1/3, yend = 1/3, x=0, xend = 0.5), color = project_colors[1], linetype = "dotted", size = 1.1) +
+    geom_segment(aes(y = 1, yend = 1, x=0, xend = 0.5), color = project_colors[4], linetype = "dotted", size = 1.1) +
+    geom_line(size = 1.5) +
+    geom_linerange(aes(x = sumStats[2], xmin = sumStats[1], xmax = sumStats[3], y = 0)) +
+    geom_point(aes(x = sumStats[2], y = 0), size = 2) +
+    geom_label(aes(x = 0.1, y = 1, label = "WTA strategy"), color = project_colors[4]) +
+    geom_label(aes(x = 0.4, y = 1/3, label = "random choice"), color = project_colors[1]) +
+    geom_segment(aes(x = sumStats[2], xend = sumStats[2], y = 0, yend = mean_target_prob(sumStats[2]))) +
+    ylab("mean target probability") +
+    ggtitle(current_condition)
+  
+}
+
+outplot <- make_alpha_plot("production") + make_alpha_plot("interpretation")
+
+ggsave(
+  filename = "../03-paper/00-pics/closeness-target-by-alpha-item-level.pdf",
+  plot = outplot,
+  width = 9, height = 4, scale =1)

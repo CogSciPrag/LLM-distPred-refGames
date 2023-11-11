@@ -436,7 +436,7 @@ We can also use the condition-level predictions for predicting the item-level da
 If the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, the likelihood function for analysis at the item-level uses the same (condition-level) predictor to separately predict data from each item, so that the likelihood function becomes:
 %
 \begin{align*}
- P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial}(D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
+ P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial} \left (D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3} \right )\,.
 \end{align*}
 %
 Fitting the RSA model to the partitioned data set, we find estimates of Bppp values that do not discredit the model (see Table~\ref{tab:sumStats}).
@@ -452,22 +452,21 @@ Section~\ref{sec:item-level-pred} first looks at the item-level data, before Sec
 \begin{tabular}{llllcrlcrcl}
   \toprule
   &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
-  data & condition & model & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
+  data & model & condition & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
   \midrule
 
-  cond.-level & avg. scores        & production     & 0.19 & 0.00 & 0.22 & 0.04 & 0.26 & 0.11 & 0.05 & * \\
-  cond.-level & avg. scores        & interpretation & 0.15 & 0.00 & 0.18 & 0.02 & 0.20 & 0.06 & 0.00 & * \\
-  cond.-level & avg. probabilities & production     & 0.86 & 0.08 & 1.04 & 0.13 & 1.22 & 0.18 & 0.51 &  \\
-  cond.-level & avg. probabilities & interpretation & 0.36 & 0.00 & 0.48 & 0.05 & 0.60 & 0.12 & 0.00 & * \\
-  cond.-level & avg. WTA           & production     & 0.87 & 0.08 & 1.04 & 0.13 & 1.23 & 0.17 & 0.49 &  \\
-  cond.-level & avg. WTA           & interpretation & 0.17 & 0.10 & 0.39 & 0.15 & 0.61 & 0.20 & 0.26 &  \\
-  cond.-level & RSA                & production     & 2.59 & 0.08 & 3.16 & 0.13 & 3.71 & 0.18 & 0.49 &  \\
-  cond.-level & RSA                & interpretation & 0.24 & 0.10 & 0.66 & 0.15 & 1.07 & 0.20 & 0.52 &  \\
-  item-level  & LLM                & production     & 0.15 & 0.00 & 0.21 & 0.10 & 0.29 & 0.21 & 0.00 & * \\
-  item-level  & LLM                & interpretation & 0.08 & 0.00 & 0.13 & 0.17 & 0.18 & 0.33 & 0.00 & * \\
-  item-level  & RSA                & production     & 2.62 & 0.08 & 3.15 & 0.13 & 3.69 & 0.17 & 0.34 &  \\
-  item-level  & RSA                & interpretation & 0.24 & 0.10 & 0.66 & 0.15 & 1.05 & 0.20 & 0.25 & \\
-
+  item-level  & RSA                & production     & 2.62 & 3.15 & 3.69 & 0.08 & 0.13 & 0.17 & 0.34 &  \\
+  item-level  & RSA                & interpretation & 0.24 & 0.66 & 1.05 & 0.10 & 0.15 & 0.20 & 0.25 &  \\
+  item-level  & LLM                & production     & 0.15 & 0.21 & 0.29 & 0.00 & 0.10 & 0.21 & 0.00 & * \\
+  item-level  & LLM                & interpretation & 0.08 & 0.13 & 0.18 & 0.00 & 0.17 & 0.33 & 0.00 & * \\
+  cond.-level & RSA                & production     & 2.59 & 3.16 & 3.71 & 0.08 & 0.13 & 0.18 & 0.49 &  \\
+  cond.-level & RSA                & interpretation & 0.24 & 0.66 & 1.07 & 0.10 & 0.15 & 0.20 & 0.52 &  \\
+  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.26 & 0.00 & 0.04 & 0.11 & 0.05 & * \\
+  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.06 & 0.00 & * \\
+  cond.-level & avg. probabilities & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.13 & 0.18 & 0.51 &  \\
+  cond.-level & avg. probabilities & interpretation & 0.36 & 0.48 & 0.60 & 0.00 & 0.05 & 0.12 & 0.00 & * \\
+  cond.-level & avg. WTA           & production     & 0.87 & 1.04 & 1.23 & 0.08 & 0.13 & 0.17 & 0.49 &  \\
+  cond.-level & avg. WTA           & interpretation & 0.17 & 0.39 & 0.61 & 0.10 & 0.15 & 0.20 & 0.26 &  \\
 
    \bottomrule \\
 \end{tabular}
@@ -486,14 +485,15 @@ Section~\ref{sec:item-level-pred} first looks at the item-level data, before Sec
 
 The RSA model's predictions are defined at the condition-level.
 An LLM, on the other hand, first and foremost makes predictions about each item.
-As mentioned previously, the items of the reference game experiment differ in the task-relevant features (color, shape, texture), as well as the order of presentation of states and words.
-We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelevant material \citep[e.g.,][]{DegenHawkins2020:When-redundancy} \mf{more refs on (color) over-specification}; and machines may be susceptible to the presentation of the order of choice options. \mf{@PT references from the NLP literature on effects of prompt variation?}
+As mentioned previously, the items of the reference game experiment differ in which levels of features (color, shape, texture) instantiate the structure of the task shown in Figure \ref{fig:ref-game}, as well as the order of presentation of objects and words.
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{@PT references from the NLP literature on effects of prompt variation?}
 It therefore becomes an empirical question of whether a standard item-level score from LLMs provides a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
-Since the WTA-based item-level predictions are a limiting case of the more general softmax-approach, we consider the latter, repeated from above with slightly updated notation:
+As described in Section~\ref{motivation}, the standard procedure for assessing LLM predictions in multi-choice tasks is to use a winner-takes-all (WTA) strategy that just picks the best option for each item.
+But since this strategy has conceptual and empirical weaknesses, we define the item-level LLM predictions using the more general softmax-approach, which contains the WTA-based approach as a limiting case, repeated here from above with slightly updated notation:
 %
 \begin{align*}
-P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C, \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
+P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
 \end{align*}
 %
 Item-level scores $\text{S}_{ki}$, as defined in Section~\ref{motivation}, are obtained from GPT-3.5 \mf{which model exactly, when assessed, cite paper}.
@@ -505,16 +505,14 @@ The choice options are categorized as in the human experiment.\footnote{
 Allowing for random errors with probability $\epsilon_{C}$, as before,:
 %
 \begin{align*}
-  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C, \alpha_{c}, \epsilon_{c} \right )
-  = \epsilon_{c} \  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C, \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \
-  (1 = \epsilon_{c}) \  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C, \alpha_{c}, \epsilon_{c} \right )
-  \,,
+  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right )
+  = \epsilon_{c} \  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
 \end{align*}
 %
-the resulting likelihood function for item-level data with item-level predictions is:
+The resulting likelihood function for item-level data with item-level predictions is:
 %
 \begin{align*}
- P^{\text{SM}}_{\text{item}}(D_{c} \mid C, \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial}(D_{c}^{k}, \tuple{P^{\text{SM}}_{\text{item}}(y_{ki} \mid C,  \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
+ P^{\text{SM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{SM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
 \end{align*}
 %
 Priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}.
@@ -535,19 +533,30 @@ Priors on parameters are as for the RSA model described in Section~\ref{sec:mode
   \label{fig:item-level-obs-pred}
 \end{figure}
 
-Posterior credible values for parameters are.
+Summary statistics for samples from the posterior distribution over parameters are shown in Table~\ref{tab:sumStats}.
+Credible values of $\alpha$ parameters are comparatively low for the LLM-based model, suggesting that the predicted scores have rather large differences, which have to be compensated for by the softmax link-function to adequately fit the data.
+Figure~\ref{fig:closeness-target-item-level} shows the mean predicted target probabilities for different parameter values of $\alpha$, highlighting that for posterior credible values, the predictions are clearly distinct from the predictions of a WTA strategy.
+This suggests that the WTA strategy, which is the special limiting case for $\alpha \rightarrow \infty$, provides a substantially worse fit for item-level choices than those provided by less extreme values of $\alpha$.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{00-pics/closeness-target-by-alpha-item-level.pdf}
+  \caption{
+    Mean predicted target probability for different values of softmax parameter $\alpha$.
+    The solid black lines show the probability of the target options, predicted for a fixed value of $\alpha$ ($x$-axis), averaged over all items for each condition.
+    The gray-shaded area indicates the posterior 95\% credible interval for $\alpha$.
+    For reference, the target probability under a random choice strategy and under the WTA strategy are shown with dashed lines.
+    For credible values of $\alpha$, the means of predicted probabilities for the target option are clearly distinct from the WTA strategy.
+  }
+  \label{fig:closeness-target-item-level}
+\end{figure}
 
-
-
+Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (see Table~\ref{tab:sumStats}), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
 Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM scores predict variance which is not borne out by the human data.
 Concretely, the plots show, for each condition and item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data ($y$-axis).
 There is ample variation in the model's predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
 So, the model itself predicts systematic variability at the item level.
 The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
-
-Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (0.0001 for production, 0 for interpretation), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
-In contrast, using the global, item-independent RSA model predictions to fit the item-level data, we obtain estimates of posterior predictive $p$-values that do not discredit the model ($0.338$ for production, $0.252$ for interpretation).
 These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
 Put more strongly, a model that seeks to predict what human participants choose on a by-item level, based on the most obvious item-level score, is ruled out by experimental data.
 
@@ -847,3 +856,8 @@ For example, the model does not predict cases where the number of competitor cho
 
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
