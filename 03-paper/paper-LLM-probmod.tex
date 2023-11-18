@@ -567,22 +567,10 @@ Put more strongly, a model that uses the most obvious item-level score to predic
 \label{llm-predictions-for-reference-games}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\begin{itemize}
-  \item mention multi-set averages
-  \begin{itemize}
-    \item Let \(\set{I_1, \dots I_m}\) be the multi-set of items that occurred in the human experiment for condition $C$.\footnote{
-  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.
-}
-
-  \end{itemize}
-\end{itemize}
-
-
-This section explores different ways of deriving a probabilistic likelihood function for the human data from an LLM at the aggregate, condition-level.
-Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
-In the following, we first describe the different options of deriving LLM-based predictors.
-We then compare all probabilistic models based on their adequacy of explaining the human choice data.
+% This section explores different ways of deriving a probabilistic likelihood function for the human data from an LLM at the aggregate, condition-level.
+% Using log-probabilities for each answer option as a basic item-level score, there are at least three conceivable ways of deriving condition-level predictions by averaging over item-level variation (see Figure~\ref{fig:measures-overview}).
+% In the following, we first describe the different options of deriving LLM-based predictors.
+% We then compare all probabilistic models based on their adequacy of explaining the human choice data.
 
 \begin{figure}
   \centering
@@ -594,22 +582,26 @@ We then compare all probabilistic models based on their adequacy of explaining t
   \label{fig:measures-overview}
 \end{figure}
 
-Condition-level predictions are a probability distribution over response types, obtained from item-level scores $\text{S}_{ki}$ by averaging over all items belonging to the relevant condition.
-To map non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$:
-%
-\begin{align*}
- \text{SoftMax}(\myvec{s}, \alpha) = \myvec{p}, \text{where } p_{i} \propto \expo \left (\alpha p_{i} \right )\,.
-\end{align*}
-%
-The softmax function can furthermore be decomposed into a first step of mapping scores to probabilities, and subsequently reweighing probabilities via a power-law transformation \citep[c.f.,][]{FrankeDegen2023:The-softmax-fun}:
-%
-\begin{align*}
-  \text{SoftMax}(\myvec{s}, \alpha) & = \text{Pow}( \text{SoftMax}(\myvec{s}, 1) ; \alpha) \\
-  \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \text{where } q_{i} \propto p_{i}^{\alpha}
-\end{align*}
-%
-This means that there are three conceivable scope-sites for aggregating item-level information as shown in Figure~\ref{fig:measures-overview}.
-Narrow-scope aggregation first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities:
+While LLMs do not make conditional-level predictions as such, they can be derived from item-level scores $\text{S}_{ki}$ by averaging over all items belonging to the relevant condition.
+There are many ways of averaging item-level information.
+Figure~\ref{fig:measures-overview} shows three salient approaches, which differ in what the underlying item-level measure is: the raw scores $\text{S}_{ki}$, the item-level probability derived from it (as introduced in Section~\ref{motivation} and used in Section~\ref{sec:item-level-pred}), or the predictions from the winner-takes-all strategy commonly used in benchmark testing (see Section~\ref{motivation}).
+
+% In general, to map a vector non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$:
+% %
+% \begin{align*}
+%  \text{SoftMax}(\myvec{s}, \alpha) = \myvec{p}, \text{where } p_{i} \propto \expo \left (\alpha p_{i} \right )\,.
+% \end{align*}
+% %
+% The softmax function can furthermore be decomposed into a first step of mapping scores to probabilities, and subsequently reweighing probabilities via a power-law transformation \citep[c.f.,][]{FrankeDegen2023:The-softmax-fun}:
+% %
+% \begin{align*}
+%   \text{SoftMax}(\myvec{s}, \alpha) & = \text{Pow}( \text{SoftMax}(\myvec{s}, 1) ; \alpha) \\
+%   \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \text{where } q_{i} \propto p_{i}^{\alpha}
+% \end{align*}
+
+The \emph{average-scores predictor} first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities using the usual parameterize softmax function:\footnote{
+  Technically, we average over the multi-set \(\set{I_1, \dots I_m}\) of items that occurred in the human experiment for condition $C$.
+  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.}
 %
 \begin{align*}
   & P_{\text{cond}}^{\text{SCR}}(r_{i} \mid C, \alpha_{c})
@@ -617,7 +609,7 @@ Narrow-scope aggregation first aggregates the item-level scores, and then transp
     \tag*{\textcolor{gray}{[average scores (narrow-scope aggregation)]}}
 \end{align*}
 %
-Wide-scope aggregation, first transposes scores into probabilities, scales them and only aggregates over items last.
+The \emph{average-probabilities predictor} first transposes scores into probabilities with a parameterized softmax function, and only aggregates over items last.
 \begin{align*}
   % & \textbf{wide-scope aggregation} \\
   & P_{\text{cond}}^{\text{PRB}}(r_{i} \mid C, \alpha_{c})
@@ -625,7 +617,8 @@ Wide-scope aggregation, first transposes scores into probabilities, scales them 
     \tag*{\textcolor{gray}{[average probabilities (wide-scope aggregation)]}}
 \end{align*}
 %
-Intermediate-scope aggregation performs item-level averaging after mapping scores onto probabilities (using softmax with $\alpha=1$), but before scaling (with a power-law transformation with variable $\alpha$):
+Finally, the \emph{average-WTA predictor} considers the prediction of the WTA strategy as the basic item-level unit to aggregate over.
+To add parameterized scaling to this method a power-law transformation with variable $\alpha$ is a natural choice:
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
   & P_{\text{cond}}^{\text{WTA}}(r_{i} \mid C, \alpha_{c})
@@ -636,14 +629,11 @@ where $P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) = \lim_{\alpha} P_{\text{item
 \bigskip
 
 
-All three condition-level predictors coincide when there is only one item, of course.
-For more items, wide-scope and intermediate-scope aggregation coincide when $\alpha = 1$.
-In all other cases, the predictors are not guaranteed to be identical.
-Conceptually, the main difference is what each measure considers to be the basic item-level unit to aggregate over.
-Narrow-scope aggregation considers raw scores, which are \emph{not} probabilistic predictions at the item level.
-Wide-scope aggregation considers $\alpha$-optimized probabilities at the item level, which is compatible with a procedure of sampling, via softmax decoding, item-level answer options.
-Wide-scope aggregation contains the ``winner-takes-all'' procedure for accuracy scoring in common benchmark tests for $\alpha \rightarrow \infty$.
-Finally, like wide-scope aggregation, intermediate-scope aggregation is also compatible with a sampling based picture, but would use pure decoding (without $\alpha$-optimization) at the item level and reserves the scaling of probability distributions to a stage \emph{after} aggregation.
+The \emph{average-scores} and \emph{average-probabilities} predictions are equivalent if there is only one item, of course.
+The prediction of the \emph{average-WTA} method is then the special case of $\alpha \rightarrow \infty$.
+For cases with more than one item, the predictions of these different predictors are not guaranteed to be the same.
+Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predictors, but not the \emph{averages-scores} predictor, are compatible with a picture in which condition-level predictions result from the actual predictions at the item level.
+The difference between the \emph{average-probabilities} and the \emph{average-WTA} predictors is that the latter is an aggregate of an item-level predictor that is demonstrably bad, as shown in the previous Section~\ref{sec:item-level-pred}.
 
 % \begin{table}[t]
 %   \centering
@@ -681,17 +671,20 @@ Finally, like wide-scope aggregation, intermediate-scope aggregation is also com
 %   \label{fig:posterior-stats}
 % \end{table}
 
-The three condition-level predictions yield three different probabilistic models, each with two pairs of condition-dependent parameters $\alpha_{c}$, and $\epsilon_{c}$.
-Using priors and Bayesian posterior estimation as previously described for the RSA (see Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
+Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, the three condition-level predictions yield three different likelihood functions for the condition-level data.
+Using priors and Bayesian posterior estimation as previously described in Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
 The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
-What is noteworthy about these estimates is that the $\alpha_{c}$ parameters for the wide-scope model have a very large credible range.
-This is because, already for values of $\alpha_{c} = 1$, the item-level predictions are virtually ``winner-takes-all'' choices, selecting the option with the maximum score with probability almost 1 for almost all items.
-This implies that, by studying the posterior predictive distribution of the wide-scope model, we are virtually testing condition-level predictions from the standard WTA-strategy used for benchmark testing (see Section~\ref{motivation}).
+What is noteworthy is that for the \emph{average-WTA} model, the estimates of $\alpha_{c}$ in the production condition do not rule out, in fact lie close to, the special value $\alpha_{c}=1$, for which the power-law transformation is the identity function.
+This means that just averaging WTA-responses at the item-level yields a reasonable predictor for the production data at the condition-level.
+However, for the interpretation condition, the value $\alpha_{c}=1$ is clearly outside the range of credible parameter values, so that a simple recipe like ``always average WTA-repsonses without transformation'' is not a viable strategy for good condition-level predictions in general.
+It is also worth noting that for the \emph{average-probability} model values of $\alpha_{c}$ close to one are virtually indistinguishable from the item-level predictions of the WTA strategy (see Figure~\ref{fig:closeness-target-item-level}).
+This suggests that, for the production data, the aggregating item-level predictions from the WTA-strategy gives good condition-level predictions.
+Since the production data is also very biased towards almost exclusively target choices by human participants, this is not too surprising.
 
 Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
-We find that only the theoretical model (RSA) and the intermediate-scope model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
+We find that only the theoretical model (RSA) and the \emph{average-WTA} model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
 To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-Consequently, the results from Table~\ref{tab:sumStats} suggest that the narrow-scope model fails on the interpretation data, and is at most borderline compatible with the production data; that the wide-scope model is able to reproduce the production data, but fails on the interpretation data; and that only the intermediate-scope model is able to fully recover the data from both conditions.
+Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{average-scores} model fails on the interpretation data, and is at most borderline compatible with the production data; that the \emph{average-probabilities} model is able to reproduce the production data, but fails on the interpretation data; and that only the \emph{average-WTA} model is able to fully recover the data from both conditions.
 
 % \begin{table}[ht]
 % \centering
@@ -720,12 +713,17 @@ Consequently, the results from Table~\ref{tab:sumStats} suggest that the narrow-
 
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
-On the positive side, we also find that there is at least one model with predictors based on LLM-measures, namely the intermediate-scope model, which is able to recover the patterns in the data.
+On the positive side, we also find that there is at least one model with predictors based on LLM-measures, namely the \emph{average-WTA} model, which is able to recover the patterns in the data.
 In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.\footnote{
-  A potential worry is that the intermediate-scope model is trivial in the sense that it could have predicted \emph{any} data observation.
+  A potential worry is that the \emph{average-WTA} model is trivial in the sense that it could have predicted \emph{any} data observation.
   Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
+  \mf{todo: redo these calculations with actual WTA!}
 }
 This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
+On the other hand, there is a stark contrast between the results of item-level and condition-level data.
+The model that was able to properly fit the condition-level data relies on a model of item-level choice that is clearly incompatible with the human item-level data.
+The model seems to be ``right for the wrong reasons.''
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -733,13 +731,9 @@ This implies that using LLM predictors for probabilistic predictions, such as in
 \label{conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-It is not entirely ludicrous to use numerical predictions from LLMs are
-part of predictive probabilistic models. But we have to be careful.
-Ideally, we average out over low-level variation, such as from order of
-presentation or similar ``nuisance,'' at least as long as we do not
-understand what causes this variation in the predictions of models and
-further research that investigates when exactly this variation accords
-with empirically observed patterns.
+It is not entirely ludicrous to use numerical predictions from LLMs are part of predictive probabilistic models.
+But we have to be careful.
+Ideally, we average out over low-level variation, such as from order of presentation or similar ``nuisance,'' at least as long as we do not understand what causes this variation in the predictions of models and further research that investigates when exactly this variation accords with empirically observed patterns.
 
 This also implies that we should likely \emph{not} (yet) aspire to use
 LLMs are models or individual- or item-level predictors.
