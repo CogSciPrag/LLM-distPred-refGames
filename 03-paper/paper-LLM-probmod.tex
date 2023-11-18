@@ -422,31 +422,6 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
   Posterior samples where generated for four chains with 2000 samples each, after a warm-up of 1000 samples. The ``adapt-delta'' value was set to 0.99. Converge was checked with $\hat{R}$-statistics \citep{GelmanRubin1992:Inference-from-}.
 }
 
-To assess goodness-of-fit, we use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
-Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models for condition-level data, which are to be introduced later).
-We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, which require that the distribution of posterior predictions includes the observed choice rates for each answer option.
-To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values (Bppp values), using likelihood of the observed data as a test statistics.
-These Bppp values approximate the probability that a model conditioned on observed data $D_{\text{obs}}$ predicts future data $D_{rep}$, of the same size and format as $D_{obs}$, that is at least as likely as the data $D_{\text{obs}}$ itself is (given the posterior predictive distribution).
-Very small Bppp values indicate that the model might be inadequate for reproducing the data it was trained on, so to speak.
-This is clearly not the case for the RSA model with Bppp values close to 0.5, as shown in Table~\ref{tab:sumStats}.
-In sum, the condition-level predictions by the RSA model, a theoretically motivated PCM, are not discredited by the condition-level data.
-Reversely, the RSA model seems to adequately capture the condition-level data.
-
-We can also use the condition-level predictions for predicting the item-level data.
-If the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, the likelihood function for analysis at the item-level uses the same (condition-level) predictor to separately predict data from each item, so that the likelihood function becomes:
-%
-\begin{align*}
- P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial} \left (D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3} \right )\,.
-\end{align*}
-%
-Fitting the RSA model to the partitioned data set, we find estimates of Bppp values that do not discredit the model (see Table~\ref{tab:sumStats}).
-This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from a theoretically motivated PCM.
-In other words, the condition-level RSA predictions seem to adequately capture also the item-level data.
-
-
-The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
-Section~\ref{sec:item-level-pred} first looks at the item-level data, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
-
 \begin{table}[t]
 \centering
 \begin{tabular}{llllcrlcrcl}
@@ -478,6 +453,31 @@ Section~\ref{sec:item-level-pred} first looks at the item-level data, before Sec
 \label{tab:sumStats}
 \end{table}
 
+To assess goodness-of-fit, we use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
+Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models for condition-level data, which are to be introduced later).
+We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, which require that the distribution of posterior predictions includes the observed choice rates for each answer option.
+To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values (Bppp values), using likelihood of the observed data as a test statistics.
+These Bppp values approximate the probability that a model conditioned on observed data $D_{\text{obs}}$ predicts future data $D_{rep}$, of the same size and format as $D_{obs}$, that is at least as likely as the data $D_{\text{obs}}$ itself is (given the posterior predictive distribution).
+Very small Bppp values indicate that the model might be inadequate for reproducing the data it was trained on, so to speak.
+This is clearly not the case for the RSA model with Bppp values close to 0.5, as shown in Table~\ref{tab:sumStats}.
+In sum, the condition-level predictions by the RSA model, a theoretically motivated PCM, are not discredited by the condition-level data.
+Reversely, the RSA model seems to adequately capture the condition-level data.
+
+We can also use the condition-level predictions for predicting the item-level data.
+If the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, the likelihood function for analysis at the item-level uses the same (condition-level) predictor to separately predict data from each item, so that the likelihood function becomes:
+%
+\begin{align*}
+ P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial} \left (D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3} \right )\,.
+\end{align*}
+%
+Fitting the RSA model to the partitioned data set, we find estimates of Bppp values that do not discredit the model (see Table~\ref{tab:sumStats}).
+This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from a theoretically motivated PCM.
+In other words, the condition-level RSA predictions seem to adequately capture also the item-level data.
+
+
+The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
+Section~\ref{sec:item-level-pred} first looks at the item-level data, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Item-level predictions from LLMs}
 \label{sec:item-level-pred}
@@ -486,14 +486,28 @@ Section~\ref{sec:item-level-pred} first looks at the item-level data, before Sec
 The RSA model's predictions are defined at the condition-level.
 An LLM, on the other hand, first and foremost makes predictions about each item.
 As mentioned previously, the items of the reference game experiment differ in which levels of features (color, shape, texture) instantiate the structure of the task shown in Figure \ref{fig:ref-game}, as well as the order of presentation of objects and words.
-We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, maybe even leading to over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{@PT references from the NLP literature on effects of prompt variation?}
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{@PT references from the NLP literature on effects of prompt variation?}
 It therefore becomes an empirical question of whether a standard item-level score from LLMs provides a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\textwidth]{00-pics/closeness-target-by-alpha-item-level.pdf}
+  \caption{
+    Mean predicted target probability for different values of softmax parameter $\alpha$.
+    The solid black lines show the probability of the target options, predicted for a fixed value of $\alpha$ ($x$-axis), averaged over all items for each condition.
+    The gray-shaded area indicates the posterior 95\% credible interval for $\alpha$.
+    For reference, the target probability under a random choice strategy and under the WTA strategy are shown with dashed lines.
+    For credible values of $\alpha$, the means of predicted probabilities for the target option are clearly distinct from the WTA strategy.
+  }
+  \label{fig:closeness-target-item-level}
+\end{figure}
+
 
 As described in Section~\ref{motivation}, the standard procedure for assessing LLM predictions in multi-choice tasks is to use a winner-takes-all (WTA) strategy that just picks the best option for each item.
 But since this strategy has conceptual and empirical weaknesses, we define the item-level LLM predictions using the more general softmax-approach, which contains the WTA-based approach as a limiting case, repeated here from above with slightly updated notation:
 %
 \begin{align*}
-P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
+P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
 \end{align*}
 %
 Item-level scores $\text{S}_{ki}$, as defined in Section~\ref{motivation}, are obtained from GPT-3.5 \mf{which model exactly, when assessed, cite paper}.
@@ -505,18 +519,22 @@ The choice options are categorized as in the human experiment.\footnote{
 Allowing for random errors with probability $\epsilon_{C}$, as before,:
 %
 \begin{align*}
-  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right )
-  = \epsilon_{c} \  P_{\text{item}}^{\text{SM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
+  P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right )
+  = \epsilon_{c} \  P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
 \end{align*}
 %
 The resulting likelihood function for item-level data with item-level predictions is:
 %
 \begin{align*}
- P^{\text{SM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{SM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
+ P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
 \end{align*}
 %
 Priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}.
 
+Summary statistics for samples from the posterior distribution over parameters are shown in Table~\ref{tab:sumStats}.
+Credible values of $\alpha$ parameters are comparatively low for the LLM-based model, suggesting that the predicted scores have rather large differences, which have to be compensated for by the softmax link-function to adequately fit the data.
+Figure~\ref{fig:closeness-target-item-level} shows the mean predicted target probabilities for different parameter values of $\alpha$, highlighting that for posterior credible values, the predictions are clearly distinct from the predictions of a WTA strategy.
+This suggests that the WTA strategy, which is the special limiting case for $\alpha \rightarrow \infty$, provides a substantially worse fit for item-level choices than those provided by less extreme values of $\alpha$.
 
 \begin{figure}[t]
   \centering
@@ -533,24 +551,6 @@ Priors on parameters are as for the RSA model described in Section~\ref{sec:mode
   \label{fig:item-level-obs-pred}
 \end{figure}
 
-Summary statistics for samples from the posterior distribution over parameters are shown in Table~\ref{tab:sumStats}.
-Credible values of $\alpha$ parameters are comparatively low for the LLM-based model, suggesting that the predicted scores have rather large differences, which have to be compensated for by the softmax link-function to adequately fit the data.
-Figure~\ref{fig:closeness-target-item-level} shows the mean predicted target probabilities for different parameter values of $\alpha$, highlighting that for posterior credible values, the predictions are clearly distinct from the predictions of a WTA strategy.
-This suggests that the WTA strategy, which is the special limiting case for $\alpha \rightarrow \infty$, provides a substantially worse fit for item-level choices than those provided by less extreme values of $\alpha$.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\textwidth]{00-pics/closeness-target-by-alpha-item-level.pdf}
-  \caption{
-    Mean predicted target probability for different values of softmax parameter $\alpha$.
-    The solid black lines show the probability of the target options, predicted for a fixed value of $\alpha$ ($x$-axis), averaged over all items for each condition.
-    The gray-shaded area indicates the posterior 95\% credible interval for $\alpha$.
-    For reference, the target probability under a random choice strategy and under the WTA strategy are shown with dashed lines.
-    For credible values of $\alpha$, the means of predicted probabilities for the target option are clearly distinct from the WTA strategy.
-  }
-  \label{fig:closeness-target-item-level}
-\end{figure}
-
 Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (see Table~\ref{tab:sumStats}), suggesting that the unaggregated item-level LLM predictions are inadequate predictors of the human data.
 Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM scores predict variance which is not borne out by the human data.
 Concretely, the plots show, for each condition and item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data ($y$-axis).
@@ -558,7 +558,7 @@ There is ample variation in the model's predictions, especially visible in the p
 So, the model itself predicts systematic variability at the item level.
 The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
 These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
-Put more strongly, a model that seeks to predict what human participants choose on a by-item level, based on the most obvious item-level score, is ruled out by experimental data.
+Put more strongly, a model that uses the most obvious item-level score to predict what human participants choose on a by-item level is ruled out by experimental data.
 
 
 
@@ -588,15 +588,13 @@ We then compare all probabilistic models based on their adequacy of explaining t
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
   \caption{
-    Schematic overview over three different approaches of obtaining condition-level predictions by aggregating over item-level scores.
-    The basic item-level score is average next-word log probability.
-    This can be taken as-is into averaging (narrow-scope aggregation), or first transformed from log- into probability-space, either with optimization before (wide scope) or after averaging (intermediate scope).
-    The notation for the condition-level options uses pseudo-code to more clearly reflect the relevant operator scope differences (where triangles represent the pipe operator).
+    Schematic overview over three different approaches of obtaining condition-level predictions by aggregating item-level information.
+    Approaches differ in the kind of item-level information they take into account and in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
   }
   \label{fig:measures-overview}
 \end{figure}
 
-Condition-level predictions are a probability distribution over response types, obtained from item-level scores $S(R_{l}, I_{k})$ by averaging over all items belonging to the relevant condition.
+Condition-level predictions are a probability distribution over response types, obtained from item-level scores $\text{S}_{ki}$ by averaging over all items belonging to the relevant condition.
 To map non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$:
 %
 \begin{align*}
@@ -614,24 +612,29 @@ This means that there are three conceivable scope-sites for aggregating item-lev
 Narrow-scope aggregation first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities:
 %
 \begin{align*}
-  % & \textbf{narrow-scope aggregation} \\
-  & P_{n}(R_{l}, C ; \alpha) \propto \expo \left [  \alpha \ \frac{1}{m} \ \sum_{i = k}^{m} S(R_{l}, I_{k})  \right ]
-    \tag*{\textcolor{gray}{[narrow-scope aggregation]}}
+  & P_{\text{cond}}^{\text{SCR}}(r_{i} \mid C, \alpha_{c})
+    \propto \expo \left [  \alpha_{c} \ \frac{1}{m} \ \sum_{k=1}^{m} \text{S}_{ki}  \right ]
+    \tag*{\textcolor{gray}{[average scores (narrow-scope aggregation)]}}
 \end{align*}
 %
 Wide-scope aggregation, first transposes scores into probabilities, scales them and only aggregates over items last.
 \begin{align*}
   % & \textbf{wide-scope aggregation} \\
-  & P_{w}(R_{l}, C ; \alpha) \propto \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( \alpha \ S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( \alpha \ S(R_{l'}, I_{k}) \right )}
-    \tag*{\textcolor{gray}{[wide-scope aggregation]}}
+  & P_{\text{cond}}^{\text{PRB}}(r_{i} \mid C, \alpha_{c})
+    = \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha_{c})
+    \tag*{\textcolor{gray}{[average probabilities (wide-scope aggregation)]}}
 \end{align*}
 %
 Intermediate-scope aggregation performs item-level averaging after mapping scores onto probabilities (using softmax with $\alpha=1$), but before scaling (with a power-law transformation with variable $\alpha$):
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
-  & P_{i}(R_{l}, C ; \alpha) \propto  \left [ \frac{1}{m} \ \sum_{i = k}^{m} \frac{\expo \left( S(R_{l}, I_{k}) \right )}{ \sum_{l'} \expo \left( S(R_{l'}, I_{k}) \right )} \right ]^{\alpha}
-    \tag*{\textcolor{gray}{[intermediate-scope aggregation]}}
+  & P_{\text{cond}}^{\text{WTA}}(r_{i} \mid C, \alpha_{c})
+    \propto  \left [ \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) \right ]^{\alpha_{c}}\,,
+    \tag*{\textcolor{gray}{[average WTA (intermediate-scope aggregation)]}}
 \end{align*}
+where $P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) = \lim_{\alpha} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha)$.
+\bigskip
+
 
 All three condition-level predictors coincide when there is only one item, of course.
 For more items, wide-scope and intermediate-scope aggregation coincide when $\alpha = 1$.
