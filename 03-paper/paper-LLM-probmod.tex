@@ -78,11 +78,11 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \maketitle
 
 \begin{abstract}
-  State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks.
-  But targeted assessment with methods inspired by experimental psychology highlights dissimilarities between human behavior and LLM predictions.
-  Going even a step further, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of probabilistic cognitive modeling.
+  State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks and are increasingly used as components in larger applications, where LLM-based predictions serve as proxies for human judgements.
+  This raises questions about the human-likeness of LLM-derived information and whether LLMs, if they deliver human-like behavior, could possibly be considered explanatory models of (aspects of) human cognition or language use.
+  To shed more light on these issues, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of probabilistic cognitive modeling.
   We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
-  Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level).
+  Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level), and that this is a sense in which LLMs may be said to be not explanatory.
   Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs fail to capture the variance in the human data at the item-level.
   We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, thus building PCM-like predictions from LLM-derived information, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to our data.
   These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at an aggregate level, for which they are, however, not designed to make predictions in the first place.
@@ -122,27 +122,31 @@ For one, the ``primitive predictions'' that LLMs provide are not at the level of
 For another, LLMs are often just assessed based on their ability to identify a target answer, not to predict the full distribution observed in the data.
 % Nevertheless, distributional predictions for condition-level data can in principle be derived from LLMs, but there are many ways of doing so, yet with little consensus of how to do so.
 
-% A major contribution of this work is methodological.
-This paper introduces and systematically compare different ways of carving numerical information obtained from an LLM into a structure similar to a parameterized PCM and address the empirical question of whether such an ``LLM-based PCM'' adequately captures the distribution of human forced-choice data at different levels of aggregation.
+This paper introduces and systematically compares different ways of carving numerical information obtained from an LLM into a structure similar to a parameterized PCM and addresses the empirical question of whether such an ``LLM-based PCM'' adequately captures the distribution of human forced-choice data at different levels of aggregation.
 To obtain data for this investigation, we subjected human participants and an LLM (a version of OpenAI's GPT-3.5; see Section~\ref{sec:item-level-pred}) to the same forced-choice task, a simple reference game \citep{FrankGoodman2012:Predicting-Prag}.
 We introduce different ways of defining condition-level, distributional predictions based on LLM-provided numerical measures.
 We use standard tools of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A} to train, test and compare these ``LLM-based PCMs'' against each other, and against an established, theoretically informed PCM, namely the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
-This is quite different, and arguably more stringent and insightful, than the standard practice of evaluating LLMs based on accuracy scores, determined by a winner-takes-all strategy to identify a single target response.
+This is quite different, and arguably more stringent and insightful, than the standard practice of evaluating LLMs based on accuracy scores.
 We find that variability predicted by the LLM at the item-level is not borne out by the human data, and that some but not all ways of constructing condition-level predictions are equally good.
 These results suggest that it is not impossible to build predictive models for condition-level data, similar to PCMs, on top of LLM-supplied information, but that seemingly subtle details in the derivation of likelihoods matter.
-The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not. \mf{double-check formulation of results}
+The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not.
 
 The paper is structured as follows.
-Section~\ref{motivation} motivates the investigation in this paper, by enlarging on the importance of deriving distributional predictions for conditional-level forced-choice data, and further elaborating on the relevant differences between LLMs and PCMs.
+Section~\ref{motivation} motivates the investigation in this paper by highlighting relevant differences in the way  LLMs and PCMs make predictions about data from forced-choice tasks.
 Section~\ref{experiment-reference-games} looks at human data from a simple but non-trivial forced-choice experiment, namely a text-based reference game, for which Section~\ref{sec:model-pred-from} introduces a commonly used, theoretically-motivate PCM, namely the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag}.
-Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions are adequate to capture the human data at the item-level and finds that they are not, even though the theoretically-motivated RSA model is.
+Section~\ref{sec:item-level-pred} investigates whether LLM-derived item-level predictions adequately capture the human data at the item-level.
 Section~\ref{llm-predictions-for-reference-games} then discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Motivation: Distributional predictions for condition-level forced-choice data}
+\section{Predictions for multiple-choice tasks from PCMs and LLMs}
 \label{motivation}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+This section argues that a major conceptual difference between LLMs and PCMs is that they predict data at different levels of abstraction: the item-level and the condition-level, as introduced below.
+Another important difference is that PCMs are usually evaluated on a non-degenerate likelihood function, whereas common practice in LLM-evaluation is to use a winner-takes-all strategy.
+Problems with this latter strategy are highlighted and alternative ways of defining item- and condition-level predictions from LLMs are introduced for subsequent empirical testing.
+
+\paragraph{Item- and condition-level data.}
 Psychological research into the workings of the human mind aims to find generalizable patterns in the way information is processed within or across different domains of cognition.
 Experimental work therefore often compares human performance in different \emph{experimental conditions}, which reflect the general factors that are hypothesized to influence behavior.
 Yet a single experimental condition is often instantiated with different \emph{experimental items}, which are not under scrutiny for any systematic, predictable effect on the observed measurements.
@@ -152,6 +156,7 @@ Likewise, when studying how hearing a color word can facilitate a same-or-differ
 Consequently, a typical psychological experiment is mainly interested in assessing behavior at the level of the experimental condition, because that is where the distinctions relevant to the research question reside.
 Nevertheless, each experimental condition can be, and often is, instantiated with different items, variation among which is deemed less relevant to the research question at hand.
 
+\paragraph{Probabilistic cognitive models.}
 Data from human participants for experiments of this kind usually shows some variability between items, and also variability between participants.
 This variability is commonly incorporated in statistical analyses as random stochastic variation, e.g., by using hierarchical (regression) models \citep{Jaeger2008:Categorical-dat,barr2013,SorensenHohensteinb2016:Bayesian-linear}.
 Still, the focus of interest usually remains at the condition-level effects, because it is this more abstract level of behavioral aggregation that is relevant for generalizable theory building.
@@ -160,23 +165,24 @@ Even though item-level (and individual-level) variation can, and sometimes shoul
 Therefore, a basic PCM is essentially characterized by a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each logically possible data observation $D_{C}$ for any experimental condition $C$ and numerical parameters $\theta$ \citep{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
 The difference between a theory-driven PCM and a standard, theory-neutral statistical model (like a regression model), which may also define a parameterized likelihood function of condition-level data, is that the PCM's likelihood function is defined in terms that are considered to be conceptually meaningful for the research domain at hand (see Section~\ref{sec:model-pred-from} for a concrete example).
 
+\paragraph{PCMs vs.~LLMs.}
 PCMs, thus construed, differ markedly from LLMs.
 LLMs make predictions about the likelihood of words given a preceding or surrounding text.
 They do not, without further derivation, provide predictions at a conceptually meaningful level of abstraction, similar to experimental conditions.
 In this way, LLMs are not explanatory models in the same sense as PCMs might be: they simply do not operate at a level of generalizable abstraction which is arguably necessary for increasing human understanding of the phenomenon in question \citep{Dellsen2020:Beyond-Explanat,Grimm2021:Understanding}.
 Nevertheless, we can derive predictions from LLM's word-level predictions, first at the item-level and also at the condition-level.
-Whether or not these predictions are deemed explanatory, the empirical question arises of whether any of these predictions are empirically adequate.
-This empirical question can be addressed by subjecting ``LLM-based PCMs'' to the same statistical model checking as the more usual theoretically motivated PCMs.
+Whether any of these predictions are adequate is ultimately an empirical question, which can be addressed by subjecting ``LLM-based PCMs'' to the same statistical model checking as the more usual theoretically motivated PCMs.
 
+\paragraph{Predictions from LLMs.}
 Standard benchmark-testing on multiple-choice tasks usually uses a winner-take-all (WTA) strategy \citep[e.g.,][]{srivastava2023-BIGbench} to define accuracy scores.
 The WTA-strategy can also be used to derive probabilistic item-level and condition-level predictions from LLMs.
 Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
 Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ words, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$, and each of which .
-For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same answer category $R_{i}$, e.g., that $y_{k1}$ is always the designated \emph{target option} that is assumed to be the ``true'' or to-be-selected goal answer, and that the other choice options are equally assignable into meaningful categories of answer types.
+For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same response category $r_{i}$ and that $y_{k1}$ always corresponds to the designated \emph{target option}, $r_{1}$, that is assumed to be the ``true'' or to-be-selected goal answer.
 
 The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
-  \mf{How to extend to masked language models?}
+  \mf{TODO: Add quick word on how this can in principle be extended to masked language models.}
   More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
   For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
@@ -202,13 +208,13 @@ Concretely, if $B_{k} = \arg \max_{i} \text{S}_{ki}$ is the set of all options t
 %
 Notice that the item-level WTA-prediction is usually a degenerate probability distribution placing all probability mass on a single choice option.
 
-The \emph{condition-level prediction} of the WTA approach is obtained by averaging over the item-level predictions for each answer category:
+The \emph{condition-level prediction} of the WTA approach is obtained by averaging over the item-level predictions for each response category:
 %
 \begin{align*}
-  P_{\text{cond}}^{\text{WTA}}\left(R_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{WTA}} \left(y_{ki} \right)\,.
+  P_{\text{cond}}^{\text{WTA}}\left(r_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{WTA}} \left(y_{ki} \right)\,.
 \end{align*}
 %
-The \emph{WTA-based accuracy} is the probability $P_{\text{cond}}^{\text{WTA}}\left(R_{1} \right)$ of selecting the target option over all instances of the task.
+The \emph{WTA-based accuracy} is the probability $P_{\text{cond}}^{\text{WTA}}\left(r_{1} \right)$ of selecting the target option $r_{1}$ over all instances of the task.
 This is the most prevalent measure of the quality of LLM predictions.
 
 % While generally a pragmatic and useful approach, assessing LLM performance with a WTA-based accuracy measure can misleading, because it ignores potentially relevant distributional information.
@@ -227,16 +233,14 @@ P_{\text{item}}^{\text{SM}}\left ( y_{ki} \right ) \propto \expo \left (\alpha \
 %
 The \emph{condition-level prediction} can be defined analogously to the above by averaging over items:
 \begin{align*}
-  P_{\text{cond}}^{\text{SM}}\left(R_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{ki} \right)\,.
+  P_{\text{cond}}^{\text{SM}}\left(r_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{ki} \right)\,.
 \end{align*}
-As before, the \emph{softmax-based accuracy}, $P_{\text{cond}}^{\text{SM}}\left(R_{i} \right)$, is the average probability of choosing the designated target option $y_{k1}$.
-For $\alpha \rightarrow \infty$, the softmax strategy converges to the WTA strategy, but for finite $\alpha$ the approaches differ.
-This has interesting entailments for accuracy assessment in more engineering-oriented contexts, as well as for questions of exploring the ``human-likeness'' of LLM predictions.
+As before, the \emph{softmax-based accuracy}, $P_{\text{cond}}^{\text{SM}}\left(r_{1} \right)$, is the average probability of choosing the designated target response option $r_{1}$.
 
-Looking at accuracy assessment, WTA-based accuracy measures can even differ qualitatively from accuracy measures obtained from the more general softmax-based strategy.
-Differences in accuracy measures depend on the variation in item-level scores, in particular the relation between score-ordering and score-differences.
-The example below shows that categorically different results are, in principle, possible when using WTA- or softmax based accuracy.
-The example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
+For $\alpha \rightarrow \infty$, the softmax strategy converges to the WTA strategy, but for finite $\alpha$ the approaches differ.
+Indeed, WTA-based accuracy can even differ qualitatively from softmax-based accuracy, as shown by the following example.
+The example shows that differences between accuracy measures depend on the variation in item-level scores, in particular on the relation between score-ordering and score-differences.
+Note that the example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
 %
 \begin{quote}
   % \ex \label{bsp:exmpl-diff-WTA-SM}
@@ -510,7 +514,7 @@ But since this strategy has conceptual and empirical weaknesses, we define the i
 P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
 \end{align*}
 %
-Item-level scores $\text{S}_{ki}$, as defined in Section~\ref{motivation}, are obtained from GPT-3.5 \mf{which model exactly, when assessed, cite paper}.
+Item-level scores $\text{S}_{ki}$, as defined in Section~\ref{motivation}, were obtained from the text-davinci-003 instance GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} .
 % \footnote{
   % Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
 The task description $x_{k}$ for item $I_{k}$ is a text supplied as prompt (see Appendix~\ref{sec:examples-items-llm} for an example).
@@ -577,7 +581,7 @@ Put more strongly, a model that uses the most obvious item-level score to predic
   \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
   \caption{
     Schematic overview over three different approaches of obtaining condition-level predictions by aggregating item-level information.
-    Approaches differ in the kind of item-level information they take into account and in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
+    Approaches differ in the kind of item-level information they take into account, which entails differences in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
   }
   \label{fig:measures-overview}
 \end{figure}
@@ -600,25 +604,25 @@ Figure~\ref{fig:measures-overview} shows three salient approaches, which differ 
 % \end{align*}
 
 The \emph{average-scores predictor} first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities using the usual parameterize softmax function:\footnote{
-  Technically, we average over the multi-set \(\set{I_1, \dots I_m}\) of items that occurred in the human experiment for condition $C$.
-  By using a multi-set, which may contain a single task multiple times, we produce aggregate predictions for exactly the set of item that the participant group saw, which provides the most fitting counterpart to the human data.}
+  The reported results average over the multi-set \(\set{I_1, \dots I_m}\) of items that occurred in the human experiment for condition $C$.
+  By using a multi-set, which may contain a single item multiple times, we produce aggregate predictions for exactly the set of items that the participant group saw, which provides the most fitting counterpart to the human data.}
 %
 \begin{align*}
   & P_{\text{cond}}^{\text{SCR}}(r_{i} \mid C, \alpha_{c})
-    \propto \expo \left [  \alpha_{c} \ \frac{1}{m} \ \sum_{k=1}^{m} \text{S}_{ki}  \right ]
+    \propto \expo \left [  \alpha_{c} \ \frac{1}{m} \ \sum_{k=1}^{m} \text{S}_{ki}  \right ] \,.
     \tag*{\textcolor{gray}{[average scores (narrow-scope aggregation)]}}
 \end{align*}
 %
-The \emph{average-probabilities predictor} first transposes scores into probabilities with a parameterized softmax function, and only aggregates over items last.
+The \emph{average-probabilities predictor} first transposes scores into probabilities with a parameterized softmax function, and only aggregates over items last:
 \begin{align*}
   % & \textbf{wide-scope aggregation} \\
   & P_{\text{cond}}^{\text{PRB}}(r_{i} \mid C, \alpha_{c})
-    = \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha_{c})
+    = \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha_{c}) \,.
     \tag*{\textcolor{gray}{[average probabilities (wide-scope aggregation)]}}
 \end{align*}
 %
 Finally, the \emph{average-WTA predictor} considers the prediction of the WTA strategy as the basic item-level unit to aggregate over.
-To add parameterized scaling to this method a power-law transformation with variable $\alpha$ is a natural choice:
+To add parameterized scaling to this method, a power-law transformation with variable $\alpha$ is a natural choice:
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
   & P_{\text{cond}}^{\text{WTA}}(r_{i} \mid C, \alpha_{c})
@@ -629,87 +633,25 @@ where $P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) = \lim_{\alpha} P_{\text{item
 \bigskip
 
 
-The \emph{average-scores} and \emph{average-probabilities} predictions are equivalent if there is only one item, of course.
-The prediction of the \emph{average-WTA} method is then the special case of $\alpha \rightarrow \infty$.
+The \emph{average-scores} and \emph{average-probabilities} predictions are equivalent if there is only one item, in which case the prediction of the \emph{average-WTA} method is the special case of $\alpha \rightarrow \infty$.
 For cases with more than one item, the predictions of these different predictors are not guaranteed to be the same.
 Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predictors, but not the \emph{averages-scores} predictor, are compatible with a picture in which condition-level predictions result from the actual predictions at the item level.
 The difference between the \emph{average-probabilities} and the \emph{average-WTA} predictors is that the latter is an aggregate of an item-level predictor that is demonstrably bad, as shown in the previous Section~\ref{sec:item-level-pred}.
 
-% \begin{table}[t]
-%   \centering
-
-%   % \includegraphics[width=0.9\linewidth]{00-pics/posterior-stats.pdf}
-
-%   \begin{tabular}{llllcr}
-%     \toprule \addlinespace[1ex]
-%     model        & condition      & Parameter  & $|$95\% & mean & 95\%$|$ \\
-%     \midrule  \addlinespace[1ex]
-%     narrow       & production     & $\alpha$   & 0.19    & 0.22 & 0.26 \\
-%                  &                & $\epsilon$ & 0.00    & 0.04 & 0.11 \\
-%                  & interpretation & $\alpha$   & 0.15    & 0.18 & 0.20 \\
-%                  &                & $\epsilon$ & 0.00    & 0.02 & 0.06 \\ \addlinespace[0.75ex]
-%     intermediate & production     & $\alpha$   & 0.86    & 1.04 & 1.22 \\
-%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
-%                  & interpretation & $\alpha$   & 0.36    & 0.48 & 0.60 \\
-%                  &                & $\epsilon$ & 0.00    & 0.05 & 0.12 \\ \addlinespace[0.75ex]
-%     wide         & production     & $\alpha$   & 0.22    & 2.69 & 8.79 \\
-%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.19 \\
-%                  & interpretation & $\alpha$   & 0.19    & 1.08 & 6.03 \\
-%                  &                & $\epsilon$ & 0.00    & 0.06 & 0.18 \\ \addlinespace[0.75ex]
-%     RSA          & production     & $\alpha$   & 2.59    & 3.16 & 3.71 \\
-%                  &                & $\epsilon$ & 0.08    & 0.13 & 0.18 \\
-%                  & interpretation & $\alpha$   & 0.24    & 0.66 & 1.07 \\
-%                  &                & $\epsilon$ & 0.10    & 0.15 & 0.20 \\ \addlinespace[0.25ex]
-%     \bottomrule \\
-%   \end{tabular}
-
-%   \caption{
-%     Summary statistics of posterior samples.
-%     Numbers indicate estimates for lower and upper bounds of 95\% credible intervals and the posterior means.
-%     \mf{make wide format}
-%   }
-%   \label{fig:posterior-stats}
-% \end{table}
-
-Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, the three condition-level predictions yield three different likelihood functions for the condition-level data.
-Using priors and Bayesian posterior estimation as previously described in Section~\ref{sec:model-pred-from}), we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
-The usual Bayesian summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
+Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, we can build likelihood functions for condition-level data around the three predictors introduced above.
+With the same priors and methods used before, we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
+Summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
 What is noteworthy is that for the \emph{average-WTA} model, the estimates of $\alpha_{c}$ in the production condition do not rule out, in fact lie close to, the special value $\alpha_{c}=1$, for which the power-law transformation is the identity function.
 This means that just averaging WTA-responses at the item-level yields a reasonable predictor for the production data at the condition-level.
 However, for the interpretation condition, the value $\alpha_{c}=1$ is clearly outside the range of credible parameter values, so that a simple recipe like ``always average WTA-repsonses without transformation'' is not a viable strategy for good condition-level predictions in general.
 It is also worth noting that for the \emph{average-probability} model values of $\alpha_{c}$ close to one are virtually indistinguishable from the item-level predictions of the WTA strategy (see Figure~\ref{fig:closeness-target-item-level}).
-This suggests that, for the production data, the aggregating item-level predictions from the WTA-strategy gives good condition-level predictions.
+This suggests that, for the production data, aggregation of item-level predictions from the WTA-strategy gives good condition-level predictions.
 Since the production data is also very biased towards almost exclusively target choices by human participants, this is not too surprising.
 
 Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
-We find that only the theoretical model (RSA) and the \emph{average-WTA} model passes this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
+We find that only the theoretical model (RSA) and the \emph{average-WTA} model pass this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
 To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{average-scores} model fails on the interpretation data, and is at most borderline compatible with the production data; that the \emph{average-probabilities} model is able to reproduce the production data, but fails on the interpretation data; and that only the \emph{average-WTA} model is able to fully recover the data from both conditions.
-
-% \begin{table}[ht]
-% \centering
-
-% % \begin{tabular}{lrr}
-% %   \toprule
-% %   model        & production & interpretation \\ \midrule
-% %   narrow       & 0.05       & 0.00 \\
-% %   wide         & 0.51       & 0.00 \\
-% %   intermediate & 0.49       & 0.26 \\
-% %   RSA          & 0.49       & 0.52 \\
-% %   \bottomrule \\
-% % \end{tabular}
-
-% \begin{tabular}{lrrrr}
-%   \toprule
-%   & narrow & wide & intermediate & RSA \\ \midrule
-%   production & 0.05 & 0.51 & 0.49 & 0.49 \\
-%   interpretation & 0.00 & 0.00 & 0.26 & 0.52 \\ \bottomrule \\
-% \end{tabular}
-
-
-% \caption{Sample-based estimates of Bayesian posterior predictive $p$-values for each model and each condition, based on likelihood of the observed data as test statistic.}
-% \label{tab:Bppp-values}
-% \end{table}
+Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{average-scores} model fails on the interpretation data, and is at most borderline compatible with the production data; that the \emph{average-probabilities} model is able to reproduce the production data, but fails on the interpretation data; and that only the \emph{average-WTA} model does not fail to capture the data from both conditions.
 
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
@@ -719,7 +661,6 @@ In other words, there is a way of deriving predictor values for condition-level 
   Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
   \mf{todo: redo these calculations with actual WTA!}
 }
-This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
 On the other hand, there is a stark contrast between the results of item-level and condition-level data.
 The model that was able to properly fit the condition-level data relies on a model of item-level choice that is clearly incompatible with the human item-level data.
 The model seems to be ``right for the wrong reasons.''
@@ -741,6 +682,11 @@ LLMs are models or individual- or item-level predictors.
 ( {TODO: rethink conclusion})
 
 {to be continued}
+
+\begin{itemize}
+  \item This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
+\end{itemize}
+
 
 \newpage
 \appendix
