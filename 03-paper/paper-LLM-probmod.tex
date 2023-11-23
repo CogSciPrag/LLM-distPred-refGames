@@ -603,7 +603,7 @@ Figure~\ref{fig:measures-overview} shows three salient approaches, which differ 
 %   \text{Pow}(\myvec{p} ; \alpha) & = \myvec{q}, \text{where } q_{i} \propto p_{i}^{\alpha}
 % \end{align*}
 
-The \emph{average-scores predictor} first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities using the usual parameterize softmax function:\footnote{
+The \emph{average-scores predictor} first aggregates the item-level scores, and then transposes the averages into (scaled) probabilities using the usual parameterized softmax function:\footnote{
   The reported results average over the multi-set \(\set{I_1, \dots I_m}\) of items that occurred in the human experiment for condition $C$.
   By using a multi-set, which may contain a single item multiple times, we produce aggregate predictions for exactly the set of items that the participant group saw, which provides the most fitting counterpart to the human data.}
 %
@@ -622,7 +622,7 @@ The \emph{average-probabilities predictor} first transposes scores into probabil
 \end{align*}
 %
 Finally, the \emph{average-WTA predictor} considers the prediction of the WTA strategy as the basic item-level unit to aggregate over.
-To add parameterized scaling to this method, a power-law transformation with variable $\alpha$ is a natural choice:
+To add parameterized scaling to this method, a power-law transformation is a natural choice:
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
   & P_{\text{cond}}^{\text{WTA}}(r_{i} \mid C, \alpha_{c})
@@ -634,16 +634,16 @@ where $P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) = \lim_{\alpha} P_{\text{item
 
 
 The \emph{average-scores} and \emph{average-probabilities} predictions are equivalent if there is only one item, in which case the prediction of the \emph{average-WTA} method is the special case of $\alpha \rightarrow \infty$.
-For cases with more than one item, the predictions of these different predictors are not guaranteed to be the same.
-Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predictors, but not the \emph{averages-scores} predictor, are compatible with a picture in which condition-level predictions result from the actual predictions at the item level.
-The difference between the \emph{average-probabilities} and the \emph{average-WTA} predictors is that the latter is an aggregate of an item-level predictor that is demonstrably bad, as shown in the previous Section~\ref{sec:item-level-pred}.
+For cases with more than one item, the predictions of the three predictors are not guaranteed to be the same.
+Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predictors, but not the \emph{average-scores} predictor, are compatible with a picture in which condition-level predictions result from the actual predictions at the item level.
+The difference between the \emph{average-probabilities} and the \emph{average-WTA} predictor is that the latter is an aggregate of an item-level predictor that is demonstrably bad, as shown in the previous Section~\ref{sec:item-level-pred}.
 
 Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, we can build likelihood functions for condition-level data around the three predictors introduced above.
 With the same priors and methods used before, we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
 Summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
 What is noteworthy is that for the \emph{average-WTA} model, the estimates of $\alpha_{c}$ in the production condition do not rule out, in fact lie close to, the special value $\alpha_{c}=1$, for which the power-law transformation is the identity function.
 This means that just averaging WTA-responses at the item-level yields a reasonable predictor for the production data at the condition-level.
-However, for the interpretation condition, the value $\alpha_{c}=1$ is clearly outside the range of credible parameter values, so that a simple recipe like ``always average WTA-repsonses without transformation'' is not a viable strategy for good condition-level predictions in general.
+However, for the interpretation condition, the value $\alpha_{c}=1$ is clearly outside the range of credible parameter values, so that a simple recipe like ``always average WTA-responses without transformation'' is not a viable strategy for good condition-level predictions in general.
 It is also worth noting that for the \emph{average-probability} model values of $\alpha_{c}$ close to one are virtually indistinguishable from the item-level predictions of the WTA strategy (see Figure~\ref{fig:closeness-target-item-level}).
 This suggests that, for the production data, aggregation of item-level predictions from the WTA-strategy gives good condition-level predictions.
 Since the production data is also very biased towards almost exclusively target choices by human participants, this is not too surprising.
@@ -662,7 +662,7 @@ In other words, there is a way of deriving predictor values for condition-level 
   \mf{todo: redo these calculations with actual WTA!}
 }
 On the other hand, there is a stark contrast between the results of item-level and condition-level data.
-The model that was able to properly fit the condition-level data relies on a model of item-level choice that is clearly incompatible with the human item-level data.
+The model that was able to properly fit the condition-level data builds on predictions for item-level choice that are clearly incompatible with the human item-level data.
 The model seems to be ``right for the wrong reasons.''
 
 
