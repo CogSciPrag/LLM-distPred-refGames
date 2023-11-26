@@ -42,8 +42,8 @@ def getLogProbContinuation(
         continuation,
         return_tensors="pt",
     ).input_ids
-    print("input_ids prompt ", input_ids_prompt)
-    print("input ids continuation ", input_ids_continuation)
+    #print("input_ids prompt ", input_ids_prompt)
+    #print("input ids continuation ", input_ids_continuation)
     # cut off the first token of the continuation, as it is SOS
     input_ids = torch.cat(
         (input_ids_prompt, input_ids_continuation[:, 1:]), 
@@ -65,13 +65,15 @@ def getLogProbContinuation(
         llama_output_scores, 
         dim=-1, 
         index=input_ids_probs
-    ).flatten().tolist()        
+    ).flatten()
     # slice output to only get scores of the continuation, not the context
     continuationConditionalLogProbs = conditionalLogProbs[
         input_ids_prompt.shape[-1]:
     ]
+    print("Shape of retrieved log probs", continuationConditionalLogProbs.shape)
     # compute continunation log prob
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
+    print("sent log prob ", sentLogProb)
 
     return sentLogProb
             
@@ -154,7 +156,7 @@ def get_model_predictions(
 
     }
 
-    return(output_dict)
+    return output_dict
 
 
 def main(model_name):
@@ -182,8 +184,10 @@ def main(model_name):
             0.5, 
             0.5
         )
+
         trial = {'trial': i}
-        output = dict(**trial, **vignette, **predictions)
+        output = dict(**vignette, **predictions)
+        output['trial'] = i
         list_of_dicts.append(output)
 
     results_df = pd.DataFrame(list_of_dicts)

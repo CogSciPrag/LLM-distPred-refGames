@@ -28,4 +28,3 @@ module load devel/cuda/11.6
 
 python3 -u llama_logprobs.py \
     --model_name="meta-llama/Llama-2-70b-hf"
-done

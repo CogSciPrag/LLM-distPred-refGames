@@ -174,5 +174,5 @@ def sample_vignette():
 
     return (vignette)
 
-vignette = sample_vignette()
-pprint(vignette)
+#vignette = sample_vignette()
+#pprint(vignette)
