@@ -185,9 +185,32 @@ def main(model_name):
             0.5
         )
 
-        trial = {'trial': i}
-        output = dict(**vignette, **predictions)
-        output['trial'] = i
+        materials = {
+            'trial': i,
+            'utterances': vignette['utterances'],
+            'trigger_feature': vignette['trigger_feature'],	
+            'nuisance_feature': vignette['nuisance_feature'],	
+            'production_target': vignette['production_target'],	
+            'production_competitor': vignette['production_competitor'],	
+            'production_distractor1': vignette['production_distractor1'],
+            'production_distractor2': vignette['production_distractor2'],	
+            'production_index_target': vignette['production_index_target'],	
+            'production_index_competitor': vignette['production_index_competitor'],	
+            'production_index_distractor1': vignette['production_index_distractor1'],	
+            'production_index_distractor2': vignette['production_index_distractor2'],
+            'trigger_object': vignette['trigger_object'],	
+            'trigger_word': vignette['trigger_word'],	
+            'interpretation_target': vignette['interpretation_target'],	
+            'interpretation_competitor': vignette['interpretation_competitor'],	
+            'interpretation_distractor': vignette['interpretation_distractor'],	
+            'interpretation_index_target': vignette['interpretation_index_target'],	
+            'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
+            'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
+            'context_production': vignette['context_production'],	
+            'context_interpretation': vignette['context_interpretation']
+            
+        }
+        output = dict(**materials, **predictions)
         list_of_dicts.append(output)
 
     results_df = pd.DataFrame(list_of_dicts)
