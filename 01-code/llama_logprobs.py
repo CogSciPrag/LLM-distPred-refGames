@@ -12,8 +12,14 @@ from transformers import (
     AutoModelForCausalLM, 
     AutoTokenizer
 )
-# get device
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+# get device count
+num_devices = torch.cuda.device_count()
+print("NUM DEVICES: ", num_devices)
+# print all device names and info
+for i in range(num_devices):
+    print(torch.cuda.get_device_properties(i))
+
+# define logsoftmax for retrieving logprobs from scores
 logsoftmax = torch.nn.LogSoftmax(dim=-1)
 
 def getLogProbContinuation(
@@ -25,6 +31,7 @@ def getLogProbContinuation(
     """
     Helper for retrieving log probability of different response types from Llama-2 of various sizes.
     """
+
     initialSequence = preface + initialSequence
     # tokenize separately, so as to know the shape of the continuation
     input_ids_prompt = tokenizer(
@@ -41,7 +48,7 @@ def getLogProbContinuation(
     input_ids = torch.cat(
         (input_ids_prompt, input_ids_continuation[:, 1:]), 
         -1
-    ).to(device)
+    ).to("cuda:0") # put input on the first device
     # pass through model
     outputs = model(
         input_ids,
@@ -79,23 +86,34 @@ def get_model_predictions(
         vignette, 
         model,
         tokenizer,
+        model_name,
         alpha_production, 
         alpha_interpretation
     ):
 
-    # production
+    # take care of special tokens for chat models
+    # assume that the task and context come from the user, and the response from the model
+    # no specific system prompt is passed
+    # if one wanted to, the expected formatting would be: [INST]<<SYS>>{system prompt}<</SYS>>\n\n{user message}[/INST]
+    if "chat" in model_name:
+        context_production = f"[INST]{vignette['context_production']}[/INST]"
+        context_interpretation = f"[INST]{vignette['context_interpretation']}[/INST]"
+    else:
+        context_production = vignette['context_production']
+        context_interpretation = vignette['context_interpretation']
 
+    # production
     lprob_target      = getLogProbContinuation(
-        vignette['context_production'], vignette["production_target"],
+        context_production, vignette["production_target"],
         model, tokenizer)
     lprob_competitor  = getLogProbContinuation(
-        vignette['context_production'], vignette["production_competitor"],
+        context_production, vignette["production_competitor"],
         model, tokenizer)
     lprob_distractor1 = getLogProbContinuation(
-        vignette['context_production'], vignette["production_distractor1"],
+        context_production, vignette["production_distractor1"],
         model, tokenizer)
     lprob_distractor2 = getLogProbContinuation(
-        vignette['context_production'], vignette["production_distractor2"],
+        context_production, vignette["production_distractor2"],
         model, tokenizer)
 
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
@@ -104,16 +122,16 @@ def get_model_predictions(
     # interpretation
 
     lprob_target      = getLogProbContinuation(
-        vignette['context_interpretation'], vignette["interpretation_target"],
+        context_interpretation, vignette["interpretation_target"],
         model, tokenizer)
     lprob_competitor  = getLogProbContinuation(
-        vignette['context_interpretation'], vignette["interpretation_competitor"],
+        context_interpretation, vignette["interpretation_competitor"],
         model, tokenizer)
     lprob_distractor  = getLogProbContinuation(
-        vignette['context_interpretation'], vignette["interpretation_distractor"],
+        context_interpretation, vignette["interpretation_distractor"],
         model, tokenizer)
 
-    scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])[:,1]
+    scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
     probs_interpretation = soft_max(scores_interpretation, alpha_interpretation)
 
     output_dict = {
@@ -147,7 +165,8 @@ def main(model_name):
         model_name, 
         device_map='auto', 
         torch_dtype=torch.float16
-    ).to(device)
+    )
+    model.eval()
 
     list_of_dicts = []
 
@@ -159,6 +178,7 @@ def main(model_name):
             vignette, 
             model, 
             tokenizer, 
+            model_name,
             0.5, 
             0.5
         )
