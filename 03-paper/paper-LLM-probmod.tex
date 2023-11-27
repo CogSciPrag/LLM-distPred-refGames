@@ -407,8 +407,15 @@ It is therefore common to include a small error probability $\epsilon$, with whi
   P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon_{c}) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
 %
-where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
-\mf{FC objected to ``condition-specificity'' which is fair, but I leave it as it was; my reasoning: we use model checking to rule out models; in this setting the conservative strategy is to err on the side of making the models too powerful (even at the cost of conceptual plausibility)}
+where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.\footnote{
+  Since the RSA model predicts probability 0 for the distractor option, this model is, in principle, able to predict any probability distribution over the three choice categories that is compatible with the order: $P_{r}(R_{t}) \ge P_{r}(R_{c}) \ge P_{r}(R_{d})$.
+  Intuitively, this is because with $\epsilon=0$, $P_{r}(R_{d}, C; \alpha_{c}) = 0$, so that there is an $\alpha$ for any ratio of predicted choice probabilities for target and competitor, as long as the target probability is no smaller than the competitor probability.
+  The $\epsilon$-transformation is essentially a linear shift in the probability simplex towards the maximum entropy prediction, so that every prediction which obeys the ordering restriction above can be made for some pair of $\alpha$ and $\epsilon$.
+  This prediction-triviality is met in two ways.
+  For one, the Bayesian priors on model parameters soft-constrain the model, so that the \emph{ex ante} credible predictions do rule out many logically possible observations.
+  For another, we break the triviality by assigning a non-zero probability to the prediction for the distractor option.
+  The same triviality problem lurks for the \emph{average-WTA} model introduced in Section~\ref{llm-predictions-for-reference-games}, and the same solution is applied to it.
+}
 
 The data $D_{C}$ from condition $C$, see Figure~\ref{fig:refgame-counts}, consists of counts for each response category.
 The parameterized likelihood function entailed by the RSA model for condition-level data $D_{C}$ is:
@@ -421,7 +428,7 @@ The parameterized likelihood function entailed by the RSA model for condition-le
 The result is a four-parameter model, one pair of parameters per condition.
 
 Parameterized predictions, like in Equation~(\ref{eq:RSA-likelihood}), can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
-Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
+Let $\alpha_{c}\sim \text{log-Normal}(1,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,15)$ have a Beta prior favoring small values.
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{tab:sumStats}).\footnote{
   Posterior samples where generated for four chains with 2000 samples each, after a warm-up of 1000 samples. The ``adapt-delta'' value was set to 0.99. Converge was checked with $\hat{R}$-statistics \citep{GelmanRubin1992:Inference-from-}.
 }
@@ -434,18 +441,18 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
   data & model & condition & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
   \midrule
 
-  item-level  & RSA                & production     & 2.62 & 3.15 & 3.69 & 0.08 & 0.13 & 0.17 & 0.34 &  \\
-  item-level  & RSA                & interpretation & 0.24 & 0.66 & 1.05 & 0.10 & 0.15 & 0.20 & 0.25 &  \\
-  item-level  & LLM                & production     & 0.15 & 0.21 & 0.29 & 0.00 & 0.10 & 0.21 & 0.00 & * \\
-  item-level  & LLM                & interpretation & 0.08 & 0.13 & 0.18 & 0.00 & 0.17 & 0.33 & 0.00 & * \\
-  cond.-level & RSA                & production     & 2.59 & 3.16 & 3.71 & 0.08 & 0.13 & 0.18 & 0.49 &  \\
-  cond.-level & RSA                & interpretation & 0.24 & 0.66 & 1.07 & 0.10 & 0.15 & 0.20 & 0.52 &  \\
-  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.26 & 0.00 & 0.04 & 0.11 & 0.05 & * \\
-  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.06 & 0.00 & * \\
-  cond.-level & avg. probabilities & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.13 & 0.18 & 0.51 &  \\
-  cond.-level & avg. probabilities & interpretation & 0.36 & 0.48 & 0.60 & 0.00 & 0.05 & 0.12 & 0.00 & * \\
-  cond.-level & avg. WTA           & production     & 0.87 & 1.04 & 1.23 & 0.08 & 0.13 & 0.17 & 0.49 &  \\
-  cond.-level & avg. WTA           & interpretation & 0.17 & 0.39 & 0.61 & 0.10 & 0.15 & 0.20 & 0.26 &  \\
+  item-level  & RSA                & production     & 2.62 & 3.13 & 3.69 & 0.08 & 0.12 & 0.16 & 0.29 &  \\
+  item-level  & RSA                & interpretation & 0.21 & 0.67 & 1.08 & 0.08 & 0.14 & 0.19 & 0.21 &  \\
+  item-level  & LLM                & production     & 0.15 & 0.19 & 0.24 & 0.00 & 0.07 & 0.16 & 0.00 & * \\
+  item-level  & LLM                & interpretation & 0.08 & 0.11 & 0.14 & 0.00 & 0.09 & 0.22 & 0.00 & * \\
+  cond.-level & RSA                & production     & 2.62 & 3.14 & 3.70 & 0.08 & 0.12 & 0.17 & 0.50 &  \\
+  cond.-level & RSA                & interpretation & 0.27 & 0.68 & 1.13 & 0.09 & 0.14 & 0.19 & 0.51 &  \\
+  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.25 & 0.00 & 0.03 & 0.08 & 0.05 &  \\
+  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.05 & 0.00 & * \\
+  cond.-level & avg. probabilities & production     & 0.86 & 1.03 & 1.22 & 0.08 & 0.12 & 0.17 & 0.47 &  \\
+  cond.-level & avg. probabilities & interpretation & 0.36 & 0.46 & 0.59 & 0.00 & 0.04 & 0.10 & 0.00 & * \\
+  cond.-level & avg. WTA           & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.12 & 0.17 & 0.48 &  \\
+  cond.-level & avg. WTA           & interpretation & 0.15 & 0.37 & 0.58 & 0.03 & 0.12 & 0.18 & 0.49 &  \\
 
    \bottomrule \\
 \end{tabular}
@@ -656,11 +663,7 @@ Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{a
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
 On the positive side, we also find that there is at least one model with predictors based on LLM-measures, namely the \emph{average-WTA} model, which is able to recover the patterns in the data.
-In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.\footnote{
-  A potential worry is that the \emph{average-WTA} model is trivial in the sense that it could have predicted \emph{any} data observation.
-  Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
-  \mf{todo: redo these calculations with actual WTA!}
-}
+In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.
 On the other hand, there is a stark contrast between the results of item-level and condition-level data.
 The model that was able to properly fit the condition-level data builds on predictions for item-level choice that are clearly incompatible with the human item-level data.
 The model seems to be ``right for the wrong reasons.''
@@ -705,6 +708,9 @@ Variability of performance measures also comes with a well-known risk for robust
 The more researcher degrees of freedom there are, the higher the risk of false results, even in the absence of intentions to mislead \citep[e.g.][]{Ioannidis2005:Why-Most-Publis,Chambers2017:The-Seven-Deadl}.
 The comparison of LLMs with PCMs here raises awareness for the issue of robust research methods also in NLP \citep{WielingRawee2018:Reproducibility}.
 
+The work presented here also contains considerable researcher degrees of freedom.
+We only considered one out of several conceivable ways of carving a parameterized likelihood function from LLM-based predictors.
+If future work would contribute to systematically exploring these, the main goal of this paper would have been met, which is to raise awareness for the possibility, perhaps even necessity, to scrutinize LLMs at the same level of rigorous detail as other models in cognitive science.
 
 \paragraph{Human-like predictions from LLM.}
 The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
@@ -731,6 +737,8 @@ The scope of our experimental investigation was deliberately small but perspicuo
 Focusing on the methodological contributions and details in performance assessments, we focused on a minimal non-trivial case study where we could triangulate LLMs, PCMs and human data.
 This work may therefore serve as starting point for a wider investigation of more complex data sets and case studies in which LLMs are analyzed as and directly compared to explanatory PCMs.
 
+
+\printbibliography[heading=bibintoc]
 
 \newpage
 \appendix
@@ -793,37 +801,36 @@ I would choose the word
 \end{verbatim}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Range of prior predictions of intermediate-scope model}
-\label{sec:range-prior-pred}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Range of prior predictions of intermediate-scope model}
+% \label{sec:range-prior-pred}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
-The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
-Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
-There are distributions over response types which the model does not predict \emph{ex ante}.
-For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
+% It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
+% The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
+% Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
+% There are distributions over response types which the model does not predict \emph{ex ante}.
+% For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
 
 
-\begin{figure}[t]
-  \centering
+% \begin{figure}[t]
+%   \centering
 
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
-  %
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
+%   \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
+%   %
+%   \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
 
-  \caption{
-    Range of predictions the intermediate-scope model makes for any pair of parameter values $\alpha_{c}$ and $\epsilon_{c}$.
-    The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
-    The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that the probability of choosing the target is bigger than that of the competitor, which in turn is bigger than that of the distractor.
-    The blue area is the subspace of probabilistic predictions the intermediate-scope model makes under any value of its parameters.
-    The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
-    The yellow dot is the ``vanilla prediction'' for $\alpha_{c}=1$ and $\epsilon_{c}=0$.
-  }
-  \label{fig:prediction-range}
-\end{figure}
+%   \caption{
+%     Range of predictions the intermediate-scope model makes for any pair of parameter values $\alpha_{c}$ and $\epsilon_{c}$.
+%     The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
+%     The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that the probability of choosing the target is bigger than that of the competitor, which in turn is bigger than that of the distractor.
+%     The blue area is the subspace of probabilistic predictions the intermediate-scope model makes under any value of its parameters.
+%     The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
+%     The yellow dot is the ``vanilla prediction'' for $\alpha_{c}=1$ and $\epsilon_{c}=0$.
+%   }
+%   \label{fig:prediction-range}
+% \end{figure}
 
-\printbibliography[heading=bibintoc]
 
 \end{document}
 
@@ -831,3 +838,8 @@ For example, the model does not predict cases where the number of competitor cho
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+
+
+
+   \hline
+\end{tabular}
