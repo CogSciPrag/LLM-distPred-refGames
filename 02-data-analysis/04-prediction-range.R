@@ -58,13 +58,17 @@ plot_predictive_range <- function(p, title = "production", gridsize = 100) {
 }
 
 # p_prod <- prob_prod[1,] / sum(prob_prod[1,])
-p_prod <- c(0.9, 0.09, 0.01) # for more stable results with lower gridsize (still)
+# p_prod <- c(0.9, 0.09, 0.01) # for more stable results with lower gridsize (still)
+# p_prod <- c(0.8923842, 0.107616, 9.999997e-08) # WTA strategy (shifted into interior)
+p_prod <- c(6.666668e-01, 3.333334e-01, 9.999997e-08) # RSA strategy (shifted into interior)
 prediction_range_prod  <- plot_predictive_range(p_prod, "production", gridsize = 100)
 prediction_range_prod
 
 # p_inter <- prob_inter[1,] / sum(prob_inter[1,])
-p_inter <- c(0.681758393, 0.316123548, 0.002118059)
-prediction_range_inter <- plot_predictive_range(p_inter, "interpretation", gridsize = 400)
+# p_inter <- c(0.681758393, 0.316123548, 0.002118059)
+# p_inter <- c(0.6771525, 0.3228479, 1.999999e-07) # WTA strategy (shifted into interior)
+p_inter <- c(6.000001e-01, 4.000001e-01, 9.999997e-08) # RSA strategy (shifted into interior)
+prediction_range_inter <- plot_predictive_range(p_inter, "interpretation", gridsize = 100)
 prediction_range_inter
 
 ggsave(plot = prediction_range_prod,  
