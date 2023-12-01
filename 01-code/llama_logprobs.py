@@ -43,25 +43,30 @@ def getLogProbContinuation(
         return_tensors="pt",
     ).input_ids
     #print("input_ids prompt ", input_ids_prompt)
-    #print("input ids continuation ", input_ids_continuation)
+    print("input ids continuation ", input_ids_continuation.shape)
     # cut off the first token of the continuation, as it is SOS
     input_ids = torch.cat(
         (input_ids_prompt, input_ids_continuation[:, 1:]), 
         -1
     ).to("cuda:0") # put input on the first device
+    print("input ids shape ", input_ids.shape)
     # pass through model
     outputs = model(
         input_ids,
     )
     # transform logits to probabilities
+    print("shape of logits ", outputs.logits.shape)
+    # remove the EOS logit which we aren't interested in
     llama_output_scores = logsoftmax(
-        outputs.logits[0][:, :-1]
+        outputs.logits[0][:-1]
     )
+    print("output log probs shape ", llama_output_scores.shape)
     # retreive log probs at token ids
     # transform input_ids to a tensor of shape [n_tokens, 1] for this
     # cut off the sos token so as to get predictions for the actual token conditioned on 
     # preceding context
     input_ids_probs = input_ids[:, 1:].squeeze().unsqueeze(-1)
+    print("shape of input ids for porb retrieval ", input_ids_probs.shape)
     # retreive at correct token positions
     conditionalLogProbs = torch.gather(
         llama_output_scores, 
