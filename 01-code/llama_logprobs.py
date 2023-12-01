@@ -55,11 +55,13 @@ def getLogProbContinuation(
     )
     # transform logits to probabilities
     llama_output_scores = logsoftmax(
-        outputs.logits[0]
+        outputs.logits[0][:, :-1]
     )
     # retreive log probs at token ids
     # transform input_ids to a tensor of shape [n_tokens, 1] for this
-    input_ids_probs = input_ids.squeeze().unsqueeze(-1)
+    # cut off the sos token so as to get predictions for the actual token conditioned on 
+    # preceding context
+    input_ids_probs = input_ids[:, 1:].squeeze().unsqueeze(-1)
     # retreive at correct token positions
     conditionalLogProbs = torch.gather(
         llama_output_scores, 
