@@ -75,7 +75,7 @@ def getLogProbContinuation(
     ).flatten()
     # slice output to only get scores of the continuation, not the context
     continuationConditionalLogProbs = conditionalLogProbs[
-        input_ids_prompt.shape[-1]:
+        (input_ids_prompt.shape[-1]-1):
     ]
     print("Shape of retrieved log probs", continuationConditionalLogProbs.shape)
     # compute continunation log prob
