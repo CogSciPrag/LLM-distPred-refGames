@@ -42,8 +42,8 @@ transformed parameters {
 }
 
 model {
-  alpha ~ lognormal(0.5,1);
-  epsilon ~ beta(1,5);
+  alpha ~ lognormal(1,1);
+  epsilon ~ beta(1,15);
   for (k in 1:n_chunk) {
       d[k,] ~ multinomial(theta[k,]);
   }

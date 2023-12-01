@@ -407,8 +407,15 @@ It is therefore common to include a small error probability $\epsilon$, with whi
   P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon_{c}) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
 %
-where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.
-\mf{FC objected to ``condition-specificity'' which is fair, but I leave it as it was; my reasoning: we use model checking to rule out models; in this setting the conservative strategy is to err on the side of making the models too powerful (even at the cost of conceptual plausibility)}
+where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.\footnote{
+  Since the RSA model predicts probability 0 for the distractor option, this model is, in principle, able to predict any probability distribution over the three choice categories that is compatible with the order: $P_{r}(R_{t}) \ge P_{r}(R_{c}) \ge P_{r}(R_{d})$.
+  Intuitively, this is because with $\epsilon=0$, $P_{r}(R_{d}, C; \alpha_{c}) = 0$, so that there is an $\alpha$ for any ratio of predicted choice probabilities for target and competitor, as long as the target probability is no smaller than the competitor probability.
+  The $\epsilon$-transformation is essentially a linear shift in the probability simplex towards the maximum entropy prediction, so that every prediction which obeys the ordering restriction above can be made for some pair of $\alpha$ and $\epsilon$.
+  This prediction-triviality is met in two ways.
+  For one, the Bayesian priors on model parameters soft-constrain the model, so that the \emph{ex ante} credible predictions do rule out many logically possible observations.
+  For another, we break the triviality by assigning a non-zero probability to the prediction for the distractor option.
+  The same triviality problem lurks for the \emph{average-WTA} model introduced in Section~\ref{llm-predictions-for-reference-games}, and the same solution is applied to it.
+}
 
 The data $D_{C}$ from condition $C$, see Figure~\ref{fig:refgame-counts}, consists of counts for each response category.
 The parameterized likelihood function entailed by the RSA model for condition-level data $D_{C}$ is:
@@ -421,7 +428,7 @@ The parameterized likelihood function entailed by the RSA model for condition-le
 The result is a four-parameter model, one pair of parameters per condition.
 
 Parameterized predictions, like in Equation~(\ref{eq:RSA-likelihood}), can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
-Let $\alpha_{c}\sim \text{log-Normal}(0.5,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,5)$ have a Beta prior favoring small values.
+Let $\alpha_{c}\sim \text{log-Normal}(1,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,15)$ have a Beta prior favoring small values.
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{tab:sumStats}).\footnote{
   Posterior samples where generated for four chains with 2000 samples each, after a warm-up of 1000 samples. The ``adapt-delta'' value was set to 0.99. Converge was checked with $\hat{R}$-statistics \citep{GelmanRubin1992:Inference-from-}.
 }
@@ -434,18 +441,18 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
   data & model & condition & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
   \midrule
 
-  item-level  & RSA                & production     & 2.62 & 3.15 & 3.69 & 0.08 & 0.13 & 0.17 & 0.34 &  \\
-  item-level  & RSA                & interpretation & 0.24 & 0.66 & 1.05 & 0.10 & 0.15 & 0.20 & 0.25 &  \\
-  item-level  & LLM                & production     & 0.15 & 0.21 & 0.29 & 0.00 & 0.10 & 0.21 & 0.00 & * \\
-  item-level  & LLM                & interpretation & 0.08 & 0.13 & 0.18 & 0.00 & 0.17 & 0.33 & 0.00 & * \\
-  cond.-level & RSA                & production     & 2.59 & 3.16 & 3.71 & 0.08 & 0.13 & 0.18 & 0.49 &  \\
-  cond.-level & RSA                & interpretation & 0.24 & 0.66 & 1.07 & 0.10 & 0.15 & 0.20 & 0.52 &  \\
-  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.26 & 0.00 & 0.04 & 0.11 & 0.05 & * \\
-  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.06 & 0.00 & * \\
-  cond.-level & avg. probabilities & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.13 & 0.18 & 0.51 &  \\
-  cond.-level & avg. probabilities & interpretation & 0.36 & 0.48 & 0.60 & 0.00 & 0.05 & 0.12 & 0.00 & * \\
-  cond.-level & avg. WTA           & production     & 0.87 & 1.04 & 1.23 & 0.08 & 0.13 & 0.17 & 0.49 &  \\
-  cond.-level & avg. WTA           & interpretation & 0.17 & 0.39 & 0.61 & 0.10 & 0.15 & 0.20 & 0.26 &  \\
+  item-level  & RSA                & production     & 2.62 & 3.13 & 3.69 & 0.08 & 0.12 & 0.16 & 0.29 &  \\
+  item-level  & RSA                & interpretation & 0.21 & 0.67 & 1.08 & 0.08 & 0.14 & 0.19 & 0.21 &  \\
+  item-level  & LLM                & production     & 0.15 & 0.19 & 0.24 & 0.00 & 0.07 & 0.16 & 0.00 & * \\
+  item-level  & LLM                & interpretation & 0.08 & 0.11 & 0.14 & 0.00 & 0.09 & 0.22 & 0.00 & * \\
+  cond.-level & RSA                & production     & 2.62 & 3.14 & 3.70 & 0.08 & 0.12 & 0.17 & 0.50 &  \\
+  cond.-level & RSA                & interpretation & 0.27 & 0.68 & 1.13 & 0.09 & 0.14 & 0.19 & 0.51 &  \\
+  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.25 & 0.00 & 0.03 & 0.08 & 0.05 &  \\
+  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.05 & 0.00 & * \\
+  cond.-level & avg. probabilities & production     & 0.86 & 1.03 & 1.22 & 0.08 & 0.12 & 0.17 & 0.47 &  \\
+  cond.-level & avg. probabilities & interpretation & 0.36 & 0.46 & 0.59 & 0.00 & 0.04 & 0.10 & 0.00 & * \\
+  cond.-level & avg. WTA           & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.12 & 0.17 & 0.48 &  \\
+  cond.-level & avg. WTA           & interpretation & 0.15 & 0.37 & 0.58 & 0.03 & 0.12 & 0.18 & 0.49 &  \\
 
    \bottomrule \\
 \end{tabular}
@@ -656,11 +663,7 @@ Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{a
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
 On the positive side, we also find that there is at least one model with predictors based on LLM-measures, namely the \emph{average-WTA} model, which is able to recover the patterns in the data.
-In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.\footnote{
-  A potential worry is that the \emph{average-WTA} model is trivial in the sense that it could have predicted \emph{any} data observation.
-  Appendix~\ref{sec:range-prior-pred} shows that this is not the case.
-  \mf{todo: redo these calculations with actual WTA!}
-}
+In other words, there is a way of deriving predictor values for condition-level forced-choice probabilities from an LLM such that, when fed into a common linking function (here with parameters $\alpha$ for optimization and $\epsilon$ for random error), the human choice probability can be reconstructed faithfully in its entirety.
 On the other hand, there is a stark contrast between the results of item-level and condition-level data.
 The model that was able to properly fit the condition-level data builds on predictions for item-level choice that are clearly incompatible with the human item-level data.
 The model seems to be ``right for the wrong reasons.''
@@ -672,21 +675,70 @@ The model seems to be ``right for the wrong reasons.''
 \label{conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-It is not entirely ludicrous to use numerical predictions from LLMs are part of predictive probabilistic models.
-But we have to be careful.
-Ideally, we average out over low-level variation, such as from order of presentation or similar ``nuisance,'' at least as long as we do not understand what causes this variation in the predictions of models and further research that investigates when exactly this variation accords with empirically observed patterns.
+While the common practice in evaluating the capabilities of LLMs is based on accuracy averaged over large collections of data, this work took the alternative route to explore what we learn if we subjected LLMs to the same routines and strong demands on distributional quality of fit to human data as we normally do for probabilistic cognitive models.
+Taking this perspective, a main contribution of this paper is methodological, showing how statistical model criticism can be used for LLMs in the first place, and, more specifically, how it can be insightful in the detailed assessment of how LLMs might or might not be able to predict human data at the degree of accuracy that we would normally aspire for when dealing with explanatory statistical models in cognitive science.
+Applying this comparative approach to a minimal, but non-trivial data set, we find that the LLM predictions on a per-item level predict variance that is not attested in the human data.
+From several candidate predictor measures for aggregate condition-level data, only one was not refuted by the human data, but this was one that relied on the empirically implausible WTA-strategy at the item-level, incidentally the same strategy that is commonly used in accuracy-based benchmark testing \citep{srivastava2023-BIGbench}.
 
-This also implies that we should likely \emph{not} (yet) aspire to use
-LLMs are models or individual- or item-level predictors.
+\paragraph{Explanatory power.}
+The comparison of LLMs and PCMs led to a simple but consequential observation, namely that the atomic predictions or LLMs are at the item level, while explanatory PCMs usually make predictions at a more abstract level of conceptualization, similar to the level of an experimental condition.
+This is one sense in which LLMs may be felt to be less, or not at all, explanatory.
+They do not offer, at least not directly, a human-comprehensible compression of reality into a \emph{kind} of response pattern, over and beyond making a predicting for each particular situation.
+As this kind of compression is arguably important for a sense of understanding \citep{Dellsen2020:Beyond-Explanat,Grimm2021:Understanding}, the direct comparison of LLMs with common practices in experimental psychology and with probabilistic cognitive models, provides an interesting perspective on why LLMs are often felt to be lacking in explanatory power.
 
-( {TODO: rethink conclusion})
+This perspective on the explanatory role of LLMs goes beyond the factors of performance, indirect support and parsimony identified by \citet{SortNoopDeemtervan-Deemter2023:Dimensions-of-E}.
+It is also subtly different from considerations of an LLMs ability to generalize \citep{HupkesDankers2020:Compositionalit}.
+It rather suggests that \emph{transferability} is a dimension to ``explanatory power'' that is important as well.
+Imagine that models $M$ and $M'$ have been designed for and trained on data from a situation $S$, but need to be applied to a different situation $T$.
+Assume that for model $M$ the only way to make prediction for $T$ is to collect data pertaining to $T$, and either retrain or fine-tune the model.
+In contrast, for model $M'$ can make predictions for $T$ without novel data collection by recognizing a meaningful difference between $S$ and $T$ and consequently manually changing parameter values or model-internal mechanics to accommodate for this change.
+In that case, model $M'$ would be more transferable than model $M$.
+For example, if we change the experimental setting for a reference game to consist of data from a special population, such as very young children or language-impaired adults, a potentially reasonable architectural change to a model like the RSA model is to consider differences in the sets of alternative utterances for the speaker \citep[e.g.][]{Noveck2001:When-Children-a}.
+Even though this is only a vague explication of a notion of transferability, it suffices to corroborate the intuition that models like PCMs, which are designed to operate at a higher level of conceptual abstraction, will often appear more transferable than models like LLMs, which make predictions not for \emph{kinds} of situations but for \emph{particular} situations.
+Whether any given model's transfer-ability is correct, is an orthogonal empirical question.
+It is also an empirical question, exactly to which extent and in which areas LLMs are (not) transferable, especially if we consider prompting a transfer strategy \citep{LiuLiu2022:Generated-Knowl,XieRaghunathan2022:An-Explanation-}.
+In any case, the comparison between LLMs and PCMs started here suggests systematic research into the transfer-ability and explanatory value of LLMs, e.g., by prompting strategies that are empirically insightful or by their use in composite neuro-symbolic models that implement theoretically-meaningful conceptual differences between types of situations.
 
-{to be continued}
 
-\begin{itemize}
-  \item This implies that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is averaged out in the right way.
-\end{itemize}
+\paragraph{Variability in predictions and performance measures.}
+Despite being anchored in a small, but detailed case-study, the fact that different plausible methods of aggregating item-level information led to condition-level predictions of variable quality is worrisome.
+Similarly, we argued that the wide-spread reliance on a winner-takes-all strategy might be inconsistent with the actual use practices of LLMs, which may not always rely on a temperature-zero sampling strategy (see Section~\ref{motivation}).
+In conclusion, research on LLM should systematically study the conceptual and empirical consequences of seemingly minor decisions in evaluation or application settings.
+Variability of performance measures also comes with a well-known risk for robust and reproducible science.
+The more researcher degrees of freedom there are, the higher the risk of false results, even in the absence of intentions to mislead \citep[e.g.][]{Ioannidis2005:Why-Most-Publis,Chambers2017:The-Seven-Deadl}.
+The comparison of LLMs with PCMs here raises awareness for the issue of robust research methods also in NLP \citep{WielingRawee2018:Reproducibility}.
 
+The work presented here also contains considerable researcher degrees of freedom.
+We only considered one out of several conceivable ways of carving a parameterized likelihood function from LLM-based predictors.
+If future work would contribute to systematically exploring these, the main goal of this paper would have been met, which is to raise awareness for the possibility, perhaps even necessity, to scrutinize LLMs at the same level of rigorous detail as other models in cognitive science.
+
+\paragraph{Human-like predictions from LLM.}
+The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
+Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
+Based on the data set and the detailed analyses conducted here, it seems not infeasible to use numerical predictions from LLMs are part of predictive probabilistic models.
+But, ideally, low-level variation, such as from order of presentation or similar ``nuisance variables,'' should be averaged out or taken into account in some way or other, at least as long as we do not understand what causes this variation in the predictions of models and further research that investigates when exactly this variation accords with empirically observed patterns.
+In sum, we conjecture that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is taken into account.
+
+
+\paragraph{No substitute for human subjects.}
+Looking at LLM-derived predictions for human data from the perspective of cognitive modeling highlights the fact that LLMs predict item-level variation, but not subject-level variation, which is common in human data.
+We may consider variation introduced via softmax / temperature as analogous to between-human variation, but this likely falls short of reality, where pronounced differences in answer behavior may surface.
+For the particular case of pragmatic language use, prior research has shown that individual participants have markedly different behavioral profiles, often consistently behaving like literal language users or more sophisticated language users \citep[e.g.,][]{NieuwlandDitman2010:On-the-incremen,FrankeDegen2015:Reasoning-in-Re,SpychalskaKontinen2016:Investigating-s}.
+It is an open question whether predictions from LLMs reflect the same kind of variation.
+The results presented here recommend skepticism.
+We therefore side with the cautious voices that do not recommend replacing human participants with LLMs in psychological research \citep{DillionTandon2023:Can-AI-language,HardingDAlessandro2023:AI-language-mod}.
+In contrast, there is a challenge for LLM research.
+The fact that aggregate predictions can track aggregate human behaviour means that the variance in on both sides is washed out to achieve a similar result.
+This raises the issue of finding the systematic differences between LLMs and human answerers.
+The task then would be to find cases where the differences do \emph{not} wash out and ask: What if anything do these cases share?
+
+\paragraph{Limitations and follow-up work.}
+The scope of our experimental investigation was deliberately small but perspicuous.
+Focusing on the methodological contributions and details in performance assessments, we focused on a minimal non-trivial case study where we could triangulate LLMs, PCMs and human data.
+This work may therefore serve as starting point for a wider investigation of more complex data sets and case studies in which LLMs are analyzed as and directly compared to explanatory PCMs.
+
+
+\printbibliography[heading=bibintoc]
 
 \newpage
 \appendix
@@ -749,53 +801,35 @@ I would choose the word
 \end{verbatim}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Range of prior predictions of intermediate-scope model}
-\label{sec:range-prior-pred}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Range of prior predictions of intermediate-scope model}
+% \label{sec:range-prior-pred}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
-The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
-Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
-There are distributions over response types which the model does not predict \emph{ex ante}.
-For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
+% It may seem that, given the freedom to adjust optimization $\alpha$ and random guessing rate $\epsilon$, some models might be able to explain \emph{any} data observation.
+% The intermediate-scope model, which was not discredited by model criticism in terms of recovery-based posterior predictive checks, is not trivial in this sense.
+% Figure~\ref{fig:prediction-range} shows the range of predictions that the intermediate-scope model is, in principle, capable of making (for the whole possible range of \(\alpha\) and \(\epsilon\) values, disregarding Bayesian priors).
+% There are distributions over response types which the model does not predict \emph{ex ante}.
+% For example, the model does not predict cases where the number of competitor choices is almost as high as the number of target choice, as would be the case if participants would consistently \emph{not} engage in pragmatic reasoning.
 
 
-\begin{figure}[t]
-  \centering
+% \begin{figure}[t]
+%   \centering
 
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
-  %
-  \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
+%   \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-prod.png}
+%   %
+%   \includegraphics[width=0.45\textwidth]{00-pics/prediction-range-inter.png}
 
-  \caption{
-    Range of predictions the intermediate-scope model makes for any pair of parameter values $\alpha_{c}$ and $\epsilon_{c}$.
-    The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
-    The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that the probability of choosing the target is bigger than that of the competitor, which in turn is bigger than that of the distractor.
-    The blue area is the subspace of probabilistic predictions the intermediate-scope model makes under any value of its parameters.
-    The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
-    The yellow dot is the ``vanilla prediction'' for $\alpha_{c}=1$ and $\epsilon_{c}=0$.
-  }
-  \label{fig:prediction-range}
-\end{figure}
-
-\printbibliography[heading=bibintoc]
-
-\newpage
-
-\section*{Snippets}
-
-\begin{itemize}
-  \item for conclusion?
-  \begin{itemize}
-    \item The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-    Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
-  \end{itemize}
-  \item PT: the high-level take-away that item-level LLM predictions don't fit human predictions well might, as always, be met with the comment that the task is rather artificial. maybe this should go into the discussion
-  \item FC: The fact that the aggregate predictions track aggregate human behaviour means that the discrepancies are washing out. But there's also the interesting question of finding the systematic differences between LLMs and people. The task then would be to find sets of stimuli where the differences do \emph{not} wash out and ask: What if anything do these stimuli share? This paper could also be a jumping board for this line of research.
-  \item PT: maybe a conclusion in the spirit of "cogmod in the age of LLMs"/ "computational psycholinguistics \& careful assessment of reasoning / linguistic abilities of LLMs against human performance" might be not entirely ludicrous too
-\end{itemize}
-
+%   \caption{
+%     Range of predictions the intermediate-scope model makes for any pair of parameter values $\alpha_{c}$ and $\epsilon_{c}$.
+%     The light gray triangle with the red boundary is the probability simplex, i.e., the space of all possible 3-place probability vectors.
+%     The darker gray area in gray boundary lines is the subspace that is compatible with the ordering that the probability of choosing the target is bigger than that of the competitor, which in turn is bigger than that of the distractor.
+%     The blue area is the subspace of probabilistic predictions the intermediate-scope model makes under any value of its parameters.
+%     The orange dot in the middle is the ``Laplace point'' of equal probability for all three options, which the model predicts for $\alpha=0$ or $\epsilon=1$.
+%     The yellow dot is the ``vanilla prediction'' for $\alpha_{c}=1$ and $\epsilon_{c}=0$.
+%   }
+%   \label{fig:prediction-range}
+% \end{figure}
 
 
 \end{document}
@@ -804,3 +838,8 @@ For example, the model does not predict cases where the number of competitor cho
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+
+
+
+   \hline
+\end{tabular}
