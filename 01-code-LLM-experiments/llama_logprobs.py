@@ -43,7 +43,7 @@ def getLogProbContinuation(
         return_tensors="pt",
     ).input_ids
     #print("input_ids prompt ", input_ids_prompt)
-    print("input ids continuation ", input_ids_continuation.shape)
+    print("input ids continuation ", input_ids_continuation.shape, input_ids_continuation)
     # cut off the first token of the continuation, as it is SOS
     input_ids = torch.cat(
         (input_ids_prompt, input_ids_continuation[:, 1:]), 
@@ -51,9 +51,10 @@ def getLogProbContinuation(
     ).to("cuda:0") # put input on the first device
     print("input ids shape ", input_ids.shape)
     # pass through model
-    outputs = model(
-        input_ids,
-    )
+    with torch.no_grad():
+        outputs = model(
+            input_ids,
+        )
     # transform logits to probabilities
     print("shape of logits ", outputs.logits.shape)
     # remove the EOS logit which we aren't interested in
@@ -66,7 +67,7 @@ def getLogProbContinuation(
     # cut off the sos token so as to get predictions for the actual token conditioned on 
     # preceding context
     input_ids_probs = input_ids[:, 1:].squeeze().unsqueeze(-1)
-    print("shape of input ids for porb retrieval ", input_ids_probs.shape)
+    print("shape of input ids for porb retrieval ", input_ids_probs.shape, input_ids_probs)
     # retreive at correct token positions
     conditionalLogProbs = torch.gather(
         llama_output_scores, 
@@ -77,7 +78,7 @@ def getLogProbContinuation(
     continuationConditionalLogProbs = conditionalLogProbs[
         (input_ids_prompt.shape[-1]-1):
     ]
-    print("Shape of retrieved log probs", continuationConditionalLogProbs.shape)
+    print("Shape of retrieved log probs", continuationConditionalLogProbs.shape, continuationConditionalLogProbs)
     # compute continunation log prob
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
     print("sent log prob ", sentLogProb)
@@ -124,7 +125,15 @@ def get_model_predictions(
     lprob_distractor2 = getLogProbContinuation(
         context_production, vignette["production_distractor2"],
         model, tokenizer)
-
+    # for testing, also just sample a few productions
+    predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
+    production_samples = model.generate(
+        **predictions_prompt_ids,
+        do_sample = True,
+        num_return_sequences=5,
+    )
+    production_decoded = tokenizer.batch_decode(production_samples)
+    print("productions decoded", production_decoded)
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
     probs_production = soft_max(scores_production, alpha_production)
 
@@ -153,6 +162,7 @@ def get_model_predictions(
         'prob_production_competitor'    : probs_production[1],
         'prob_production_distractor1'   : probs_production[2],
         'prob_production_distractor2'   : probs_production[3],
+        'production_decoded': "|".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
@@ -180,7 +190,7 @@ def main(model_name):
     list_of_dicts = []
 
     # for comparability of results, use materials from GPT-3 results
-    vignettes = pd.read_csv('results.csv')
+    vignettes = pd.read_csv('../02-data/results_GPT.csv')
 
     for i, vignette in tqdm(vignettes.iterrows()):
         predictions = get_model_predictions(
