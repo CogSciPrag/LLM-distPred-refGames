@@ -101,6 +101,15 @@ def getLogProbContinuation(
     print("input_ids_continuation[0][-1] ", input_ids_continuation[0][-1])
     print("Answer logit retrieved with Jenn's method ", answer_logits)
 
+    ### sanity checking the llh results via nll loss comp
+    manual_llh = np.mean(np.array(conditionalLogProbs))
+    auto_llh = model(
+       input_ids,
+       labels=input_ids
+    ).loss
+    print("manually computed LL ", manual_llh)
+    print("loss computation based nll ", auto_llh)
+
     return sentLogProb, answer_logits
             
 
