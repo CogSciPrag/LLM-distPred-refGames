@@ -83,7 +83,25 @@ def getLogProbContinuation(
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
     print("sent log prob ", sentLogProb)
 
-    return sentLogProb
+    ### alternative method of retrieving log probs of single words via generate ###
+    # only pass the prompt and then retreive score of the respective tokens among the first predicted token
+    outputs_generate = model.generate(
+        input_ids_prompt, 
+        max_new_tokens=1,
+        output_scores=True,
+        num_return_sequences=1,
+        return_dict_in_generate=True
+    )
+    if isinstance(outputs_generate.scores, tuple):
+        logits = outputs_generate.scores[0][0]
+    else:
+        logits = outputs_generate.scores
+        
+    answer_logits = logits[input_ids_continuation[0][-1]].item()
+    print("input_ids_continuation[0][-1] ", input_ids_continuation[0][-1])
+    print("Answer logit retrieved with Jenn's method ", answer_logits)
+
+    return sentLogProb, answer_logits
             
 
 def soft_max(scores, alpha=1):
@@ -113,39 +131,42 @@ def get_model_predictions(
         context_interpretation = vignette['context_interpretation']
 
     # production
-    lprob_target      = getLogProbContinuation(
+    lprob_target, lprob_target_gen      = getLogProbContinuation(
         context_production, vignette["production_target"],
         model, tokenizer)
-    lprob_competitor  = getLogProbContinuation(
+    lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
         context_production, vignette["production_competitor"],
         model, tokenizer)
-    lprob_distractor1 = getLogProbContinuation(
+    lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
         context_production, vignette["production_distractor1"],
         model, tokenizer)
-    lprob_distractor2 = getLogProbContinuation(
+    lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
         context_production, vignette["production_distractor2"],
         model, tokenizer)
     # for testing, also just sample a few productions
-    predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
-    production_samples = model.generate(
-        **predictions_prompt_ids,
-        do_sample = True,
-        num_return_sequences=5,
-    )
-    production_decoded = tokenizer.batch_decode(production_samples)
-    print("productions decoded", production_decoded)
+    # predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
+    # production_samples = model.generate(
+    #     **predictions_prompt_ids,
+    #     do_sample = True,
+    #     num_return_sequences=5,
+    # )
+    # production_decoded = tokenizer.batch_decode(production_samples)
+    # print("productions decoded", production_decoded)
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
     probs_production = soft_max(scores_production, alpha_production)
-
+    # softmax the scores generated with alternative method
+    scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
+    probs_production_gen = soft_max(scores_production_gen, alpha_production
+                                    )
     # interpretation
 
-    lprob_target      = getLogProbContinuation(
+    lprob_target, _      = getLogProbContinuation(
         context_interpretation, vignette["interpretation_target"],
         model, tokenizer)
-    lprob_competitor  = getLogProbContinuation(
+    lprob_competitor, _  = getLogProbContinuation(
         context_interpretation, vignette["interpretation_competitor"],
         model, tokenizer)
-    lprob_distractor  = getLogProbContinuation(
+    lprob_distractor, _  = getLogProbContinuation(
         context_interpretation, vignette["interpretation_distractor"],
         model, tokenizer)
 
@@ -158,11 +179,17 @@ def get_model_predictions(
         'scores_production_competitor'  : scores_production[1],
         'scores_production_distractor1' : scores_production[2],
         'scores_production_distractor2' : scores_production[3],
+
+        'scores_production_target'      : scores_production_gen[0],
+        'scores_production_competitor'  : scores_production_gen[1],
+        'scores_production_distractor1' : scores_production_gen[2],
+        'scores_production_distractor2' : scores_production_gen[3],
+
         'prob_production_target'        : probs_production[0],
         'prob_production_competitor'    : probs_production[1],
         'prob_production_distractor1'   : probs_production[2],
         'prob_production_distractor2'   : probs_production[3],
-        'production_decoded': "|".join(production_decoded),
+        # 'production_decoded': "|".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
