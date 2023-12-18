@@ -33,27 +33,44 @@ def getLogProbContinuation(
     """
 
     initialSequence = preface + initialSequence
+    prompt = preface + initialSequence + continuation
+    print(initialSequence)
+    print(prompt)
     # tokenize separately, so as to know the shape of the continuation
     input_ids_prompt = tokenizer(
-        initialSequence, 
+        initialSequence.strip(), 
         return_tensors="pt",
+        # add_special_tokens=False
     ).input_ids
-    input_ids_continuation = tokenizer(
-        continuation,
+    input_ids = tokenizer(
+        prompt.strip(),
         return_tensors="pt",
-    ).input_ids
-    #print("input_ids prompt ", input_ids_prompt)
-    print("input ids continuation ", input_ids_continuation.shape, input_ids_continuation)
+    ).input_ids.to("cuda:0")
+    
+    print("input_ids prompt ",input_ids_prompt.shape, input_ids_prompt)
+    #prompt_to_words =  input_ids_prompt.word_ids()
+    #desired_output = []
+    #for w_idx in prompt_to_words:
+    #     start, end = input_ids_prompt.word_to_tokens(w_idx)
+    #     start+=1
+    #     end+=1
+    #     desired_output.append(list(range(start, end)))
+    #print("desired output ", desired_output)
+    #input_ids_to_words = input_ids.word_ids()
+    #print("input ids to words ", input_ids_to_words)
+    #print("input ids continuation ", input_ids_continuation.shape, input_ids_continuation)
     # cut off the first token of the continuation, as it is SOS
-    input_ids = torch.cat(
-        (input_ids_prompt, input_ids_continuation[:, 1:]), 
-        -1
-    ).to("cuda:0") # put input on the first device
-    print("input ids shape ", input_ids.shape)
+    #input_ids = torch.cat(
+    #    (input_ids_prompt, input_ids_continuation[:, 1:]), 
+    #    -1
+    #).to("cuda:0") # put input on the first device
+    print("input ids shape ", input_ids.shape, input_ids)
+    # print("----- decoded input ids -=-=== ", tokenizer.batch_decode(input_ids))
     # pass through model
     with torch.no_grad():
         outputs = model(
             input_ids,
+            labels=input_ids
         )
     # transform logits to probabilities
     print("shape of logits ", outputs.logits.shape)
@@ -67,7 +84,7 @@ def getLogProbContinuation(
     # cut off the sos token so as to get predictions for the actual token conditioned on 
     # preceding context
     input_ids_probs = input_ids[:, 1:].squeeze().unsqueeze(-1)
-    print("shape of input ids for porb retrieval ", input_ids_probs.shape, input_ids_probs)
+    #print("shape of input ids for prob retrieval ", input_ids_probs.shape, input_ids_probs)
     # retreive at correct token positions
     conditionalLogProbs = torch.gather(
         llama_output_scores, 
@@ -82,12 +99,13 @@ def getLogProbContinuation(
     # compute continunation log prob
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
     print("sent log prob ", sentLogProb)
+    print("mean log prob ", torch.mean(continuationConditionalLogProbs).item())
 
     ### alternative method of retrieving log probs of single words via generate ###
     # only pass the prompt and then retreive score of the respective tokens among the first predicted token
     outputs_generate = model.generate(
-        input_ids_prompt, 
-        max_new_tokens=1,
+        input_ids_prompt.to("cuda:0"), 
+        max_new_tokens=5,
         output_scores=True,
         num_return_sequences=1,
         return_dict_in_generate=True
@@ -96,19 +114,29 @@ def getLogProbContinuation(
         logits = outputs_generate.scores[0][0]
     else:
         logits = outputs_generate.scores
-        
-    answer_logits = logits[input_ids_continuation[0][-1]].item()
-    print("input_ids_continuation[0][-1] ", input_ids_continuation[0][-1])
-    print("Answer logit retrieved with Jenn's method ", answer_logits)
 
+    input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]-1:]        
+    answer_logits = logits[input_ids_continuation[0]].item()
+    print("input_ids_continuation[0][-1] ", input_ids_continuation[0])
+    print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
+    print("Answer logit retrieved with Jenn's method ", answer_logits)
+    #print("Token predicted with 1 token generate ", outputs_generate.sequences, tokenizer.batch_decode(outputs_generate.sequences))
     ### sanity checking the llh results via nll loss comp
-    manual_llh = np.mean(np.array(conditionalLogProbs))
+    manual_llh = torch.mean(conditionalLogProbs)
     auto_llh = model(
        input_ids,
        labels=input_ids
     ).loss
     print("manually computed LL ", manual_llh)
     print("loss computation based nll ", auto_llh)
+
+    # another sanity check with MF's NPNLG code
+    relevant_labels = torch.clone(input_ids)
+    for i in range(input_ids_prompt.shape[-1]-1):
+        relevant_labels[0, i] = -100
+    print("Relevant labels ", relevant_labels)
+    output_masked = model(input_ids, labels=relevant_labels)
+    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]-1))
 
     return sentLogProb, answer_logits
             
@@ -138,6 +166,15 @@ def get_model_predictions(
     else:
         context_production = vignette['context_production']
         context_interpretation = vignette['context_interpretation']
+    # general sanity check
+    #testing_prompt = getLogProbContinuation(
+    #    "Continue the following Christmas song: Dashing through the snow\nIn a one-horse open sleigh\nO'er the fields we go\nLaughing all the way\nBells on bobtails ring\nMaking spirits bright\nWhat fun it is to ride and sing\nA sleighing song tonight\nJingle bells, Jingle bells\n", "Jingle",
+    #    model, tokenizer)
+    #print("Jingle continuation " ,testing_prompt) 
+    #testing_prompt2 = getLogProbContinuation(
+    #    "Continue the following Christmas song: Dashing through the snow\nIn a one-horse open sleigh\nO'er the fields we go\nLaughing all the way\nBells on bobtails ring\nMaking spirits bright\nWhat fun it is to ride and sing\nA sleighing song tonight\nJingle bells, Jingle bells\n", "Christmas",
+    #    model, tokenizer)
+    #print("Christmas continuation ", testing_prompt2)
 
     # production
     lprob_target, lprob_target_gen      = getLogProbContinuation(
@@ -271,7 +308,7 @@ def main(model_name):
     pprint(results_df)
     # TODO format results_df name to include model name
     name_for_saving = model_name.split('/')[-1]
-    results_name = f'results_{name_for_saving}.csv'
+    results_name = f'results_wholePrompt_{name_for_saving}.csv'
     results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
