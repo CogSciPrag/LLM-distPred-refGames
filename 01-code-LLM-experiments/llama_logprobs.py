@@ -115,7 +115,8 @@ def getLogProbContinuation(
     else:
         logits = outputs_generate.scores
 
-    input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]-1:]        
+    input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
+    print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
     answer_logits = logits[input_ids_continuation[0]].item()
     print("input_ids_continuation[0][-1] ", input_ids_continuation[0])
     print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
@@ -132,13 +133,17 @@ def getLogProbContinuation(
 
     # another sanity check with MF's NPNLG code
     relevant_labels = torch.clone(input_ids)
-    for i in range(input_ids_prompt.shape[-1]-1):
+    for i in range(input_ids_prompt.shape[-1]):
         relevant_labels[0, i] = -100
     print("Relevant labels ", relevant_labels)
     output_masked = model(input_ids, labels=relevant_labels)
-    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]-1))
+    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]))
+    # for doubke checking, compute the same with only the last tokens
+    print("input ids continuation for checking NPNLG code" , input_ids_continuation)
+    output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
+    print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return sentLogProb, answer_logits
+    return sentLogProb, output_masked.loss.item()
             
 
 def soft_max(scores, alpha=1):
@@ -199,25 +204,29 @@ def get_model_predictions(
     # production_decoded = tokenizer.batch_decode(production_samples)
     # print("productions decoded", production_decoded)
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
-    probs_production = soft_max(scores_production, alpha_production)
+    probs_production = soft_max(scores_production, alpha=1)
     # softmax the scores generated with alternative method
     scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
-    probs_production_gen = soft_max(scores_production_gen, alpha_production
+    probs_production_gen = soft_max(scores_production_gen, alpha=1
                                     )
     # interpretation
 
-    lprob_target, _      = getLogProbContinuation(
+    lprob_target, lprob_target_gen      = getLogProbContinuation(
         context_interpretation, vignette["interpretation_target"],
         model, tokenizer)
-    lprob_competitor, _  = getLogProbContinuation(
+    lprob_competitor, lprob_comp_gen  = getLogProbContinuation(
         context_interpretation, vignette["interpretation_competitor"],
         model, tokenizer)
-    lprob_distractor, _  = getLogProbContinuation(
+    lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
         context_interpretation, vignette["interpretation_distractor"],
         model, tokenizer)
 
     scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
-    probs_interpretation = soft_max(scores_interpretation, alpha_interpretation)
+    probs_interpretation = soft_max(scores_interpretation, alpha=1)
+
+    scores_interpretation_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
+    probs_interpretation_gen = soft_max(scores_production_gen, alpha=1
+                                    )
 
     output_dict = {
         'alpha_production'              : alpha_production,
@@ -226,15 +235,19 @@ def get_model_predictions(
         'scores_production_distractor1' : scores_production[2],
         'scores_production_distractor2' : scores_production[3],
 
-        'scores_production_target'      : scores_production_gen[0],
-        'scores_production_competitor'  : scores_production_gen[1],
-        'scores_production_distractor1' : scores_production_gen[2],
-        'scores_production_distractor2' : scores_production_gen[3],
+        'scores_production_target_npnlg'      : scores_production_gen[0],
+        'scores_production_competitor_npnlg'  : scores_production_gen[1],
+        'scores_production_distractor1_npnlg' : scores_production_gen[2],
+        'scores_production_distractor2_npnlg' : scores_production_gen[3],
 
         'prob_production_target'        : probs_production[0],
         'prob_production_competitor'    : probs_production[1],
         'prob_production_distractor1'   : probs_production[2],
         'prob_production_distractor2'   : probs_production[3],
+        'prob_production_target_npnlg'        : probs_production_gen[0],
+        'prob_production_competitor_npnlg'    : probs_production_gen[1],
+        'prob_production_distractor1_npnlg'   : probs_production_gen[2],
+        'prob_production_distractor2_npnlg'   : probs_production_gen[3],
         # 'production_decoded': "|".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
@@ -242,8 +255,13 @@ def get_model_predictions(
         'scores_interpretation_distractor' : scores_interpretation[2],
         'prob_interpretation_target'       : probs_interpretation[0],
         'prob_interpretation_competitor'   : probs_interpretation[1],
-        'prob_interpretation_distractor'   : probs_interpretation[2]
-
+        'prob_interpretation_distractor'   : probs_interpretation[2],
+        'scores_interpretation_target_npnlg'     : scores_interpretation_gen[0],
+        'scores_interpretation_competitor_npnlg' : scores_interpretation_gen[1],
+        'scores_interpretation_distractor_npnlg' : scores_interpretation_gen[2],
+        'prob_interpretation_target_npnlg'       : probs_interpretation_gen[0],
+        'prob_interpretation_competitor_npnlg'   : probs_interpretation_gen[1],
+        'prob_interpretation_distractor_npnlg'   : probs_interpretation_gen[2]
     }
 
     return output_dict
