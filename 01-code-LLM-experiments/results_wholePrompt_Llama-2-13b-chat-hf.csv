@@ -1,0 +1,4801 @@
+trial,utterances,trigger_feature,nuisance_feature,production_target,production_competitor,production_distractor1,production_distractor2,production_index_target,production_index_competitor,production_index_distractor1,production_index_distractor2,trigger_object,trigger_word,interpretation_target,interpretation_competitor,interpretation_distractor,interpretation_index_target,interpretation_index_competitor,interpretation_index_distractor,context_production,context_interpretation,alpha_production,scores_production_target,scores_production_competitor,scores_production_distractor1,scores_production_distractor2,scores_production_target_npnlg,scores_production_competitor_npnlg,scores_production_distractor1_npnlg,scores_production_distractor2_npnlg,prob_production_target,prob_production_competitor,prob_production_distractor1,prob_production_distractor2,prob_production_target_npnlg,prob_production_competitor_npnlg,prob_production_distractor1_npnlg,prob_production_distractor2_npnlg,alpha_interpretation,scores_interpretation_target,scores_interpretation_competitor,scores_interpretation_distractor,prob_interpretation_target,prob_interpretation_competitor,prob_interpretation_distractor,scores_interpretation_target_npnlg,scores_interpretation_competitor_npnlg,scores_interpretation_distractor_npnlg,prob_interpretation_target_npnlg,prob_interpretation_competitor_npnlg,prob_interpretation_distractor_npnlg
+0,"green
+triangle
+red
+circle",color,texture,red,triangle,green,circle,2,1,0,3,red triangle with dots,green,green triangle with dots,green circle with dots,red triangle with dots,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with dots
+a green circle with dots
+a red triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the red triangle with dots
+
+Which of the following words would you choose:
+
+green
+triangle
+red
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with dots
+a green circle with dots
+a red triangle with dots
+
+Your friend can choose from the following list of words:
+
+green
+triangle
+red
+circle
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.66352081298828,-32.09766387939453,-26.99658966064453,-28.62598419189453,27.66352081298828,32.09766387939453,26.99658966064453,28.62598419189453,0.29921617426322855,0.003550268507701696,0.5829476891733363,0.11428586805573351,0.011310772508374615,0.9532704556220905,0.005805608531902476,0.02961316333763251,0.5,-30.184234619140625,-28.543622970581055,-30.214548110961914,0.1402826558524303,0.7236233383871512,0.13609400576041863,6.03684663772583,32.09766387939453,26.99658966064453,0.011310772508374615,0.9532704556220905,0.005805608531902476
+1,"triangle
+stripes
+stars
+hexagon",texture,color,stars,hexagon,stripes,triangle,2,3,1,0,orange hexagon with stars,stripes,orange hexagon with stripes,orange triangle with stripes,orange hexagon with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange triangle with stripes
+a orange hexagon with stars
+a orange hexagon with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange hexagon with stars
+
+Which of the following words would you choose:
+
+triangle
+stripes
+stars
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange triangle with stripes
+a orange hexagon with stars
+a orange hexagon with stripes
+
+Your friend can choose from the following list of words:
+
+triangle
+stripes
+stars
+hexagon
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.102676391601562,-30.50002098083496,-26.79836082458496,-32.4179801940918,13.051338195800781,15.25001049041748,8.93278694152832,32.4179801940918,0.6610034610273149,0.008136942430419559,0.3296642271250035,0.001195369417262198,3.883061153698872e-09,3.499818119659882e-08,6.316989384353904e-11,0.9999999610555877,0.5,-29.456363677978516,-29.756641387939453,-44.31132888793945,0.5745102871903075,0.4254895096355712,2.0317412123529088e-07,4.208051681518555,15.25001049041748,8.93278694152832,3.883061153698872e-09,3.499818119659882e-08,6.316989384353904e-11
+2,"orange
+blue
+stripes
+spades",color,shape,orange,stripes,blue,spades,0,2,1,3,orange circle with stripes,blue,blue circle with stripes,blue circle with spades,orange circle with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange circle with stripes
+a blue circle with stripes
+a blue circle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stripes
+
+Which of the following words would you choose:
+
+orange
+blue
+stripes
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange circle with stripes
+a blue circle with stripes
+a blue circle with spades
+
+Your friend can choose from the following list of words:
+
+orange
+blue
+stripes
+spades
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.836116790771484,-25.889663696289062,-27.967788696289062,-25.941516876220703,12.418058395385742,8.629887580871582,27.967788696289062,12.970758438110352,0.5802409682133909,0.20232930123189938,0.02532448145173331,0.19210524910297644,1.765378054634061e-07,3.996281221987355e-09,0.9999995126539412,3.0681197216122657e-07,0.5,-38.17230987548828,-29.203567504882812,-28.815494537353516,5.146103592845176e-05,0.40416048089543166,0.5957880580686398,7.634461879730225,8.629887580871582,27.967788696289062,1.765378054634061e-07,3.996281221987355e-09,0.9999995126539412
+3,"blue
+triangle
+orange
+square",shape,texture,square,orange,triangle,blue,3,2,1,0,orange square with stars,triangle,orange triangle with stars,blue triangle with stars,orange square with stars,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with stars
+a orange triangle with stars
+a blue triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with stars
+
+Which of the following words would you choose:
+
+blue
+triangle
+orange
+square
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with stars
+a orange triangle with stars
+a blue triangle with stars
+
+Your friend can choose from the following list of words:
+
+blue
+triangle
+orange
+square
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.67188835144043,-24.964900970458984,-31.91016960144043,-27.73243522644043,29.67188835144043,12.482450485229492,31.91016960144043,27.73243522644043,0.008418947463658517,0.9321299134693438,0.0008978103416011753,0.058553328725396536,0.09504815318675217,3.255859612269278e-09,0.8912855768289869,0.013666266728401344,0.5,-28.61804962158203,-30.192594528198242,-42.2889518737793,0.8284297626607899,0.17156928001667437,9.573225356593942e-07,5.7236104011535645,12.482450485229492,31.91016960144043,0.09504815318675217,3.255859612269278e-09,0.8912855768289869
+4,"dots
+square
+hexagon
+stars",shape,color,hexagon,stars,square,dots,2,3,1,0,red hexagon with stars,square,red square with stars,red square with dots,red hexagon with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with dots
+a red hexagon with stars
+a red square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with stars
+
+Which of the following words would you choose:
+
+dots
+square
+hexagon
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with dots
+a red hexagon with stars
+a red square with stars
+
+Your friend can choose from the following list of words:
+
+dots
+square
+hexagon
+stars
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.033226013183594,-24.824235916137695,-29.20216178894043,-28.09962272644043,15.016613006591797,12.412117958068848,29.20216178894043,28.09962272644043,0.005178144083193432,0.9471304211397734,0.011887779399306755,0.03580365537772632,5.185387056122173e-07,3.834099255673217e-08,0.7507351289972009,0.24926431412310085,0.5,-33.15708923339844,-29.240528106689453,-43.900020599365234,0.01952078681826371,0.9804787915808579,4.21600878301477e-07,8.28927230834961,12.412117958068848,29.20216178894043,5.185387056122173e-07,3.834099255673217e-08,0.7507351289972009
+5,"orange
+hexagon
+red
+square",color,texture,red,square,orange,hexagon,2,3,0,1,red square with spades,orange,orange square with spades,orange hexagon with spades,red square with spades,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with spades
+a orange hexagon with spades
+a orange square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the red square with spades
+
+Which of the following words would you choose:
+
+orange
+hexagon
+red
+square
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with spades
+a orange hexagon with spades
+a orange square with spades
+
+Your friend can choose from the following list of words:
+
+orange
+hexagon
+red
+square
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.07593536376953,-30.53907012939453,-25.90904998779297,-31.34572982788086,28.07593536376953,30.53907012939453,12.954524993896484,15.67286491394043,0.10147926829014473,0.008642740834237127,0.8860203336601804,0.003857657215437616,0.07848329261395058,0.9215163638732462,2.126337177106142e-08,3.2224943139320886e-07,0.5,-28.477596282958984,-37.190189361572266,-29.439498901367188,0.7234164804112492,0.00011900283323270772,0.2764645167555181,4.746265411376953,30.53907012939453,12.954524993896484,0.07848329261395058,0.9215163638732462,2.126337177106142e-08
+6,"stars
+triangle
+square
+stripes",texture,color,stars,square,stripes,triangle,0,2,3,1,orange square with stars,stripes,orange square with stripes,orange triangle with stripes,orange square with stars,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange triangle with stripes
+a orange square with stripes
+a orange square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with stars
+
+Which of the following words would you choose:
+
+stars
+triangle
+square
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange triangle with stripes
+a orange square with stripes
+a orange square with stars
+
+Your friend can choose from the following list of words:
+
+stars
+triangle
+square
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.24378204345703,-29.110368728637695,-25.84632110595703,-32.13673400878906,15.121891021728516,29.110368728637695,8.615440368652344,32.13673400878906,0.011695743696553287,0.036329798644590315,0.950212768631192,0.0017616890276643791,3.890295758695658e-08,0.04624888831292036,5.8112158133101146e-11,0.95375107272601,0.5,-29.70122718811035,-28.951221466064453,-41.03669357299805,0.32081882491045116,0.6791773439379003,3.831151648496753e-06,4.950204372406006,29.110368728637695,8.615440368652344,3.890295758695658e-08,0.04624888831292036,5.8112158133101146e-11
+7,"green
+circle
+blue
+square",shape,texture,square,green,circle,blue,3,0,1,2,green square with dots,circle,green circle with dots,blue circle with dots,green square with dots,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with dots
+a blue circle with dots
+a green circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green square with dots
+
+Which of the following words would you choose:
+
+green
+circle
+blue
+square
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with dots
+a blue circle with dots
+a green circle with dots
+
+Your friend can choose from the following list of words:
+
+green
+circle
+blue
+square
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.59571647644043,-26.77149772644043,-28.66700553894043,-28.09571647644043,29.59571647644043,26.77149772644043,28.66700553894043,28.09571647644043,0.04022411148642979,0.6776868811436195,0.10181704655715854,0.1802719608127922,0.5961081958066848,0.03538200781700105,0.23550007918017704,0.13300971719613713,0.5,-28.39400863647461,-29.629438400268555,-41.117103576660156,0.7747657071002966,0.22523198296095354,2.309938749987058e-06,5.678801536560059,26.77149772644043,28.66700553894043,0.5961081958066848,0.03538200781700105,0.23550007918017704
+8,"stars
+circle
+square
+stripes",texture,color,stripes,square,stars,circle,3,2,0,1,red square with stripes,stars,red square with stars,red circle with stars,red square with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with stripes
+a red square with stars
+a red circle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stripes
+
+Which of the following words would you choose:
+
+stars
+circle
+square
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with stripes
+a red square with stars
+a red circle with stars
+
+Your friend can choose from the following list of words:
+
+stars
+circle
+square
+stripes
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.340839385986328,-28.947284698486328,-40.44826126098633,-28.428730010986328,8.446946144104004,28.947284698486328,20.224130630493164,28.428730010986328,0.9321866902784532,0.025307170981677986,2.561137774857935e-07,0.042505882626091375,7.832628313256194e-10,0.6267457959343523,0.00010201728301777767,0.3731521859993671,0.5,-38.17518997192383,-29.01895523071289,-54.06849670410156,0.00010554846831245626,0.9998944515184722,1.3215284659867621e-11,9.543797492980957,28.947284698486328,20.224130630493164,7.832628313256194e-10,0.6267457959343523,0.00010201728301777767
+9,"circle
+triangle
+orange
+blue",color,texture,blue,triangle,orange,circle,3,1,2,0,blue triangle with dots,orange,orange triangle with dots,orange circle with dots,blue triangle with dots,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with dots
+a orange circle with dots
+a orange triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with dots
+
+Which of the following words would you choose:
+
+circle
+triangle
+orange
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with dots
+a orange circle with dots
+a orange triangle with dots
+
+Your friend can choose from the following list of words:
+
+circle
+triangle
+orange
+blue
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.919687271118164,-32.26953887939453,-25.134864807128906,-28.742197036743164,27.919687271118164,32.26953887939453,12.567432403564453,28.742197036743164,0.056659861066225246,0.0007314067342713449,0.9177164880076258,0.02489224419187755,0.012384948128304348,0.9594243631913235,2.6637570873017753e-09,0.028190686016615094,0.5,-28.00278091430664,-31.33131980895996,-29.322078704833984,0.7673605383098407,0.027506376740210947,0.20513308494994825,4.667129993438721,32.26953887939453,12.567432403564453,0.012384948128304348,0.9594243631913235,2.6637570873017753e-09
+10,"stripes
+dots
+red
+green",color,shape,green,dots,red,stripes,3,1,2,0,green square with dots,red,red square with dots,red square with stripes,green square with dots,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with dots
+a red square with dots
+a red square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the green square with dots
+
+Which of the following words would you choose:
+
+stripes
+dots
+red
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with dots
+a red square with dots
+a red square with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+dots
+red
+green
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.22071647644043,-28.18263053894043,-26.80860710144043,-24.695327758789062,26.22071647644043,28.18263053894043,26.80860710144043,8.231776237487793,0.15890629248654906,0.022340487395097065,0.0882720963508358,0.7304811237675181,0.10087645715758617,0.7175270405966261,0.18159650069235553,1.553432332298509e-09,0.5,-40.36033630371094,-28.579082489013672,-31.501510620117188,7.256111415824677e-06,0.948937182827227,0.051055561061357085,8.072067260742188,28.18263053894043,26.80860710144043,0.10087645715758617,0.7175270405966261,0.18159650069235553
+11,"stripes
+circle
+triangle
+stars",shape,color,circle,stripes,triangle,stars,1,0,2,3,blue circle with stripes,triangle,blue triangle with stripes,blue triangle with stars,blue circle with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with stars
+a blue triangle with stripes
+a blue circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with stripes
+
+Which of the following words would you choose:
+
+stripes
+circle
+triangle
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with stars
+a blue triangle with stripes
+a blue circle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+circle
+triangle
+stars
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.784194946289062,-25.50002098083496,-32.35548400878906,-37.81837844848633,28.784194946289062,8.500006675720215,32.35548400878906,18.909189224243164,0.036081323329215605,0.9628997817767376,0.0010145917447512115,4.3031492955588835e-06,0.027350459346307348,4.2428100493937646e-11,0.9726481335787588,1.4070325057937998e-06,0.5,-29.47406768798828,-29.872413635253906,-38.64632034301758,0.5982530089240726,0.40168484321619263,6.214785973472471e-05,5.894813060760498,8.500006675720215,32.35548400878906,0.027350459346307348,4.2428100493937646e-11,0.9726481335787588
+12,"square
+dots
+spades
+circle",shape,color,circle,dots,square,spades,3,1,0,2,blue circle with dots,square,blue square with dots,blue square with spades,blue circle with dots,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with spades
+a blue circle with dots
+a blue square with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with dots
+
+Which of the following words would you choose:
+
+square
+dots
+spades
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with spades
+a blue circle with dots
+a blue square with dots
+
+Your friend can choose from the following list of words:
+
+square
+dots
+spades
+circle
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.541030883789062,-28.141616821289062,-29.147476196289062,-25.256418228149414,28.541030883789062,28.141616821289062,29.147476196289062,12.628209114074707,0.033630540624121914,0.050141482714028046,0.018338254517538736,0.8978897221443113,0.2853381363715756,0.1913799765672032,0.5232818520256554,3.503556570901309e-08,0.5,-29.403932571411133,-30.70081329345703,-40.73088455200195,0.78530211807912,0.21468842381814943,9.458102730573495e-06,5.880786418914795,28.141616821289062,29.147476196289062,0.2853381363715756,0.1913799765672032,0.5232818520256554
+13,"stars
+green
+orange
+stripes",texture,shape,stripes,green,stars,orange,3,1,0,2,green square with stripes,stars,green square with stars,orange square with stars,green square with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with stars
+a green square with stars
+a green square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the green square with stripes
+
+Which of the following words would you choose:
+
+stars
+green
+orange
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with stars
+a green square with stars
+a green square with stripes
+
+Your friend can choose from the following list of words:
+
+stars
+green
+orange
+stripes
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.256887435913086,-27.331193923950195,-36.66020584106445,-25.187671661376953,8.75229549407959,27.331193923950195,18.330102920532227,12.593835830688477,0.23503646544590226,0.08027306910472862,7.129046879828741e-06,0.6846833364024892,8.535583616967194e-09,0.9998763337381651,0.00012325999200080474,3.9773425042913216e-07,0.5,-29.12464141845703,-28.682476043701172,-45.733154296875,0.3912251155487948,0.6087748604937199,2.395748537900508e-08,7.281160354614258,27.331193923950195,18.330102920532227,8.535583616967194e-09,0.9998763337381651,0.00012325999200080474
+14,"triangle
+stripes
+circle
+stars",texture,color,stripes,circle,stars,triangle,1,2,3,0,orange circle with stripes,stars,orange circle with stars,orange triangle with stars,orange circle with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange triangle with stars
+a orange circle with stars
+a orange circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stripes
+
+Which of the following words would you choose:
+
+triangle
+stripes
+circle
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange triangle with stars
+a orange circle with stars
+a orange circle with stripes
+
+Your friend can choose from the following list of words:
+
+triangle
+stripes
+circle
+stars
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.09574317932129,-28.79493522644043,-36.779335021972656,-32.14064025878906,8.698580741882324,28.79493522644043,18.389667510986328,32.14064025878906,0.9348829037986314,0.06288006851577278,2.1425562557479752e-05,0.0022156021230384394,6.370937733069688e-11,0.034036055213618834,1.0303597094258422e-06,0.9659629143629624,0.5,-28.94517707824707,-31.242053985595703,-40.11024475097656,0.908606364889487,0.09138076896394619,1.2866146566779301e-05,5.789035320281982,28.79493522644043,18.389667510986328,6.370937733069688e-11,0.034036055213618834,1.0303597094258422e-06
+15,"hexagon
+triangle
+orange
+green",color,texture,orange,hexagon,green,triangle,2,0,3,1,orange hexagon with stripes,green,green hexagon with stripes,green triangle with stripes,orange hexagon with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green hexagon with stripes
+a green triangle with stripes
+a orange hexagon with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange hexagon with stripes
+
+Which of the following words would you choose:
+
+hexagon
+triangle
+orange
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green hexagon with stripes
+a green triangle with stripes
+a orange hexagon with stripes
+
+Your friend can choose from the following list of words:
+
+hexagon
+triangle
+orange
+green
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.640666961669922,-30.271514892578125,-26.809579849243164,-32.36719512939453,12.320333480834961,15.135757446289062,26.809579849243164,32.36719512939453,0.8941917923629813,0.0032061548532625684,0.10220773884288205,0.0003943139408739889,1.9592340596411032e-09,3.271970763789352e-08,0.0038431387725804504,0.9961568265484779,0.5,-28.8804874420166,-30.314926147460938,-29.003494262695312,0.4711410365589504,0.11224890644376784,0.4166100569972818,4.813414573669434,15.135757446289062,26.809579849243164,1.9592340596411032e-09,3.271970763789352e-08,0.0038431387725804504
+16,"triangle
+stars
+square
+dots",texture,color,stars,square,dots,triangle,1,2,3,0,red square with stars,dots,red square with dots,red triangle with dots,red square with stars,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with dots
+a red triangle with dots
+a red square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stars
+
+Which of the following words would you choose:
+
+triangle
+stars
+square
+dots
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with dots
+a red triangle with dots
+a red square with stars
+
+Your friend can choose from the following list of words:
+
+triangle
+stars
+square
+dots
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.24808120727539,-28.920913696289062,-27.991226196289062,-31.691421508789062,12.624040603637695,28.920913696289062,27.991226196289062,31.691421508789062,0.9162853432190627,0.023277688744865657,0.05897908191435761,0.0014578861217140072,4.816957015023368e-09,0.05759898457823159,0.022732996030343434,0.919668014574468,0.5,-28.761951446533203,-38.355735778808594,-44.76903533935547,0.9999317418918218,6.814637500085538e-05,1.1173317732537985e-07,5.752390384674072,28.920913696289062,27.991226196289062,4.816957015023368e-09,0.05759898457823159,0.022732996030343434
+17,"stripes
+green
+dots
+red",texture,shape,dots,red,stripes,green,2,3,0,1,red triangle with dots,stripes,red triangle with stripes,green triangle with stripes,red triangle with dots,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stripes
+a red triangle with dots
+a green triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red triangle with dots
+
+Which of the following words would you choose:
+
+stripes
+green
+dots
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stripes
+a red triangle with dots
+a green triangle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+green
+dots
+red
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.298358917236328,-26.881366729736328,-25.04494285583496,-26.535663604736328,28.298358917236328,26.881366729736328,8.34831428527832,26.535663604736328,0.02715073733071003,0.11198852281521769,0.7026228526120806,0.1582378872419917,0.707201616337498,0.17145547456425436,1.5323181552119802e-09,0.12134290756592955,0.5,-29.114282608032227,-28.912189483642578,-45.559600830078125,0.4496479593605378,0.5503520082232946,3.2416167653333665e-08,5.822856426239014,26.881366729736328,8.34831428527832,0.707201616337498,0.17145547456425436,1.5323181552119802e-09
+18,"stripes
+circle
+dots
+triangle",shape,color,triangle,stripes,circle,dots,3,0,1,2,green triangle with stripes,circle,green circle with stripes,green circle with dots,green triangle with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with stripes
+a green circle with stripes
+a green circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with stripes
+
+Which of the following words would you choose:
+
+stripes
+circle
+dots
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with stripes
+a green circle with stripes
+a green circle with dots
+
+Your friend can choose from the following list of words:
+
+stripes
+circle
+dots
+triangle
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-31.789085388183594,-25.103538513183594,-28.257835388183594,-28.191429138183594,31.789085388183594,8.367846488952637,28.257835388183594,28.191429138183594,0.0011462268207359891,0.9178393704268784,0.03916272973899318,0.041851673013392585,0.9463816630802371,6.373111308107608e-11,0.027698989628785413,0.025919347227246356,0.5,-31.235727310180664,-28.688852310180664,-43.86396026611328,0.07263668906500131,0.927363072821426,2.3811357250130432e-07,6.247145652770996,8.367846488952637,28.257835388183594,0.9463816630802371,6.373111308107608e-11,0.027698989628785413
+19,"blue
+stripes
+stars
+red",texture,shape,stripes,red,stars,blue,1,3,2,0,red hexagon with stripes,stars,red hexagon with stars,blue hexagon with stars,red hexagon with stripes,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with stars
+a red hexagon with stripes
+a red hexagon with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with stripes
+
+Which of the following words would you choose:
+
+blue
+stripes
+stars
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with stars
+a red hexagon with stripes
+a red hexagon with stars
+
+Your friend can choose from the following list of words:
+
+blue
+stripes
+stars
+red
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.07437515258789,-27.80933380126953,-34.89273452758789,-28.42725372314453,8.691458702087402,27.80933380126953,17.446367263793945,28.42725372314453,0.7863795811170575,0.1387232518808875,0.0001163770682199748,0.07478078993383504,1.7441807201222767e-09,0.35025080559072874,1.1061141790162324e-05,0.6497381315233005,0.5,-29.626195907592773,-29.164823532104492,-44.41860580444336,0.3866602525005182,0.6133396019309377,1.4556854393915051e-07,5.925238609313965,27.80933380126953,17.446367263793945,1.7441807201222767e-09,0.35025080559072874,1.1061141790162324e-05
+20,"hexagon
+blue
+triangle
+green",color,texture,green,triangle,blue,hexagon,3,2,1,0,green triangle with stars,blue,blue triangle with stars,blue hexagon with stars,green triangle with stars,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with stars
+a green triangle with stars
+a blue hexagon with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with stars
+
+Which of the following words would you choose:
+
+hexagon
+blue
+triangle
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with stars
+a green triangle with stars
+a blue hexagon with stars
+
+Your friend can choose from the following list of words:
+
+hexagon
+blue
+triangle
+green
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.623056411743164,-32.0742301940918,-27.735116958618164,-30.572298049926758,26.623056411743164,32.0742301940918,27.735116958618164,15.286149024963379,0.7394037002502003,0.0031729770146683247,0.2431755241047559,0.014247798630375225,0.0042181249269681136,0.9829561212386696,0.012825703534925912,5.0299436305167845e-08,0.5,-29.748668670654297,-29.37796974182129,-29.090713500976562,0.22833203814191627,0.33079531686127095,0.4408726449968127,7.437167167663574,32.0742301940918,27.735116958618164,0.0042181249269681136,0.9829561212386696,0.012825703534925912
+21,"hexagon
+triangle
+stripes
+dots",shape,color,hexagon,stripes,triangle,dots,0,2,1,3,green hexagon with stripes,triangle,green triangle with stripes,green triangle with dots,green hexagon with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with stripes
+a green hexagon with stripes
+a green triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with stripes
+
+Which of the following words would you choose:
+
+hexagon
+triangle
+stripes
+dots
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with stripes
+a green hexagon with stripes
+a green triangle with dots
+
+Your friend can choose from the following list of words:
+
+hexagon
+triangle
+stripes
+dots
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.025428771972656,-24.818374633789062,-32.08204650878906,-28.325210571289062,15.012714385986328,8.272791862487793,32.08204650878906,28.325210571289062,0.005286571569371047,0.9650926213640327,0.0006760773424477577,0.02894472972414862,3.774468837337802e-08,4.464210696240078e-11,0.9771755565359954,0.022824405674674052,0.5,-28.432573318481445,-32.71382141113281,-43.2580680847168,0.9863627847044715,0.013636856037808436,3.5925772018812394e-07,5.686514377593994,8.272791862487793,32.08204650878906,3.774468837337802e-08,4.464210696240078e-11,0.9771755565359954
+22,"stripes
+green
+red
+spades",color,shape,red,spades,green,stripes,2,3,1,0,red circle with spades,green,green circle with spades,green circle with stripes,red circle with spades,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red circle with spades
+a green circle with spades
+a green circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red circle with spades
+
+Which of the following words would you choose:
+
+stripes
+green
+red
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red circle with spades
+a green circle with spades
+a green circle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+green
+red
+spades
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.513195037841797,-26.001970291137695,-27.133312225341797,-25.847789764404297,27.513195037841797,13.000985145568848,27.133312225341797,8.61592960357666,0.08141858960348677,0.36901170601179506,0.11904319767848362,0.4305265067062346,0.5938446605329971,2.958694875346353e-07,0.40615503991033164,3.6871835263004536e-09,0.5,-38.759098052978516,-28.22783851623535,-33.53618621826172,2.65568196807733e-05,0.9950478577717781,0.00492558540854126,7.751819610595703,13.000985145568848,27.133312225341797,0.5938446605329971,2.958694875346353e-07,0.40615503991033164
+23,"triangle
+stripes
+dots
+square",texture,color,stripes,triangle,dots,square,1,0,2,3,green triangle with stripes,dots,green triangle with dots,green square with dots,green triangle with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with dots
+a green triangle with stripes
+a green square with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with stripes
+
+Which of the following words would you choose:
+
+triangle
+stripes
+dots
+square
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with dots
+a green triangle with stripes
+a green square with dots
+
+Your friend can choose from the following list of words:
+
+triangle
+stripes
+dots
+square
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.460956573486328,-31.449237823486328,-28.108417510986328,-29.076190948486328,8.486985206604004,31.449237823486328,28.108417510986328,29.076190948486328,0.9088848260150393,0.0022794567159533756,0.06437706554441458,0.024458651724592828,9.442320127305538e-11,0.8860501919765873,0.03137317682458488,0.08257663110440452,0.5,-29.35729217529297,-28.79485511779785,-51.0526123046875,0.36298375932249316,0.6370162405401882,1.3731860374666908e-10,5.871458530426025,31.449237823486328,28.108417510986328,9.442320127305538e-11,0.8860501919765873,0.03137317682458488
+24,"orange
+circle
+hexagon
+blue",color,texture,blue,circle,orange,hexagon,3,1,0,2,blue circle with dots,orange,orange circle with dots,orange hexagon with dots,blue circle with dots,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange hexagon with dots
+a orange circle with dots
+a blue circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with dots
+
+Which of the following words would you choose:
+
+orange
+circle
+hexagon
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange hexagon with dots
+a orange circle with dots
+a blue circle with dots
+
+Your friend can choose from the following list of words:
+
+orange
+circle
+hexagon
+blue
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.75415802001953,-28.64746856689453,-24.139041900634766,-30.322288513183594,27.75415802001953,28.64746856689453,12.069520950317383,15.161144256591797,0.025878820525024694,0.010592162564692604,0.9615446609650253,0.0019843559452574497,0.2904268200892987,0.7095721489205369,4.480076085412133e-08,9.861894034484184e-07,0.5,-28.768566131591797,-28.879152297973633,-30.15223503112793,0.465990518659589,0.41720558976070693,0.11680389157970406,4.794760704040527,28.64746856689453,12.069520950317383,0.2904268200892987,0.7095721489205369,4.480076085412133e-08
+25,"triangle
+red
+square
+orange",shape,texture,triangle,red,square,orange,0,1,2,3,red triangle with stripes,square,red square with stripes,orange square with stripes,red triangle with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stripes
+a red square with stripes
+a orange square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red triangle with stripes
+
+Which of the following words would you choose:
+
+triangle
+red
+square
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stripes
+a red square with stripes
+a orange square with stripes
+
+Your friend can choose from the following list of words:
+
+triangle
+red
+square
+orange
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-32.1601676940918,-28.003673553466797,-30.021495819091797,-26.13709831237793,32.1601676940918,28.003673553466797,30.021495819091797,13.068549156188965,0.002056854438117076,0.1313245820968148,0.01745890299809096,0.8491596604669771,0.8822437628851179,0.01381802987846993,0.10393820272612696,4.5102853094695855e-09,0.5,-29.06810760498047,-28.925580978393555,-41.49284362792969,0.46442767240662297,0.5355704615411486,1.8660522283824349e-06,5.8136210441589355,28.003673553466797,30.021495819091797,0.8822437628851179,0.01381802987846993,0.10393820272612696
+26,"spades
+orange
+stripes
+red",color,shape,orange,stripes,red,spades,1,2,3,0,orange circle with stripes,red,red circle with stripes,red circle with spades,orange circle with stripes,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange circle with stripes
+a red circle with spades
+a red circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stripes
+
+Which of the following words would you choose:
+
+spades
+orange
+stripes
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange circle with stripes
+a red circle with spades
+a red circle with stripes
+
+Your friend can choose from the following list of words:
+
+spades
+orange
+stripes
+red
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.113319396972656,-26.307632446289062,-27.522720336914062,-26.25181007385254,12.556659698486328,8.769210815429688,27.522720336914062,13.12590503692627,0.5837428161745596,0.17682268543422233,0.05246045053828581,0.1869740478529322,3.1646236220180815e-07,7.168922989523044e-09,0.9999991172008884,5.591678263691297e-07,0.5,-32.61274337768555,-29.14402198791504,-30.330585479736328,0.02331356729701285,0.7482647568112061,0.22842167589178103,6.522548675537109,8.769210815429688,27.522720336914062,3.1646236220180815e-07,7.168922989523044e-09,0.9999991172008884
+27,"blue
+stripes
+red
+spades",color,shape,blue,spades,red,stripes,0,3,2,1,blue hexagon with spades,red,red hexagon with spades,red hexagon with stripes,blue hexagon with spades,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with spades
+a red hexagon with stripes
+a blue hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with spades
+
+Which of the following words would you choose:
+
+blue
+stripes
+red
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with spades
+a red hexagon with stripes
+a blue hexagon with spades
+
+Your friend can choose from the following list of words:
+
+blue
+stripes
+red
+spades
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.04810333251953,-25.913097381591797,-27.56763458251953,-25.854543685913086,28.04810333251953,12.956548690795898,27.56763458251953,8.618181228637695,0.04989769739233213,0.4219896586547486,0.0806761995907059,0.4474364443622133,0.6178584491920708,1.724686189597773e-07,0.3821413760872447,2.2520655981408503e-09,0.5,-30.26096534729004,-28.807838439941406,-32.289798736572266,0.18491279595297702,0.7907732372282175,0.02431396681880558,5.04349422454834,12.956548690795898,27.56763458251953,0.6178584491920708,1.724686189597773e-07,0.3821413760872447
+28,"stripes
+spades
+red
+blue",color,shape,red,stripes,blue,spades,2,0,3,1,red circle with stripes,blue,blue circle with stripes,blue circle with spades,red circle with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with spades
+a blue circle with stripes
+a red circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red circle with stripes
+
+Which of the following words would you choose:
+
+stripes
+spades
+red
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with spades
+a blue circle with stripes
+a red circle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+spades
+red
+blue
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.350597381591797,-25.548839569091797,-28.123058319091797,-25.683610916137695,27.350597381591797,8.516280174255371,28.123058319091797,12.841805458068848,0.07801316399734,0.4727824727090319,0.036032331914948985,0.41317203137867925,0.3159469460853976,2.089171671485089e-09,0.684052893873154,1.5795227679456027e-07,0.5,-29.0992374420166,-32.7242431640625,-29.649063110351562,0.6235582769024302,0.016617170131580733,0.3598245529659891,5.819847583770752,8.516280174255371,28.123058319091797,0.3159469460853976,2.089171671485089e-09,0.684052893873154
+29,"hexagon
+circle
+blue
+green",color,texture,blue,circle,green,hexagon,2,1,3,0,blue circle with dots,green,green circle with dots,green hexagon with dots,blue circle with dots,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with dots
+a green hexagon with dots
+a green circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with dots
+
+Which of the following words would you choose:
+
+hexagon
+circle
+blue
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with dots
+a green hexagon with dots
+a green circle with dots
+
+Your friend can choose from the following list of words:
+
+hexagon
+circle
+blue
+green
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.57654571533203,-28.58887481689453,-26.74951934814453,-30.095766067504883,27.57654571533203,28.58887481689453,26.74951934814453,15.047883033752441,0.26806752272082235,0.09740814171567443,0.6129389056281725,0.02158542993533074,0.23870024435865164,0.6569038486008004,0.1043950426225606,8.644179873158868e-07,0.5,-28.282320022583008,-47.330116271972656,-29.3265380859375,0.7396630609831267,3.950764356178462e-09,0.260336935066109,5.656464099884033,28.58887481689453,26.74951934814453,0.23870024435865164,0.6569038486008004,0.1043950426225606
+30,"circle
+hexagon
+spades
+stars",texture,color,stars,circle,spades,hexagon,3,0,2,1,blue circle with stars,spades,blue circle with spades,blue hexagon with spades,blue circle with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with spades
+a blue circle with stars
+a blue circle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with stars
+
+Which of the following words would you choose:
+
+circle
+hexagon
+spades
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with spades
+a blue circle with stars
+a blue circle with spades
+
+Your friend can choose from the following list of words:
+
+circle
+hexagon
+spades
+stars
+
+Your friend chose the word:
+
+spades
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.99806022644043,-28.67091178894043,-25.054731369018555,-30.293020248413086,12.499030113220215,28.67091178894043,12.527365684509277,15.146510124206543,0.5062456800642056,0.012860627633062447,0.47835395141479103,0.0025397408879410683,9.476334051716953e-08,0.9999984698415226,9.748691875191349e-08,1.337908218174062e-06,0.5,-29.173154830932617,-34.19000244140625,-45.217628479003906,0.9934181209148261,0.006581772153662025,1.0693151188740924e-07,5.834630966186523,28.67091178894043,12.527365684509277,9.476334051716953e-08,0.9999984698415226,9.748691875191349e-08
+31,"circle
+hexagon
+green
+red",shape,texture,hexagon,red,circle,green,1,3,0,2,red hexagon with spades,circle,red circle with spades,green circle with spades,red hexagon with spades,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red circle with spades
+a green circle with spades
+a red hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with spades
+
+Which of the following words would you choose:
+
+circle
+hexagon
+green
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red circle with spades
+a green circle with spades
+a red hexagon with spades
+
+Your friend can choose from the following list of words:
+
+circle
+hexagon
+green
+red
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-31.062522888183594,-27.9067440032959,-29.1015682220459,-27.3085994720459,15.531261444091797,27.9067440032959,29.1015682220459,27.3085994720459,0.013465174119364251,0.31604529512683,0.09568497868251205,0.5748045520712937,8.697666010720796e-07,0.20606608169300245,0.6806315526325897,0.11330149590780683,0.5,-29.27654457092285,-28.99879264831543,-36.458072662353516,0.4308637790053842,0.5688085470083749,0.000327673986240853,5.855309009552002,27.9067440032959,29.1015682220459,8.697666010720796e-07,0.20606608169300245,0.6806315526325897
+32,"orange
+spades
+stripes
+green",color,shape,orange,spades,green,stripes,0,1,3,2,orange square with spades,green,green square with spades,green square with stripes,orange square with spades,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with spades
+a green square with stripes
+a orange square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with spades
+
+Which of the following words would you choose:
+
+orange
+spades
+stripes
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with spades
+a green square with stripes
+a orange square with spades
+
+Your friend can choose from the following list of words:
+
+orange
+spades
+stripes
+green
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.480627059936523,-26.392593383789062,-27.300792694091797,-26.62209701538086,12.740313529968262,13.196296691894531,27.300792694091797,8.874032020568848,0.5310444123033367,0.21333833503369007,0.08602861922486618,0.16958863343810712,4.7474861820393975e-07,7.490221838517352e-07,0.9999987662898251,9.939372895680303e-09,0.5,-30.706645965576172,-28.300392150878906,-28.80096435546875,0.05314535891452959,0.5895058214463469,0.3573488196391236,6.141328811645508,13.196296691894531,27.300792694091797,4.7474861820393975e-07,7.490221838517352e-07,0.9999987662898251
+33,"hexagon
+dots
+circle
+spades",shape,color,circle,dots,hexagon,spades,2,1,0,3,green circle with dots,hexagon,green hexagon with dots,green hexagon with spades,green circle with dots,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green circle with dots
+a green hexagon with dots
+a green hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the green circle with dots
+
+Which of the following words would you choose:
+
+hexagon
+dots
+circle
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green circle with dots
+a green hexagon with dots
+a green hexagon with spades
+
+Your friend can choose from the following list of words:
+
+hexagon
+dots
+circle
+spades
+
+Your friend chose the word:
+
+hexagon
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.194841384887695,-27.940935134887695,-29.66605567932129,-24.653236389160156,28.194841384887695,27.940935134887695,14.833027839660645,12.326618194580078,0.02699712568648022,0.03480067051548615,0.006199794273751874,0.9320024095242818,0.5631371875589122,0.4368618536959979,8.864460652745085e-07,7.229902463216979e-08,0.5,-40.81990432739258,-28.66364288330078,-41.61953353881836,5.25532315011569e-06,0.9999923824322119,2.3622446380985044e-06,6.803316593170166,27.940935134887695,14.833027839660645,0.5631371875589122,0.4368618536959979,8.864460652745085e-07
+34,"square
+red
+triangle
+blue",color,texture,blue,triangle,red,square,3,2,1,0,blue triangle with spades,red,red triangle with spades,red square with spades,blue triangle with spades,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with spades
+a red triangle with spades
+a blue triangle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with spades
+
+Which of the following words would you choose:
+
+square
+red
+triangle
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with spades
+a red triangle with spades
+a blue triangle with spades
+
+Your friend can choose from the following list of words:
+
+square
+red
+triangle
+blue
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.334726333618164,-32.38672637939453,-28.198251724243164,-30.169931411743164,28.334726333618164,32.38672637939453,28.198251724243164,30.169931411743164,0.4304418626808149,0.007484335399401281,0.49338355722084903,0.06869024469893478,0.015232010080969693,0.8760289914519384,0.013288839272547379,0.09545015919454457,0.5,-30.050092697143555,-28.75403594970703,-29.418888092041016,0.1530285127223078,0.5592972075904912,0.28767427968720094,6.010018348693848,32.38672637939453,28.198251724243164,0.015232010080969693,0.8760289914519384,0.013288839272547379
+35,"orange
+dots
+stars
+blue",texture,shape,stars,orange,dots,blue,2,0,1,3,orange circle with stars,dots,orange circle with dots,blue circle with dots,orange circle with stars,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange circle with dots
+a orange circle with stars
+a blue circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stars
+
+Which of the following words would you choose:
+
+orange
+dots
+stars
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange circle with dots
+a orange circle with stars
+a blue circle with dots
+
+Your friend can choose from the following list of words:
+
+orange
+dots
+stars
+blue
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.260757446289062,-24.297014236450195,-28.43360710144043,-27.54810905456543,12.630378723144531,12.148507118225098,28.43360710144043,27.54810905456543,0.26561059861882486,0.6962957728694138,0.011124853574167454,0.026968774937593833,9.699602295798123e-08,5.990730028943427e-08,0.7079601434601301,0.2920396996365467,0.5,-28.39656639099121,-29.587512969970703,-43.55281066894531,0.7669101624868837,0.2330896368482979,2.0066481842222716e-07,4.732760906219482,12.148507118225098,28.43360710144043,9.699602295798123e-08,5.990730028943427e-08,0.7079601434601301
+36,"stripes
+stars
+red
+blue",color,shape,blue,stripes,red,stars,3,0,2,1,blue triangle with stripes,red,red triangle with stripes,red triangle with stars,blue triangle with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stars
+a red triangle with stripes
+a blue triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with stripes
+
+Which of the following words would you choose:
+
+stripes
+stars
+red
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stars
+a red triangle with stripes
+a blue triangle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+stars
+red
+blue
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.219493865966797,-25.580123901367188,-27.431896209716797,-35.87309265136719,28.219493865966797,8.526707649230957,27.431896209716797,17.936546325683594,0.05812952656165453,0.8140678381694025,0.1277750624565009,2.757281244199244e-05,0.6872991056245504,1.9260936149097397e-09,0.31267737888842667,2.3513560929335868e-05,0.5,-35.308467864990234,-28.537012100219727,-29.81855010986328,0.0008962030801471241,0.7820099975321405,0.2170937993877124,7.0616936683654785,8.526707649230957,27.431896209716797,0.6872991056245504,1.9260936149097397e-09,0.31267737888842667
+37,"stripes
+red
+stars
+blue",color,shape,blue,stars,red,stripes,3,2,1,0,blue triangle with stars,red,red triangle with stars,red triangle with stripes,blue triangle with stars,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stars
+a red triangle with stripes
+a blue triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with stars
+
+Which of the following words would you choose:
+
+stripes
+red
+stars
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stars
+a red triangle with stripes
+a blue triangle with stars
+
+Your friend can choose from the following list of words:
+
+stripes
+red
+stars
+blue
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.921642303466797,-25.58573341369629,-27.653118133544922,-28.87479591369629,27.921642303466797,12.792866706848145,27.653118133544922,9.624932289123535,0.0767317878611765,0.7933186396439071,0.10036767934137379,0.02958189315354248,0.566730465004592,1.524167860217551e-07,0.43326937616333105,6.415291028815085e-09,0.5,-30.622516632080078,-28.56996726989746,-30.715227127075195,0.1031014259831464,0.8029260232036526,0.09397255081320101,7.6556291580200195,12.792866706848145,27.653118133544922,0.566730465004592,1.524167860217551e-07,0.43326937616333105
+38,"dots
+stripes
+square
+triangle",texture,color,stripes,triangle,dots,square,1,3,0,2,blue triangle with stripes,dots,blue triangle with dots,blue square with dots,blue triangle with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with dots
+a blue square with dots
+a blue triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with stripes
+
+Which of the following words would you choose:
+
+dots
+stripes
+square
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with dots
+a blue square with dots
+a blue triangle with stripes
+
+Your friend can choose from the following list of words:
+
+dots
+stripes
+square
+triangle
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.366228103637695,-31.648456573486328,-28.051776885986328,-29.051776885986328,8.455409049987793,31.648456573486328,28.051776885986328,29.051776885986328,0.9131282627700047,0.0017068471313882478,0.06226052350466828,0.022904366593938817,7.677704398835194e-11,0.9074943821238055,0.02487859233568487,0.06762702546373266,0.5,-29.006160736083984,-32.10035705566406,-49.92816925048828,0.9566527123725806,0.04334728684319301,7.84226401551337e-10,5.80123233795166,31.648456573486328,28.051776885986328,7.677704398835194e-11,0.9074943821238055,0.02487859233568487
+39,"circle
+square
+stripes
+stars",texture,color,stripes,square,stars,circle,2,1,3,0,blue square with stripes,stars,blue square with stars,blue circle with stars,blue square with stripes,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with stars
+a blue square with stars
+a blue square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue square with stripes
+
+Which of the following words would you choose:
+
+circle
+square
+stripes
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with stars
+a blue square with stars
+a blue square with stripes
+
+Your friend can choose from the following list of words:
+
+circle
+square
+stripes
+stars
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.666927337646484,-29.23341178894043,-32.652278900146484,-28.53516960144043,8.555642127990723,29.23341178894043,16.326139450073242,28.53516960144043,0.9208280979021237,0.026018008173094635,0.0008520771616860355,0.05230181676309568,6.988807613108184e-10,0.6677968209452598,1.656102428689962e-06,0.33220152225343064,0.5,-36.302146911621094,-29.239728927612305,-51.63029479980469,0.0008559707769121292,0.9991440290344935,1.8859444317504083e-10,9.075535774230957,29.23341178894043,16.326139450073242,6.988807613108184e-10,0.6677968209452598,1.656102428689962e-06
+40,"hexagon
+square
+red
+blue",shape,texture,square,red,hexagon,blue,1,2,0,3,red square with stripes,hexagon,red hexagon with stripes,blue hexagon with stripes,red square with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with stripes
+a blue hexagon with stripes
+a red square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stripes
+
+Which of the following words would you choose:
+
+hexagon
+square
+red
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with stripes
+a blue hexagon with stripes
+a red square with stripes
+
+Your friend can choose from the following list of words:
+
+hexagon
+square
+red
+blue
+
+Your friend chose the word:
+
+hexagon
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.8418025970459,-27.3813533782959,-30.326208114624023,-28.2617244720459,29.8418025970459,27.3813533782959,15.163104057312012,28.2617244720459,0.05500105572599778,0.6440662534343286,0.033884133364940526,0.2670485574747332,0.7743797935528598,0.06612938645857853,3.266451654620835e-07,0.15949049334339618,0.5,-29.161853790283203,-29.635709762573242,-37.09682846069336,0.6161600600786763,0.3836193539798627,0.00022058594146089576,4.86030912399292,27.3813533782959,15.163104057312012,0.7743797935528598,0.06612938645857853,3.266451654620835e-07
+41,"orange
+blue
+hexagon
+triangle",color,texture,blue,hexagon,orange,triangle,1,2,0,3,blue hexagon with spades,orange,orange hexagon with spades,orange triangle with spades,blue hexagon with spades,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange triangle with spades
+a blue hexagon with spades
+a orange hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with spades
+
+Which of the following words would you choose:
+
+orange
+blue
+hexagon
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange triangle with spades
+a blue hexagon with spades
+a orange hexagon with spades
+
+Your friend can choose from the following list of words:
+
+orange
+blue
+hexagon
+triangle
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.35840606689453,-31.058610916137695,-24.966907501220703,-32.78516387939453,28.35840606689453,15.529305458068848,12.483453750610352,32.78516387939453,0.03247851304819238,0.002182288036584727,0.9649509773580892,0.0003882215571336502,0.011811990114438257,3.167491605833111e-08,1.5063256915610498e-09,0.9881879767043201,0.5,-29.88113021850586,-28.801525115966797,-30.696582794189453,0.2280004643860124,0.6711232279165429,0.10087630769744471,4.268733024597168,15.529305458068848,12.483453750610352,0.011811990114438257,3.167491605833111e-08,1.5063256915610498e-09
+42,"square
+spades
+stars
+circle",texture,color,stars,square,spades,circle,2,0,1,3,red square with stars,spades,red square with spades,red circle with spades,red square with stars,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with stars
+a red circle with spades
+a red square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stars
+
+Which of the following words would you choose:
+
+square
+spades
+stars
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with stars
+a red circle with spades
+a red square with spades
+
+Your friend can choose from the following list of words:
+
+square
+spades
+stars
+circle
+
+Your friend chose the word:
+
+spades
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.965835571289062,-29.55274772644043,-25.966894149780273,-29.14649772644043,12.982917785644531,29.55274772644043,12.983447074890137,29.14649772644043,0.48351602225356743,0.013385503556971032,0.4830044534079138,0.02009402078154759,3.820338326325063e-08,0.6001883133896138,3.822360925538548e-08,0.3998116101833938,0.5,-29.053279876708984,-39.88152313232422,-42.73711395263672,0.9999790282854966,1.9830999216892345e-05,1.140715286680633e-06,5.81065559387207,29.55274772644043,12.983447074890137,3.820338326325063e-08,0.6001883133896138,3.822360925538548e-08
+43,"hexagon
+triangle
+blue
+green",color,texture,blue,hexagon,green,triangle,2,0,3,1,blue hexagon with spades,green,green hexagon with spades,green triangle with spades,blue hexagon with spades,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with spades
+a green triangle with spades
+a green hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with spades
+
+Which of the following words would you choose:
+
+hexagon
+triangle
+blue
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with spades
+a green triangle with spades
+a green hexagon with spades
+
+Your friend can choose from the following list of words:
+
+hexagon
+triangle
+blue
+green
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.2519588470459,-30.839866638183594,-27.2973690032959,-33.10938262939453,28.2519588470459,15.419933319091797,27.2973690032959,33.10938262939453,0.27169833293325685,0.02042550958642526,0.705764931951177,0.002111225529140941,0.00768774187398788,2.0555162499859467e-08,0.0029595500663501277,0.9893526875044995,0.5,-28.258338928222656,-39.4660530090332,-29.522449493408203,0.7797246573120366,1.058017590093005e-05,0.22026476251206253,4.709723949432373,15.419933319091797,27.2973690032959,0.00768774187398788,2.0555162499859467e-08,0.0029595500663501277
+44,"red
+hexagon
+green
+triangle",color,texture,red,triangle,green,hexagon,0,3,2,1,red triangle with stripes,green,green triangle with stripes,green hexagon with stripes,red triangle with stripes,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green hexagon with stripes
+a red triangle with stripes
+a green triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red triangle with stripes
+
+Which of the following words would you choose:
+
+red
+hexagon
+green
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green hexagon with stripes
+a red triangle with stripes
+a green triangle with stripes
+
+Your friend can choose from the following list of words:
+
+red
+hexagon
+green
+triangle
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.446176528930664,-32.37891387939453,-27.013193130493164,-30.451194763183594,27.446176528930664,32.37891387939453,27.013193130493164,15.225597381591797,0.3848233041652763,0.0027733249082061823,0.5933400514101727,0.019063319516344737,0.00712213170563453,0.9882586232693922,0.0046192099271719,3.509780132153706e-08,0.5,-28.45539093017578,-34.59028244018555,-30.26364517211914,0.857554938962567,0.0018574298586494205,0.1405876311787837,5.691078186035156,32.37891387939453,27.013193130493164,0.00712213170563453,0.9882586232693922,0.0046192099271719
+45,"dots
+circle
+triangle
+stars",shape,color,circle,dots,triangle,stars,1,0,2,3,red circle with dots,triangle,red triangle with dots,red triangle with stars,red circle with dots,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with dots
+a red circle with dots
+a red triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red circle with dots
+
+Which of the following words would you choose:
+
+dots
+circle
+triangle
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with dots
+a red circle with dots
+a red triangle with stars
+
+Your friend can choose from the following list of words:
+
+dots
+circle
+triangle
+stars
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.061538696289062,-27.753433227539062,-31.796890258789062,-24.492290496826172,28.061538696289062,27.753433227539062,31.796890258789062,12.246145248413086,0.02640291138275792,0.0359302569487953,0.0006300996617976746,0.9370367320066492,0.02291602139274114,0.01683955900844777,0.9602444164971017,3.10170946604355e-09,0.5,-29.543119430541992,-29.212141036987305,-34.578895568847656,0.41686974145164984,0.580420125676004,0.002710132872346247,5.908623695373535,27.753433227539062,31.796890258789062,0.02291602139274114,0.01683955900844777,0.9602444164971017
+46,"spades
+orange
+stars
+blue",color,shape,blue,spades,orange,stars,3,0,1,2,blue triangle with spades,orange,orange triangle with spades,orange triangle with stars,blue triangle with spades,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with spades
+a orange triangle with spades
+a orange triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with spades
+
+Which of the following words would you choose:
+
+spades
+orange
+stars
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with spades
+a orange triangle with spades
+a orange triangle with stars
+
+Your friend can choose from the following list of words:
+
+spades
+orange
+stars
+blue
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.346078872680664,-26.136741638183594,-25.127229690551758,-26.168010711669922,28.346078872680664,13.068370819091797,12.563614845275879,13.084005355834961,0.02275921638991405,0.20732910581364733,0.5689652507530701,0.20094642704336851,0.999999393013605,2.31726356199805e-07,1.3988227871409934e-07,2.3537776005563456e-07,0.5,-31.199106216430664,-28.46568489074707,-31.210803985595703,0.0575579120302125,0.8855535523696617,0.05688853560012591,5.199850559234619,13.068370819091797,12.563614845275879,0.999999393013605,2.31726356199805e-07,1.3988227871409934e-07
+47,"green
+circle
+hexagon
+red",color,texture,green,circle,red,hexagon,0,1,3,2,green circle with dots,red,red circle with dots,red hexagon with dots,green circle with dots,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red circle with dots
+a red hexagon with dots
+a green circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green circle with dots
+
+Which of the following words would you choose:
+
+green
+circle
+hexagon
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red circle with dots
+a red hexagon with dots
+a green circle with dots
+
+Your friend can choose from the following list of words:
+
+green
+circle
+hexagon
+red
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.75049591064453,-28.61865997314453,-27.23340606689453,-30.52345085144043,26.75049591064453,28.61865997314453,27.23340606689453,15.261725425720215,0.5572967417189116,0.08605045286969683,0.3438438712704161,0.012808934140975604,0.10992405653466449,0.7119116343996271,0.17816318294972824,1.1261159801001926e-06,0.5,-28.64539909362793,-29.762147903442383,-28.711854934692383,0.44188220457550975,0.14464674538802688,0.4134710500364634,5.729079723358154,28.61865997314453,27.23340606689453,0.10992405653466449,0.7119116343996271,0.17816318294972824
+48,"stars
+orange
+green
+stripes",texture,shape,stars,green,stripes,orange,0,2,3,1,green hexagon with stars,stripes,green hexagon with stripes,orange hexagon with stripes,green hexagon with stars,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green hexagon with stripes
+a green hexagon with stars
+a orange hexagon with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with stars
+
+Which of the following words would you choose:
+
+stars
+orange
+green
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green hexagon with stripes
+a green hexagon with stars
+a orange hexagon with stripes
+
+Your friend can choose from the following list of words:
+
+stars
+orange
+green
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.50109100341797,-27.35254669189453,-26.5414981842041,-25.250272750854492,13.750545501708984,27.35254669189453,8.847166061401367,12.625136375427246,0.07009535851442787,0.08132072393533285,0.18299327411839464,0.6655906434318447,1.2380130542272415e-06,0.9999983510394924,9.187864686238093e-09,4.017595886413543e-07,0.5,-28.74527359008789,-28.9467716217041,-39.656402587890625,0.5501992313394052,0.449790725350681,1.0043309913694326e-05,4.790878772735596,27.35254669189453,8.847166061401367,1.2380130542272415e-06,0.9999983510394924,9.187864686238093e-09
+49,"stars
+orange
+stripes
+green",texture,shape,stripes,green,stars,orange,2,3,0,1,green square with stripes,stars,green square with stars,orange square with stars,green square with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with stars
+a green square with stripes
+a orange square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green square with stripes
+
+Which of the following words would you choose:
+
+stars
+orange
+stripes
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with stars
+a green square with stripes
+a orange square with stars
+
+Your friend can choose from the following list of words:
+
+stars
+orange
+stripes
+green
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.083023071289062,-27.169933319091797,-40.5088005065918,-25.236862182617188,8.694340705871582,27.169933319091797,20.2544002532959,12.618431091308594,0.27263264124435455,0.09194724647734047,1.4809565390982775e-07,0.635419964182651,9.456298006999426e-09,0.9990082436792671,0.0009912683093326287,4.785551023679108e-07,0.5,-28.778732299804688,-29.02065086364746,-48.086360931396484,0.5601863935691341,0.4398136041233962,2.307469571163849e-09,7.194683074951172,27.169933319091797,20.2544002532959,9.456298006999426e-09,0.9990082436792671,0.0009912683093326287
+50,"red
+circle
+hexagon
+green",color,texture,green,hexagon,red,circle,3,2,0,1,green hexagon with stripes,red,red hexagon with stripes,red circle with stripes,green hexagon with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with stripes
+a green hexagon with stripes
+a red circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with stripes
+
+Which of the following words would you choose:
+
+red
+circle
+hexagon
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with stripes
+a green hexagon with stripes
+a red circle with stripes
+
+Your friend can choose from the following list of words:
+
+red
+circle
+hexagon
+green
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.334970474243164,-29.998062133789062,-26.937021255493164,-28.389657974243164,26.334970474243164,14.999031066894531,26.937021255493164,28.389657974243164,0.5877259614590136,0.015076980761451706,0.3218900430683384,0.07530701471119629,0.09407098824860276,1.1228449101095378e-06,0.17176039832357223,0.734167490582915,0.5,-39.40296936035156,-28.770662307739258,-30.559040069580078,2.066720937933584e-05,0.8567105640180968,0.14326876877252392,6.567161560058594,14.999031066894531,26.937021255493164,0.09407098824860276,1.1228449101095378e-06,0.17176039832357223
+51,"stripes
+blue
+dots
+orange",texture,shape,stripes,orange,dots,blue,0,3,2,1,orange circle with stripes,dots,orange circle with dots,blue circle with dots,orange circle with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange circle with dots
+a blue circle with dots
+a orange circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stripes
+
+Which of the following words would you choose:
+
+stripes
+blue
+dots
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange circle with dots
+a blue circle with dots
+a orange circle with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+blue
+dots
+orange
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.999040603637695,-24.677764892578125,-28.691423416137695,-27.903337478637695,8.666346549987793,12.338882446289062,28.691423416137695,27.903337478637695,0.201416089923302,0.7549477779184021,0.013639773612823078,0.02999635854547296,1.3817894763341982e-09,5.4375586602023e-08,0.6874201582335214,0.31257978600910247,0.5,-27.9527587890625,-29.356979370117188,-39.210601806640625,0.8028444583816543,0.19714518036451187,1.0361253833862874e-05,4.658792972564697,12.338882446289062,28.691423416137695,1.3817894763341982e-09,5.4375586602023e-08,0.6874201582335214
+52,"spades
+stripes
+triangle
+circle",texture,color,spades,triangle,stripes,circle,0,2,1,3,green triangle with spades,stripes,green triangle with stripes,green circle with stripes,green triangle with spades,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green circle with stripes
+a green triangle with spades
+a green triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with spades
+
+Which of the following words would you choose:
+
+spades
+stripes
+triangle
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green circle with stripes
+a green triangle with spades
+a green triangle with stripes
+
+Your friend can choose from the following list of words:
+
+spades
+stripes
+triangle
+circle
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.982494354248047,-32.50392150878906,-26.13477897644043,-29.14161491394043,12.991247177124023,32.50392150878906,8.711592674255371,29.14161491394043,0.5255748770950776,0.0007734188810672449,0.45133418206925136,0.02231752195460381,3.243079173901912e-09,0.9665055243980274,4.490836215431306e-11,0.033494472313985155,0.5,-29.089876174926758,-30.730846405029297,-44.04313659667969,0.8376666886417189,0.16233304285304587,2.6850523509529765e-07,5.817975044250488,32.50392150878906,8.711592674255371,3.243079173901912e-09,0.9665055243980274,4.490836215431306e-11
+53,"orange
+blue
+triangle
+circle",shape,texture,circle,blue,triangle,orange,3,1,2,0,blue circle with stars,triangle,blue triangle with stars,orange triangle with stars,blue circle with stars,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with stars
+a orange triangle with stars
+a blue triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with stars
+
+Which of the following words would you choose:
+
+orange
+blue
+triangle
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with stars
+a orange triangle with stars
+a blue triangle with stars
+
+Your friend can choose from the following list of words:
+
+orange
+blue
+triangle
+circle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.807628631591797,-27.829357147216797,-32.2890739440918,-24.890762329101562,28.807628631591797,27.829357147216797,32.2890739440918,12.445381164550781,0.018541396602953664,0.04931742026438729,0.0005703874421321601,0.9315707956905268,0.029513646763667935,0.01109596217545475,0.9593903887488706,2.3120067016879257e-09,0.5,-28.903804779052734,-28.600753784179688,-39.218040466308594,0.42480582834876035,0.575180086068384,1.4085582855696341e-05,7.225951194763184,27.829357147216797,32.2890739440918,0.029513646763667935,0.01109596217545475,0.9593903887488706
+54,"dots
+red
+blue
+stripes",texture,shape,dots,blue,stripes,red,0,2,3,1,blue hexagon with dots,stripes,blue hexagon with stripes,red hexagon with stripes,blue hexagon with dots,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue hexagon with stripes
+a red hexagon with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with dots
+
+Which of the following words would you choose:
+
+dots
+red
+blue
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue hexagon with stripes
+a red hexagon with stripes
+
+Your friend can choose from the following list of words:
+
+dots
+red
+blue
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.287120819091797,-27.125194549560547,-24.138683319091797,-26.662364959716797,28.287120819091797,27.125194549560547,8.04622745513916,26.662364959716797,0.013772544311617034,0.04401820671414376,0.8722835715344278,0.06992567743981129,0.6623206685389792,0.20722881364046836,1.0729018921367848e-09,0.1304505167476505,0.5,-29.082260131835938,-29.647136688232422,-48.02766418457031,0.6375801263766786,0.3624198698506383,3.772683163616317e-09,4.847043514251709,27.125194549560547,8.04622745513916,0.6623206685389792,0.20722881364046836,1.0729018921367848e-09
+55,"stars
+circle
+hexagon
+dots",texture,color,stars,hexagon,dots,circle,0,2,3,1,blue hexagon with stars,dots,blue hexagon with dots,blue circle with dots,blue hexagon with stars,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with dots
+a blue hexagon with dots
+a blue hexagon with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with stars
+
+Which of the following words would you choose:
+
+stars
+circle
+hexagon
+dots
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with dots
+a blue hexagon with dots
+a blue hexagon with stars
+
+Your friend can choose from the following list of words:
+
+stars
+circle
+hexagon
+dots
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.603538513183594,-30.105501174926758,-28.309585571289062,-28.632827758789062,12.301769256591797,15.052750587463379,28.309585571289062,28.632827758789062,0.9556207807971527,0.003897746243474771,0.023483877067269548,0.0169975958921029,4.688398967077751e-08,7.341090421865792e-07,0.41988547783717917,0.5801137411697889,0.5,-35.90581512451172,-28.948339462280273,-50.439979553222656,0.000950590957967242,0.9990494085787074,4.633255697895328e-10,5.984302520751953,15.052750587463379,28.309585571289062,4.688398967077751e-08,7.341090421865792e-07,0.41988547783717917
+56,"circle
+square
+green
+orange",shape,texture,square,orange,circle,green,1,3,0,2,orange square with spades,circle,orange circle with spades,green circle with spades,orange square with spades,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with spades
+a green circle with spades
+a orange circle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with spades
+
+Which of the following words would you choose:
+
+circle
+square
+green
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with spades
+a green circle with spades
+a orange circle with spades
+
+Your friend can choose from the following list of words:
+
+circle
+square
+green
+orange
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.71681022644043,-25.79593849182129,-28.83595085144043,-27.28346061706543,29.71681022644043,12.897969245910645,28.83595085144043,27.28346061706543,0.01532464512032758,0.7730425244207388,0.036977946693820055,0.17465488376511334,0.6657040154909188,3.3033253238758246e-08,0.2758854588938099,0.05841049258201809,0.5,-28.984750747680664,-29.2705078125,-44.28949737548828,0.5709570027769191,0.42904286844664635,1.2877643454978534e-07,4.83079195022583,12.897969245910645,28.83595085144043,0.6657040154909188,3.3033253238758246e-08,0.2758854588938099
+57,"circle
+spades
+dots
+hexagon",shape,color,hexagon,dots,circle,spades,3,2,0,1,green hexagon with dots,circle,green circle with dots,green circle with spades,green hexagon with dots,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green circle with dots
+a green circle with spades
+a green hexagon with dots
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with dots
+
+Which of the following words would you choose:
+
+circle
+spades
+dots
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green circle with dots
+a green circle with spades
+a green hexagon with dots
+
+Your friend can choose from the following list of words:
+
+circle
+spades
+dots
+hexagon
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.546907424926758,-27.754413604736328,-27.993183135986328,-24.210603713989258,14.773453712463379,27.754413604736328,27.993183135986328,12.105301856994629,0.004556288837161858,0.027357815886558303,0.0215469166970481,0.9465389785792317,1.015019817780463e-06,0.44058912442223724,0.5594097901355333,7.042241171478907e-08,0.5,-28.973552703857422,-32.11417007446289,-48.68095016479492,0.9585374215338491,0.04146257581890005,2.6472508873295574e-09,5.794710636138916,27.754413604736328,27.993183135986328,1.015019817780463e-06,0.44058912442223724,0.5594097901355333
+58,"orange
+dots
+stars
+blue",texture,shape,stars,orange,dots,blue,2,0,1,3,orange circle with stars,dots,orange circle with dots,blue circle with dots,orange circle with stars,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange circle with stars
+a orange circle with dots
+a blue circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stars
+
+Which of the following words would you choose:
+
+orange
+dots
+stars
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange circle with stars
+a orange circle with dots
+a blue circle with dots
+
+Your friend can choose from the following list of words:
+
+orange
+dots
+stars
+blue
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.427749633789062,-24.52155303955078,-28.60059928894043,-27.68702507019043,12.713874816894531,12.26077651977539,28.60059928894043,27.68702507019043,0.2761514157569897,0.6834448172417643,0.011566345923583994,0.02883742107766219,8.995342903549664e-08,5.7179405172687365e-08,0.7137308962761135,0.28626895659105234,0.5,-28.516836166381836,-29.696523666381836,-41.434326171875,0.7648901746149674,0.23510794777908262,1.8776059498608177e-06,4.752806186676025,12.26077651977539,28.60059928894043,8.995342903549664e-08,5.7179405172687365e-08,0.7137308962761135
+59,"spades
+blue
+stars
+orange",texture,shape,stars,blue,spades,orange,2,1,0,3,blue triangle with stars,spades,blue triangle with spades,orange triangle with spades,blue triangle with stars,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange triangle with spades
+a blue triangle with spades
+a blue triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with stars
+
+Which of the following words would you choose:
+
+spades
+blue
+stars
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange triangle with spades
+a blue triangle with spades
+a blue triangle with stars
+
+Your friend can choose from the following list of words:
+
+spades
+blue
+stars
+orange
+
+Your friend chose the word:
+
+spades
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.27638053894043,-28.218029022216797,-26.135799407958984,-25.404382705688477,13.138190269470215,28.218029022216797,13.067899703979492,12.702191352844238,0.21339734232517998,0.030615530153063373,0.24560806061122312,0.5103790669105335,2.8242876398095953e-07,0.9999992716892638,2.63258329199608e-07,1.8262364295372872e-07,0.5,-29.699369430541992,-28.84493064880371,-42.91614532470703,0.2985023893596316,0.7014970674213427,5.432190258644348e-07,5.939873695373535,28.218029022216797,13.067899703979492,2.8242876398095953e-07,0.9999992716892638,2.63258329199608e-07
+60,"circle
+blue
+hexagon
+green",shape,texture,hexagon,blue,circle,green,2,1,0,3,blue hexagon with dots,circle,blue circle with dots,green circle with dots,blue hexagon with dots,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue circle with dots
+a green circle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with dots
+
+Which of the following words would you choose:
+
+circle
+blue
+hexagon
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue circle with dots
+a green circle with dots
+
+Your friend can choose from the following list of words:
+
+circle
+blue
+hexagon
+green
+
+Your friend chose the word:
+
+circle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.13869285583496,-27.591440200805664,-28.416025161743164,-26.837900161743164,15.06934642791748,27.591440200805664,28.416025161743164,26.837900161743164,0.02150280887332612,0.274633155438856,0.12040382072445578,0.5834602149633621,9.7163513547617e-07,0.2665504612972192,0.6079839811501038,0.1254645859175415,0.5,-29.231298446655273,-29.22319793701172,-48.62755584716797,0.4979748827279976,0.502025115394762,1.8772403451727573e-09,5.846259593963623,27.591440200805664,28.416025161743164,9.7163513547617e-07,0.2665504612972192,0.6079839811501038
+61,"blue
+orange
+stars
+stripes",texture,shape,stars,blue,stripes,orange,2,0,3,1,blue square with stars,stripes,blue square with stripes,orange square with stripes,blue square with stars,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with stars
+a orange square with stripes
+a blue square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue square with stars
+
+Which of the following words would you choose:
+
+blue
+orange
+stars
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with stars
+a orange square with stripes
+a blue square with stripes
+
+Your friend can choose from the following list of words:
+
+blue
+orange
+stars
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.416013717651367,-28.113779067993164,-28.300779342651367,-25.302955627441406,13.208006858825684,28.113779067993164,9.433592796325684,12.651477813720703,0.22838304247960778,0.041815156932614304,0.03468331047767259,0.6951184901101053,3.3612835342827197e-07,0.9999994634901793,7.714325298393026e-09,1.9266714181402486e-07,0.5,-29.06623649597168,-28.866451263427734,-41.14188766479492,0.450218007090157,0.5497794282238895,2.5646859534137836e-06,5.813247203826904,28.113779067993164,9.433592796325684,3.3612835342827197e-07,0.9999994634901793,7.714325298393026e-09
+62,"stripes
+green
+orange
+dots",color,shape,orange,dots,green,stripes,2,3,1,0,orange square with dots,green,green square with dots,green square with stripes,orange square with dots,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with stripes
+a green square with dots
+a orange square with dots
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with dots
+
+Which of the following words would you choose:
+
+stripes
+green
+orange
+dots
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with stripes
+a green square with dots
+a orange square with dots
+
+Your friend can choose from the following list of words:
+
+stripes
+green
+orange
+dots
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.669986724853516,-28.592798233032227,-26.876001358032227,-25.85842514038086,12.334993362426758,28.592798233032227,26.876001358032227,8.619475364685059,0.6970483021286474,0.013791372289340492,0.07677200651626526,0.21238831906574673,7.37182977774394e-08,0.8477157293765111,0.15228419511067925,1.7945118667290126e-09,0.5,-35.1751823425293,-28.51893424987793,-29.00083351135254,0.0007943454964458634,0.6177051958881379,0.38150045861541626,7.035036563873291,28.592798233032227,26.876001358032227,7.37182977774394e-08,0.8477157293765111,0.15228419511067925
+63,"dots
+orange
+blue
+spades",color,shape,orange,dots,blue,spades,1,0,2,3,orange square with dots,blue,blue square with dots,blue square with spades,orange square with dots,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with dots
+a orange square with dots
+a blue square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with dots
+
+Which of the following words would you choose:
+
+dots
+orange
+blue
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with dots
+a orange square with dots
+a blue square with spades
+
+Your friend can choose from the following list of words:
+
+dots
+orange
+blue
+spades
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-23.968788146972656,-28.690444946289062,-27.495986938476562,-25.101613998413086,11.984394073486328,28.690444946289062,27.495986938476562,12.550806999206543,0.7350729248857275,0.006542457847358746,0.021601676346625603,0.236782940920288,4.26337763253711e-08,0.7675373367004428,0.2324625455478165,7.511796438274485e-08,0.5,-28.705055236816406,-40.580078125,-28.373600006103516,0.41788536950404626,2.9093786908188353e-06,0.5821117211172628,5.741010665893555,28.690444946289062,27.495986938476562,4.26337763253711e-08,0.7675373367004428,0.2324625455478165
+64,"green
+circle
+triangle
+orange",color,texture,orange,triangle,green,circle,3,2,0,1,orange triangle with dots,green,green triangle with dots,green circle with dots,orange triangle with dots,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with dots
+a green circle with dots
+a orange triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the orange triangle with dots
+
+Which of the following words would you choose:
+
+green
+circle
+triangle
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with dots
+a green circle with dots
+a orange triangle with dots
+
+Your friend can choose from the following list of words:
+
+green
+circle
+triangle
+orange
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.91216468811035,-31.707046508789062,-26.547866821289062,-28.167984008789062,12.456082344055176,31.707046508789062,26.547866821289062,28.167984008789062,0.8100548868861998,0.0009068485573829583,0.15781127763807554,0.031226986918341706,4.212709833286803e-09,0.9663824948693263,0.00555323158438805,0.028064269333575885,0.5,-31.795530319213867,-28.608131408691406,-28.818044662475586,0.022289730356588842,0.539976143991855,0.43773412565155617,6.359106063842773,31.707046508789062,26.547866821289062,4.212709833286803e-09,0.9663824948693263,0.00555323158438805
+65,"dots
+square
+stripes
+triangle",texture,color,dots,square,stripes,triangle,0,1,2,3,red square with dots,stripes,red square with stripes,red triangle with stripes,red square with dots,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stripes
+a red square with dots
+a red square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red square with dots
+
+Which of the following words would you choose:
+
+dots
+square
+stripes
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stripes
+a red square with dots
+a red square with stripes
+
+Your friend can choose from the following list of words:
+
+dots
+square
+stripes
+triangle
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.923355102539062,-29.024429321289062,-25.222671508789062,-31.785171508789062,27.923355102539062,29.024429321289062,8.407557487487793,31.785171508789062,0.061563274912051005,0.020470632283722017,0.9166714315256334,0.0012946612785936901,0.01939524050779186,0.058329147181057965,6.487717865125005e-11,0.922275612246273,0.5,-28.818151473999023,-41.66974639892578,-46.20883560180664,0.9999973500534927,2.6219360180706403e-06,2.8010489336642728e-08,5.763629913330078,29.024429321289062,8.407557487487793,0.01939524050779186,0.058329147181057965,6.487717865125005e-11
+66,"red
+orange
+circle
+hexagon",color,texture,orange,hexagon,red,circle,1,3,0,2,orange hexagon with spades,red,red hexagon with spades,red circle with spades,orange hexagon with spades,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with spades
+a red circle with spades
+a orange hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange hexagon with spades
+
+Which of the following words would you choose:
+
+red
+orange
+circle
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with spades
+a red circle with spades
+a orange hexagon with spades
+
+Your friend can choose from the following list of words:
+
+red
+orange
+circle
+hexagon
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.009803771972656,-30.50978660583496,-27.723154067993164,-28.694345474243164,12.504901885986328,15.25489330291748,27.723154067993164,28.694345474243164,0.9128170426557712,0.003730538656859456,0.06053278826936127,0.022919630418008024,6.754065172531163e-08,1.056504484067568e-06,0.27464278466476455,0.7253560912900997,0.5,-31.223012924194336,-28.84650993347168,-28.820608139038086,0.04382716193335259,0.4718951171027028,0.48427772096394456,5.203835487365723,15.25489330291748,27.723154067993164,6.754065172531163e-08,1.056504484067568e-06,0.27464278466476455
+67,"triangle
+blue
+green
+circle",shape,texture,circle,green,triangle,blue,3,2,0,1,green circle with stars,triangle,green triangle with stars,blue triangle with stars,green circle with stars,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with stars
+a blue triangle with stars
+a green circle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green circle with stars
+
+Which of the following words would you choose:
+
+triangle
+blue
+green
+circle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with stars
+a blue triangle with stars
+a green circle with stars
+
+Your friend can choose from the following list of words:
+
+triangle
+blue
+green
+circle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.728525161743164,-26.829111099243164,-32.1953239440918,-28.181161880493164,28.728525161743164,26.829111099243164,32.1953239440918,28.181161880493164,0.10591106815146469,0.7076954351280146,0.003306204913952679,0.1830872918065681,0.0296189583952537,0.004432663212823559,0.9488146085369984,0.017133769854924336,0.5,-28.776172637939453,-29.62664031982422,-34.98017120361328,0.6996743075266197,0.29891141838723545,0.0014142740861448153,7.194043159484863,26.829111099243164,32.1953239440918,0.0296189583952537,0.004432663212823559,0.9488146085369984
+68,"blue
+stripes
+orange
+spades",color,shape,orange,stripes,blue,spades,2,1,0,3,orange hexagon with stripes,blue,blue hexagon with stripes,blue hexagon with spades,orange hexagon with stripes,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with spades
+a orange hexagon with stripes
+a blue hexagon with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange hexagon with stripes
+
+Which of the following words would you choose:
+
+blue
+stripes
+orange
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with spades
+a orange hexagon with stripes
+a blue hexagon with stripes
+
+Your friend can choose from the following list of words:
+
+blue
+stripes
+orange
+spades
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.871131896972656,-26.114269256591797,-27.831554412841797,-25.940448760986328,12.435565948486328,8.704756736755371,27.831554412841797,12.970224380493164,0.5939943542487727,0.17135414787613384,0.030767141891529973,0.20388435598356347,2.0587656915997041e-07,4.935567191211044e-09,0.9999994377843264,3.5140353743121796e-07,0.5,-29.522565841674805,-40.1319465637207,-29.12531280517578,0.40196851759049984,9.92193862426722e-06,0.598021560470876,4.9204277992248535,8.704756736755371,27.831554412841797,2.0587656915997041e-07,4.935567191211044e-09,0.9999994377843264
+69,"square
+orange
+circle
+blue",shape,texture,circle,orange,square,blue,2,1,0,3,orange circle with stars,square,orange square with stars,blue square with stars,orange circle with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with stars
+a orange circle with stars
+a orange square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stars
+
+Which of the following words would you choose:
+
+square
+orange
+circle
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with stars
+a orange circle with stars
+a orange square with stars
+
+Your friend can choose from the following list of words:
+
+square
+orange
+circle
+blue
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.60938835144043,-24.902416229248047,-29.32618522644043,-27.66236686706543,28.60938835144043,12.451208114624023,29.32618522644043,27.66236686706543,0.022323109429983078,0.9092267939763216,0.010900684268478598,0.057549412325216806,0.2910565976999606,2.796204523294918e-08,0.5960440758350305,0.11289929850296353,0.5,-28.806884765625,-29.201278686523438,-41.06745147705078,0.5973383078502063,0.4026588638600439,2.8282897497442684e-06,5.761377334594727,12.451208114624023,29.32618522644043,0.2910565976999606,2.796204523294918e-08,0.5960440758350305
+70,"hexagon
+triangle
+stars
+stripes",texture,color,stars,hexagon,stripes,triangle,2,0,3,1,orange hexagon with stars,stripes,orange hexagon with stripes,orange triangle with stripes,orange hexagon with stars,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange hexagon with stripes
+a orange hexagon with stars
+a orange triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange hexagon with stars
+
+Which of the following words would you choose:
+
+hexagon
+triangle
+stars
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange hexagon with stripes
+a orange hexagon with stars
+a orange triangle with stripes
+
+Your friend can choose from the following list of words:
+
+hexagon
+triangle
+stars
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.4732666015625,-30.265695571899414,-25.2427978515625,-32.3359489440918,13.73663330078125,15.132847785949707,8.414265632629395,32.3359489440918,0.09640200400225835,0.005906763318006956,0.8969460719600313,0.0007451607197033913,8.364111826378258e-09,3.378999107549424e-08,4.082676055136479e-11,0.9999999578050702,0.5,-28.946577072143555,-32.145355224609375,-44.00473403930664,0.960788004591624,0.0392117181063174,2.773020586978844e-07,4.135225296020508,15.132847785949707,8.414265632629395,8.364111826378258e-09,3.378999107549424e-08,4.082676055136479e-11
+71,"square
+hexagon
+stripes
+stars",texture,color,stripes,square,stars,hexagon,2,0,3,1,orange square with stripes,stars,orange square with stars,orange hexagon with stars,orange square with stripes,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange hexagon with stars
+a orange square with stripes
+a orange square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with stripes
+
+Which of the following words would you choose:
+
+square
+hexagon
+stripes
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange hexagon with stars
+a orange square with stripes
+a orange square with stars
+
+Your friend can choose from the following list of words:
+
+square
+hexagon
+stripes
+stars
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.394678115844727,-29.038101196289062,-34.32827377319336,-30.42778778076172,8.464892387390137,29.038101196289062,17.16413688659668,15.21389389038086,0.9682294621441238,0.025331432766032086,0.00012769297228132202,0.006311412117562781,1.1618912507521127e-09,0.999992038041283,6.969463759347082e-06,9.913330663631427e-07,0.5,-29.7701416015625,-29.1402645111084,-43.01525115966797,0.34753819403390696,0.6524611911792754,6.147868176294804e-07,5.954028129577637,29.038101196289062,17.16413688659668,1.1618912507521127e-09,0.999992038041283,6.969463759347082e-06
+72,"blue
+triangle
+green
+square",color,texture,blue,square,green,triangle,0,3,2,1,blue square with stars,green,green square with stars,green triangle with stars,blue square with stars,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with stars
+a green triangle with stars
+a green square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue square with stars
+
+Which of the following words would you choose:
+
+blue
+triangle
+green
+square
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with stars
+a green triangle with stars
+a green square with stars
+
+Your friend can choose from the following list of words:
+
+blue
+triangle
+green
+square
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.72315788269043,-29.64259147644043,-26.89063835144043,-32.3398551940918,27.72315788269043,29.64259147644043,26.89063835144043,32.3398551940918,0.2893786856145447,0.042448966555315756,0.6653117264991828,0.002860621330956727,0.009139812903455002,0.06230698317044084,0.0039753801705581585,0.924577823755546,0.5,-27.767871856689453,-40.98056411743164,-29.78265380859375,0.8823389503505372,1.612263831495051e-06,0.11765943738563141,6.941967964172363,29.64259147644043,26.89063835144043,0.009139812903455002,0.06230698317044084,0.0039753801705581585
+73,"square
+stars
+circle
+stripes",texture,color,stars,square,stripes,circle,1,0,3,2,green square with stars,stripes,green square with stripes,green circle with stripes,green square with stars,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with stripes
+a green circle with stripes
+a green square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green square with stars
+
+Which of the following words would you choose:
+
+square
+stars
+circle
+stripes
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with stripes
+a green circle with stripes
+a green square with stars
+
+Your friend can choose from the following list of words:
+
+square
+stars
+circle
+stripes
+
+Your friend chose the word:
+
+stripes
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.606340408325195,-29.10645866394043,-26.351348876953125,-28.74806022644043,13.303170204162598,29.10645866394043,8.783782958984375,28.74806022644043,0.40160986815169986,0.0329622472732581,0.5182577324630981,0.0471701521119439,8.064512518764052e-08,0.5886526377389899,8.786849304241386e-10,0.41134728073719995,0.5,-30.99339485168457,-28.696557998657227,-43.44021987915039,0.09138523769165145,0.9086144031478058,3.5916054270583875e-07,6.198678970336914,29.10645866394043,8.783782958984375,8.064512518764052e-08,0.5886526377389899,8.786849304241386e-10
+74,"red
+spades
+dots
+orange",color,shape,orange,spades,red,dots,3,1,0,2,orange square with spades,red,red square with spades,red square with dots,orange square with spades,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with dots
+a red square with spades
+a orange square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with spades
+
+Which of the following words would you choose:
+
+red
+spades
+dots
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with dots
+a red square with spades
+a orange square with spades
+
+Your friend can choose from the following list of words:
+
+red
+spades
+dots
+orange
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.558629989624023,-25.920921325683594,-28.135513305664062,-29.236343383789062,12.779314994812012,12.960460662841797,28.135513305664062,29.236343383789062,0.556368224970798,0.38727654101619313,0.042289847022379694,0.01406538699062925,5.3469384853462e-08,6.408785730785322e-08,0.24958436573778248,0.7504155167049753,0.5,-29.093629837036133,-30.7811222076416,-29.333209991455078,0.5071145627833886,0.09380747742857692,0.3990779597880344,5.818726062774658,12.960460662841797,28.135513305664062,5.3469384853462e-08,6.408785730785322e-08,0.24958436573778248
+75,"circle
+orange
+blue
+hexagon",shape,texture,circle,orange,hexagon,blue,0,1,3,2,orange circle with stripes,hexagon,orange hexagon with stripes,blue hexagon with stripes,orange circle with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange hexagon with stripes
+a blue hexagon with stripes
+a orange circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange circle with stripes
+
+Which of the following words would you choose:
+
+circle
+orange
+blue
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange hexagon with stripes
+a blue hexagon with stripes
+a orange circle with stripes
+
+Your friend can choose from the following list of words:
+
+circle
+orange
+blue
+hexagon
+
+Your friend chose the word:
+
+hexagon
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.658212661743164,-24.908262252807617,-30.621116638183594,-28.149423599243164,28.658212661743164,12.454131126403809,15.310558319091797,28.149423599243164,0.02206399922290047,0.9381385957611152,0.0030988879130089265,0.036698517102975094,0.6245219010807856,5.730657828235109e-08,9.970915727597389e-07,0.37547704452106323,0.5,-28.292339324951172,-29.26314926147461,-37.39051818847656,0.7252220637514684,0.2746968061258764,8.113012265529661e-05,4.041762828826904,12.454131126403809,15.310558319091797,0.6245219010807856,5.730657828235109e-08,9.970915727597389e-07
+76,"dots
+green
+blue
+spades",texture,shape,spades,blue,dots,green,3,2,0,1,blue circle with spades,dots,blue circle with dots,green circle with dots,blue circle with spades,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green circle with dots
+a blue circle with dots
+a blue circle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with spades
+
+Which of the following words would you choose:
+
+dots
+green
+blue
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green circle with dots
+a blue circle with dots
+a blue circle with spades
+
+Your friend can choose from the following list of words:
+
+dots
+green
+blue
+spades
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.064472198486328,-27.863780975341797,-28.753917694091797,-26.671886444091797,12.532236099243164,27.863780975341797,28.753917694091797,26.671886444091797,0.7774580053030028,0.04730996043107345,0.019425451408512685,0.15580658285741114,5.872548604426811e-08,0.2674434454915979,0.6513485096265366,0.08120798615637953,0.5,-29.67774772644043,-28.687192916870117,-43.310699462890625,0.2708024182800923,0.7291972566798943,3.2504001331563253e-07,5.935549736022949,27.863780975341797,28.753917694091797,5.872548604426811e-08,0.2674434454915979,0.6513485096265366
+77,"green
+stars
+stripes
+blue",texture,shape,stripes,blue,stars,green,2,3,1,0,blue circle with stripes,stars,blue circle with stars,green circle with stars,blue circle with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue circle with stripes
+a blue circle with stars
+a green circle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with stripes
+
+Which of the following words would you choose:
+
+green
+stars
+stripes
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue circle with stripes
+a blue circle with stars
+a green circle with stars
+
+Your friend can choose from the following list of words:
+
+green
+stars
+stripes
+blue
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.33985710144043,-27.527782440185547,-40.9140739440918,-26.557628631591797,8.446619033813477,27.527782440185547,20.4570369720459,26.557628631591797,0.7102080228046059,0.07964924666483661,1.2234582089049263e-07,0.2101426081847366,3.7438331491663765e-09,0.7247036706549844,0.0006157078933837133,0.27468061770779867,0.5,-29.28426742553711,-28.647735595703125,-45.88531494140625,0.34603093682411673,0.6539690418271751,2.134870807090346e-08,7.321066856384277,27.527782440185547,20.4570369720459,3.7438331491663765e-09,0.7247036706549844,0.0006157078933837133
+78,"hexagon
+square
+orange
+green",shape,texture,hexagon,green,square,orange,0,3,1,2,green hexagon with spades,square,green square with spades,orange square with spades,green hexagon with spades,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with spades
+a green hexagon with spades
+a green square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with spades
+
+Which of the following words would you choose:
+
+hexagon
+square
+orange
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with spades
+a green hexagon with spades
+a green square with spades
+
+Your friend can choose from the following list of words:
+
+hexagon
+square
+orange
+green
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-31.068387985229492,-27.44532012939453,-30.26367950439453,-25.326303482055664,15.534193992614746,27.44532012939453,30.26367950439453,12.663151741027832,0.0028376696608228957,0.10627722701283691,0.0063451557910093005,0.8845399475353308,3.7833894627298297e-07,0.05634007287406004,0.9436595273579277,2.142906601585013e-08,0.5,-28.9569034576416,-28.604751586914062,-46.33473587036133,0.41286069064621883,0.5871392976397383,1.1714042906726176e-08,5.791380882263184,27.44532012939453,30.26367950439453,3.7833894627298297e-07,0.05634007287406004,0.9436595273579277
+79,"red
+green
+square
+hexagon",color,texture,red,square,green,hexagon,0,2,1,3,red square with stripes,green,green square with stripes,green hexagon with stripes,red square with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green square with stripes
+a green hexagon with stripes
+a red square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stripes
+
+Which of the following words would you choose:
+
+red
+green
+square
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green square with stripes
+a green hexagon with stripes
+a red square with stripes
+
+Your friend can choose from the following list of words:
+
+red
+green
+square
+hexagon
+
+Your friend chose the word:
+
+green
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.381723403930664,-29.630868911743164,-26.863290786743164,-30.361345291137695,27.381723403930664,29.630868911743164,26.863290786743164,15.180672645568848,0.35264727165263693,0.03720052295503931,0.5922334770907095,0.017918728301614235,0.09029271794632782,0.855941747710303,0.05376508060687792,4.5373649129072375e-07,0.5,-28.866424560546875,-29.184402465820312,-29.999202728271484,0.4878629632276736,0.3549782954703911,0.15715874130193522,5.773284912109375,29.630868911743164,26.863290786743164,0.09029271794632782,0.855941747710303,0.05376508060687792
+80,"red
+square
+circle
+orange",shape,texture,circle,red,square,orange,2,0,1,3,red circle with stripes,square,red square with stripes,orange square with stripes,red circle with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with stripes
+a red circle with stripes
+a orange square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red circle with stripes
+
+Which of the following words would you choose:
+
+red
+square
+circle
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with stripes
+a red circle with stripes
+a orange square with stripes
+
+Your friend can choose from the following list of words:
+
+red
+square
+circle
+orange
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.987314224243164,-27.65207862854004,-29.947275161743164,-25.95036506652832,28.987314224243164,27.65207862854004,29.947275161743164,12.97518253326416,0.038424058772970934,0.146045671262036,0.014712873464855001,0.8008173965001381,0.2580851129179231,0.0679012083103412,0.6740136500783024,2.86934333237151e-08,0.5,-29.066329956054688,-29.166095733642578,-33.95732498168945,0.5228585064129521,0.4732127649968467,0.003928728590201306,5.813266277313232,27.65207862854004,29.947275161743164,0.2580851129179231,0.0679012083103412,0.6740136500783024
+81,"hexagon
+red
+square
+blue",shape,texture,square,red,hexagon,blue,2,1,0,3,red square with stars,hexagon,red hexagon with stars,blue hexagon with stars,red square with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with stars
+a red square with stars
+a red hexagon with stars
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stars
+
+Which of the following words would you choose:
+
+hexagon
+red
+square
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with stars
+a red square with stars
+a red hexagon with stars
+
+Your friend can choose from the following list of words:
+
+hexagon
+red
+square
+blue
+
+Your friend chose the word:
+
+hexagon
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.63477325439453,-27.38074493408203,-30.363309860229492,-27.77368927001953,29.63477325439453,27.38074493408203,15.181654930114746,27.77368927001953,0.05734158319546296,0.5462377885214069,0.02767389264323448,0.36874673563989563,0.7933485653714731,0.08328215974839445,4.1932862129159227e-07,0.12336885555151104,0.5,-29.84162139892578,-29.54814338684082,-38.31721878051758,0.42711456773931045,0.5727963811766399,8.905108404946893e-05,5.968324184417725,27.38074493408203,15.181654930114746,0.7933485653714731,0.08328215974839445,4.1932862129159227e-07
+82,"stripes
+orange
+red
+spades",texture,shape,stripes,red,spades,orange,0,2,3,1,red square with stripes,spades,red square with spades,orange square with spades,red square with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with spades
+a red square with stripes
+a orange square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the red square with stripes
+
+Which of the following words would you choose:
+
+stripes
+orange
+red
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with spades
+a red square with stripes
+a orange square with spades
+
+Your friend can choose from the following list of words:
+
+stripes
+orange
+red
+spades
+
+Your friend chose the word:
+
+spades
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.42286491394043,-27.752452850341797,-26.569351196289062,-25.56694221496582,8.807621955871582,27.752452850341797,13.284675598144531,12.78347110748291,0.2231212103789157,0.0590348077429798,0.19271817445654466,0.5251258074215598,5.920578123666366e-09,0.9999991576767576,5.208633599712838e-07,3.15539304214437e-07,0.5,-29.166580200195312,-29.07039451599121,-41.94783020019531,0.4759714636857964,0.524027197394388,1.3389198156729613e-06,5.833315849304199,27.752452850341797,13.284675598144531,5.920578123666366e-09,0.9999991576767576,5.208633599712838e-07
+83,"hexagon
+square
+orange
+blue",color,texture,orange,square,blue,hexagon,2,1,3,0,orange square with stars,blue,blue square with stars,blue hexagon with stars,orange square with stars,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with stars
+a blue hexagon with stars
+a blue square with stars
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with stars
+
+Which of the following words would you choose:
+
+hexagon
+square
+orange
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with stars
+a blue hexagon with stars
+a blue square with stars
+
+Your friend can choose from the following list of words:
+
+hexagon
+square
+orange
+blue
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.541051864624023,-29.449228286743164,-27.581796646118164,-30.439496994018555,12.270525932312012,29.449228286743164,27.581796646118164,15.219748497009277,0.9452430809272844,0.006981513316465714,0.045181935117857605,0.0025934706383922857,2.9990425878284915e-08,0.8661602951879965,0.1338391022711824,5.725503951594865e-07,0.5,-29.114288330078125,-41.82184982299805,-29.221864700317383,0.5268673455756341,1.5954288742054814e-06,0.4731310589954918,7.278572082519531,29.449228286743164,27.581796646118164,2.9990425878284915e-08,0.8661602951879965,0.1338391022711824
+84,"orange
+stars
+green
+spades",color,shape,green,stars,orange,spades,2,1,0,3,green circle with stars,orange,orange circle with stars,orange circle with spades,green circle with stars,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green circle with stars
+a orange circle with stars
+a orange circle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the green circle with stars
+
+Which of the following words would you choose:
+
+orange
+stars
+green
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green circle with stars
+a orange circle with stars
+a orange circle with spades
+
+Your friend can choose from the following list of words:
+
+orange
+stars
+green
+spades
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.846200942993164,-25.89063835144043,-24.94563102722168,-25.990270614624023,26.846200942993164,12.945319175720215,12.47281551361084,12.995135307312012,0.07909263750559131,0.205651375598838,0.5291064857432352,0.1861495011523354,0.9999975443408166,9.181691326513465e-07,5.724228416310305e-07,9.65067209055167e-07,0.5,-28.63519859313965,-30.999109268188477,-29.07160186767578,0.5745776801718905,0.05404000613546168,0.3713823136926478,5.727039813995361,12.945319175720215,12.47281551361084,0.9999975443408166,9.181691326513465e-07,5.724228416310305e-07
+85,"dots
+spades
+orange
+blue",color,shape,blue,spades,orange,dots,3,1,2,0,blue square with spades,orange,orange square with spades,orange square with dots,blue square with spades,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a orange square with dots
+a orange square with spades
+a blue square with spades
+
+Your task is to make your friend pick out the following target object:
+
+the blue square with spades
+
+Which of the following words would you choose:
+
+dots
+spades
+orange
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a orange square with dots
+a orange square with spades
+a blue square with spades
+
+Your friend can choose from the following list of words:
+
+dots
+spades
+orange
+blue
+
+Your friend chose the word:
+
+orange
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.247814178466797,-25.818378448486328,-25.10159683227539,-29.264659881591797,28.247814178466797,12.909189224243164,12.550798416137695,29.264659881591797,0.027807000123632745,0.3156782573609476,0.6464560006991681,0.010058741816251618,0.26564224840813844,5.791845520252796e-08,4.047341214936044e-08,0.7343576531999942,0.5,-37.020015716552734,-28.535587310791016,-29.771493911743164,0.00016010616297537766,0.7747266369219483,0.22511325691507633,6.170003414154053,12.909189224243164,12.550798416137695,0.26564224840813844,5.791845520252796e-08,4.047341214936044e-08
+86,"stars
+spades
+green
+orange",texture,shape,spades,green,stars,orange,1,2,0,3,green hexagon with spades,stars,green hexagon with stars,orange hexagon with stars,green hexagon with spades,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green hexagon with stars
+a orange hexagon with stars
+a green hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the green hexagon with spades
+
+Which of the following words would you choose:
+
+stars
+spades
+green
+orange
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green hexagon with stars
+a orange hexagon with stars
+a green hexagon with spades
+
+Your friend can choose from the following list of words:
+
+stars
+spades
+green
+orange
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-26.311540603637695,-27.391122817993164,-26.370595932006836,-25.54695701599121,13.155770301818848,27.391122817993164,13.185297966003418,12.773478507995605,0.22570858021406254,0.07668165374323853,0.2127652341455524,0.48484453189714644,6.571494975956471e-07,0.9999982176371655,6.76842906622398e-07,4.483704305134873e-07,0.5,-28.923925399780273,-29.004796981811523,-45.82930374145508,0.5202068712830821,0.47979310504335876,2.3673559161333117e-08,5.784785270690918,27.391122817993164,13.185297966003418,6.571494975956471e-07,0.9999982176371655,6.76842906622398e-07
+87,"stripes
+dots
+hexagon
+triangle",shape,color,hexagon,stripes,triangle,dots,2,0,3,1,red hexagon with stripes,triangle,red triangle with stripes,red triangle with dots,red hexagon with stripes,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with stripes
+a red triangle with stripes
+a red triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with stripes
+
+Which of the following words would you choose:
+
+stripes
+dots
+hexagon
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with stripes
+a red triangle with stripes
+a red triangle with dots
+
+Your friend can choose from the following list of words:
+
+stripes
+dots
+hexagon
+triangle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.789085388183594,-24.318376541137695,-32.08985900878906,-28.326189041137695,14.894542694091797,8.106125831604004,32.08985900878906,28.326189041137695,0.004114427057328435,0.9777054401750662,0.00041218869830223696,0.017767944069303137,3.3281977558335143e-08,3.750050698582288e-11,0.9773274873407236,0.0226724793397984,0.5,-30.58021354675293,-29.28333854675293,-41.595191955566406,0.2146906607381323,0.7853058068705278,3.5323913398764354e-06,6.116042613983154,8.106125831604004,32.08985900878906,3.3281977558335143e-08,3.750050698582288e-11,0.9773274873407236
+88,"triangle
+hexagon
+blue
+green",shape,texture,hexagon,blue,triangle,green,1,2,0,3,blue hexagon with dots,triangle,blue triangle with dots,green triangle with dots,blue hexagon with dots,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue triangle with dots
+a green triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the blue hexagon with dots
+
+Which of the following words would you choose:
+
+triangle
+hexagon
+blue
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue hexagon with dots
+a blue triangle with dots
+a green triangle with dots
+
+Your friend can choose from the following list of words:
+
+triangle
+hexagon
+blue
+green
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.275419235229492,-27.63159942626953,-32.24219512939453,-26.97046661376953,15.137709617614746,27.63159942626953,32.24219512939453,26.97046661376953,0.023554911169608787,0.331343018986357,0.0032955017969666434,0.6418065680470676,3.673802239536016e-08,0.009798129518603784,0.9851433909402839,0.005058442803089902,0.5,-29.096744537353516,-29.116453170776367,-44.72396469116211,0.5049269572212454,0.4950729602865185,8.249223632854585e-08,5.81934928894043,27.63159942626953,32.24219512939453,3.673802239536016e-08,0.009798129518603784,0.9851433909402839
+89,"circle
+stripes
+triangle
+stars",texture,color,stripes,circle,stars,triangle,1,0,3,2,red circle with stripes,stars,red circle with stars,red triangle with stars,red circle with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red circle with stars
+a red triangle with stars
+a red circle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red circle with stripes
+
+Which of the following words would you choose:
+
+circle
+stripes
+triangle
+stars
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red circle with stars
+a red triangle with stars
+a red circle with stripes
+
+Your friend can choose from the following list of words:
+
+circle
+stripes
+triangle
+stars
+
+Your friend chose the word:
+
+stars
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.825231552124023,-28.484874725341797,-36.557655334472656,-32.1093864440918,8.608410835266113,28.484874725341797,18.278827667236328,32.1093864440918,0.9329571016358373,0.06528198042695633,2.0362413328048934e-05,0.0017405555238782866,6.056587858643953e-11,0.02596968063128094,9.594816856305335e-07,0.9740293598264677,0.5,-29.35053253173828,-38.06930160522461,-46.760986328125,0.9998365109615844,0.00016346158066351434,2.7457752156426032e-08,7.33763313293457,28.484874725341797,18.278827667236328,6.056587858643953e-11,0.02596968063128094,9.594816856305335e-07
+90,"spades
+stripes
+circle
+triangle",shape,color,circle,stripes,triangle,spades,2,1,3,0,blue circle with stripes,triangle,blue triangle with stripes,blue triangle with spades,blue circle with stripes,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with spades
+a blue circle with stripes
+a blue triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue circle with stripes
+
+Which of the following words would you choose:
+
+spades
+stripes
+circle
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with spades
+a blue circle with stripes
+a blue triangle with stripes
+
+Your friend can choose from the following list of words:
+
+spades
+stripes
+circle
+triangle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-28.903335571289062,-25.905288696289062,-32.48048400878906,-25.816043853759766,28.903335571289062,8.635096549987793,32.48048400878906,12.908021926879883,0.023260174256122975,0.46628149287969456,0.0006502451724842935,0.509808087691698,0.027195054959139948,4.286527122123328e-11,0.9728049419232188,3.0747760439060326e-09,0.5,-29.30453109741211,-31.44516372680664,-38.271053314208984,0.8946880213409738,0.10519780642418403,0.00011417223484215327,5.860905647277832,8.635096549987793,32.48048400878906,0.027195054959139948,4.286527122123328e-11,0.9728049419232188
+91,"green
+triangle
+square
+red",color,texture,green,triangle,red,square,0,1,3,2,green triangle with spades,red,red triangle with spades,red square with spades,green triangle with spades,1,0,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with spades
+a red triangle with spades
+a green triangle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with spades
+
+Which of the following words would you choose:
+
+green
+triangle
+square
+red
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with spades
+a red triangle with spades
+a green triangle with spades
+
+Your friend can choose from the following list of words:
+
+green
+triangle
+square
+red
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-27.387216567993164,-32.62110137939453,-28.08933448791504,-30.277353286743164,27.387216567993164,32.62110137939453,28.08933448791504,30.277353286743164,0.6424934618742328,0.0034262687094665733,0.318377797708685,0.03570247170761557,0.00479538886924586,0.8992306958068705,0.009677201167318985,0.08629671415656458,0.5,-32.87624740600586,-28.345165252685547,-28.612695693969727,0.006063512075014306,0.5630516338138225,0.43088485411116323,6.575249671936035,32.62110137939453,28.08933448791504,0.00479538886924586,0.8992306958068705,0.009677201167318985
+92,"orange
+hexagon
+triangle
+blue",color,texture,orange,triangle,blue,hexagon,0,2,3,1,orange triangle with spades,blue,blue triangle with spades,blue hexagon with spades,orange triangle with spades,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue triangle with spades
+a orange triangle with spades
+a blue hexagon with spades
+
+Your task is to make your friend pick out the following target object:
+
+the orange triangle with spades
+
+Which of the following words would you choose:
+
+orange
+hexagon
+triangle
+blue
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue triangle with spades
+a orange triangle with spades
+a blue hexagon with spades
+
+Your friend can choose from the following list of words:
+
+orange
+hexagon
+triangle
+blue
+
+Your friend chose the word:
+
+blue
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.81256675720215,-32.13672637939453,-27.97193145751953,-30.94923973083496,12.406283378601074,32.13672637939453,27.97193145751953,15.47461986541748,0.9566867522296301,0.0006308522430814652,0.04061393827307149,0.0020684572542169133,2.657562307756625e-09,0.9847046217386144,0.015295318450030019,5.715379337364648e-08,0.5,-29.153934478759766,-30.279438018798828,-28.59614372253418,0.3255952220771799,0.10565207875915432,0.5687526991636658,5.83078670501709,32.13672637939453,27.97193145751953,2.657562307756625e-09,0.9847046217386144,0.015295318450030019
+93,"spades
+stripes
+square
+triangle",shape,color,triangle,stripes,square,spades,3,1,2,0,blue triangle with stripes,square,blue square with stripes,blue square with spades,blue triangle with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a blue square with stripes
+a blue square with spades
+a blue triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the blue triangle with stripes
+
+Which of the following words would you choose:
+
+spades
+stripes
+square
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a blue square with stripes
+a blue square with spades
+a blue triangle with stripes
+
+Your friend can choose from the following list of words:
+
+spades
+stripes
+square
+triangle
+
+Your friend chose the word:
+
+square
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-32.42189025878906,-25.841812133789062,-29.458999633789062,-25.656238555908203,32.42189025878906,8.613937377929688,29.458999633789062,12.828119277954102,0.0006217046330068604,0.4479976377061596,0.012032369294413443,0.5393482883664201,0.9508692084070082,4.349689162227303e-11,0.04913078860741706,2.942077897675212e-09,0.5,-29.318378448486328,-35.521522521972656,-42.317203521728516,0.9979787706780746,0.0020189709092512855,2.2584126741817045e-06,5.863675594329834,8.613937377929688,29.458999633789062,0.9508692084070082,4.349689162227303e-11,0.04913078860741706
+94,"stars
+triangle
+spades
+hexagon",shape,color,triangle,spades,hexagon,stars,1,2,3,0,green triangle with spades,hexagon,green hexagon with spades,green hexagon with stars,green triangle with spades,1,2,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a green triangle with spades
+a green hexagon with spades
+a green hexagon with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green triangle with spades
+
+Which of the following words would you choose:
+
+stars
+triangle
+spades
+hexagon
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a green triangle with spades
+a green hexagon with spades
+a green hexagon with stars
+
+Your friend can choose from the following list of words:
+
+stars
+triangle
+spades
+hexagon
+
+Your friend chose the word:
+
+hexagon
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-32.25782775878906,-25.177766799926758,-30.513729095458984,-25.2755069732666,32.25782775878906,12.588883399963379,15.256864547729492,12.6377534866333,0.0004401064424299544,0.5228644706516329,0.0025177357774492865,0.4741776871284879,0.9999999527566857,2.8700269813007097e-09,4.1359518094424506e-08,3.0137691887100775e-09,0.5,-32.92191696166992,-28.493579864501953,-39.20000076293945,0.011793309500858239,0.9881845545298124,2.2135969329408313e-05,5.48698616027832,12.588883399963379,15.256864547729492,0.9999999527566857,2.8700269813007097e-09,4.1359518094424506e-08
+95,"hexagon
+spades
+triangle
+dots",texture,color,spades,triangle,dots,hexagon,1,2,3,0,red triangle with spades,dots,red triangle with dots,red hexagon with dots,red triangle with spades,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with dots
+a red triangle with spades
+a red triangle with dots
+
+Your task is to make your friend pick out the following target object:
+
+the red triangle with spades
+
+Which of the following words would you choose:
+
+hexagon
+spades
+triangle
+dots
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with dots
+a red triangle with spades
+a red triangle with dots
+
+Your friend can choose from the following list of words:
+
+hexagon
+spades
+triangle
+dots
+
+Your friend chose the word:
+
+dots
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-24.742263793945312,-31.957046508789062,-28.472671508789062,-30.101848602294922,12.371131896972656,31.957046508789062,28.472671508789062,15.050924301147461,0.9714193427698414,0.0007146056171517892,0.023297604104003916,0.004568447509002886,3.0256903059033397e-09,0.9702398603106149,0.029760092542879788,4.412081514823161e-08,0.5,-29.236948013305664,-34.88402557373047,-46.089263916015625,0.9964845425115185,0.003515409669231256,4.781925023499625e-08,5.8473896980285645,31.957046508789062,28.472671508789062,3.0256903059033397e-09,0.9702398603106149,0.029760092542879788
+96,"stripes
+orange
+red
+spades",color,shape,orange,stripes,red,spades,1,0,2,3,orange square with stripes,red,red square with stripes,red square with spades,orange square with stripes,0,1,2,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red square with stripes
+a red square with spades
+a orange square with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the orange square with stripes
+
+Which of the following words would you choose:
+
+stripes
+orange
+red
+spades
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red square with stripes
+a red square with spades
+a orange square with stripes
+
+Your friend can choose from the following list of words:
+
+stripes
+orange
+red
+spades
+
+Your friend chose the word:
+
+red
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-25.43368911743164,-26.44044303894043,-27.59376335144043,-26.517597198486328,12.71684455871582,8.813481330871582,27.59376335144043,13.258798599243164,0.5497554241701498,0.20088238237869988,0.06339590452693823,0.1859662889242121,3.4596793468047767e-07,6.9795389988636554e-09,0.9999990522079607,5.948445654955222e-07,0.5,-28.764978408813477,-31.061859130859375,-29.221277236938477,0.576635912954882,0.0579934657791456,0.36537062126597236,5.752995491027832,8.813481330871582,27.59376335144043,3.4596793468047767e-07,6.9795389988636554e-09,0.9999990522079607
+97,"red
+orange
+hexagon
+triangle",shape,texture,hexagon,red,triangle,orange,2,0,3,1,red hexagon with stripes,triangle,red triangle with stripes,orange triangle with stripes,red hexagon with stripes,0,2,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stripes
+a red hexagon with stripes
+a orange triangle with stripes
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with stripes
+
+Which of the following words would you choose:
+
+red
+orange
+hexagon
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stripes
+a red hexagon with stripes
+a orange triangle with stripes
+
+Your friend can choose from the following list of words:
+
+red
+orange
+hexagon
+triangle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.296892166137695,-27.39780616760254,-32.3750114440918,-25.02350425720215,15.148446083068848,27.39780616760254,32.3750114440918,12.511752128601074,0.004665083177922704,0.0847064426308571,0.0005839069660195886,0.9100445672252007,3.2780400479702195e-08,0.006846108009502623,0.9931538568630994,2.3469974631312365e-09,0.5,-28.975927352905273,-28.664623260498047,-37.901084899902344,0.42277268324628997,0.5771710877685159,5.622898519416914e-05,5.7951860427856445,27.39780616760254,32.3750114440918,3.2780400479702195e-08,0.006846108009502623,0.9931538568630994
+98,"square
+red
+triangle
+green",shape,texture,square,green,triangle,red,0,3,2,1,green square with stars,triangle,green triangle with stars,red triangle with stars,green square with stars,2,0,1,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red triangle with stars
+a green square with stars
+a green triangle with stars
+
+Your task is to make your friend pick out the following target object:
+
+the green square with stars
+
+Which of the following words would you choose:
+
+square
+red
+triangle
+green
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red triangle with stars
+a green square with stars
+a green triangle with stars
+
+Your friend can choose from the following list of words:
+
+square
+red
+triangle
+green
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-29.55860710144043,-26.56739616394043,-32.0976676940918,-27.16663932800293,29.55860710144043,26.56739616394043,32.0976676940918,27.16663932800293,0.03132468167487764,0.6236674391465652,0.002472786731555294,0.34253509244700187,0.0724142256550483,0.0036371187992132303,0.9173264068553268,0.006622248690411517,0.5,-28.379131317138672,-29.07256317138672,-41.309593200683594,0.6667288473474988,0.33326953710027657,1.6155522246288571e-06,7.094783306121826,26.56739616394043,32.0976676940918,0.0724142256550483,0.0036371187992132303,0.9173264068553268
+99,"hexagon
+spades
+stripes
+triangle",shape,color,hexagon,spades,triangle,stripes,0,1,3,2,red hexagon with spades,triangle,red triangle with spades,red triangle with stripes,red hexagon with spades,2,1,0,"Your task is to play a conversation game. There are three objects that you and your friend can see. You have to choose a single word to identify one of the three objects for your friend.
+
+The three objects are:
+
+a red hexagon with spades
+a red triangle with stripes
+a red triangle with spades
+
+Your task is to make your friend pick out the following target object:
+
+the red hexagon with spades
+
+Which of the following words would you choose:
+
+hexagon
+spades
+stripes
+triangle
+
+Your answer:
+
+I would choose the word ","Your task is to play a conversation game. There are three objects that you and your friend can see. Your friend wants to communicate about one of these objects. Your friend selects a single word. Your task is to guess which object your friend is trying to refer to.
+
+The three objects are:
+
+a red hexagon with spades
+a red triangle with stripes
+a red triangle with spades
+
+Your friend can choose from the following list of words:
+
+hexagon
+spades
+stripes
+triangle
+
+Your friend chose the word:
+
+triangle
+
+Which object do you think your friend is trying to refer to?
+
+Your answer:
+
+My friend wants to refer to ",0.5,-30.445341110229492,-25.187522888183594,-32.4921989440918,-25.16602897644043,15.222670555114746,12.593761444091797,32.4921989440918,8.388676643371582,0.002567882072667813,0.4931925594784921,0.0003316164095569466,0.503907942039283,3.1618342594315766e-08,2.281489006908987e-09,0.9999999660661296,3.403872276042131e-11,0.5,-29.340986251831055,-33.02848434448242,-41.51899719238281,0.9755719703436929,0.024423012976741782,5.016679565273778e-06,5.868197441101074,12.593761444091797,32.4921989440918,3.1618342594315766e-08,2.281489006908987e-09,0.9999999660661296
