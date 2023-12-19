@@ -166,10 +166,10 @@ def get_model_predictions(
     # no specific system prompt is passed
     # if one wanted to, the expected formatting would be: [INST]<<SYS>>{system prompt}<</SYS>>\n\n{user message}[/INST]
     if "chat" in model_name:
-        context_production = f"[INST]{vignette['context_production']}[/INST]"
+        # context_production = f"[INST]{vignette['context_production']}[/INST]"
         context_interpretation = f"[INST]{vignette['context_interpretation']}[/INST]"
     else:
-        context_production = vignette['context_production']
+        # context_production = vignette['context_production']
         context_interpretation = vignette['context_interpretation']
     # general sanity check
     #testing_prompt = getLogProbContinuation(
@@ -182,18 +182,18 @@ def get_model_predictions(
     #print("Christmas continuation ", testing_prompt2)
 
     # production
-    lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_production, vignette["production_target"],
-        model, tokenizer)
-    lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
-        context_production, vignette["production_competitor"],
-        model, tokenizer)
-    lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
-        context_production, vignette["production_distractor1"],
-        model, tokenizer)
-    lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
-        context_production, vignette["production_distractor2"],
-        model, tokenizer)
+    # lprob_target, lprob_target_gen      = getLogProbContinuation(
+    #     context_production, vignette["production_target"],
+    #     model, tokenizer)
+    # lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
+    #     context_production, vignette["production_competitor"],
+    #     model, tokenizer)
+    # lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
+    #     context_production, vignette["production_distractor1"],
+    #     model, tokenizer)
+    # lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
+    #     context_production, vignette["production_distractor2"],
+    #     model, tokenizer)
     # for testing, also just sample a few productions
     # predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
     # production_samples = model.generate(
@@ -203,12 +203,12 @@ def get_model_predictions(
     # )
     # production_decoded = tokenizer.batch_decode(production_samples)
     # print("productions decoded", production_decoded)
-    scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
-    probs_production = soft_max(scores_production, alpha=1)
-    # softmax the scores generated with alternative method
-    scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
-    probs_production_gen = soft_max(scores_production_gen, alpha=1
-                                    )
+    # scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
+    # probs_production = soft_max(scores_production, alpha=1)
+    # # softmax the scores generated with alternative method
+    # scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
+    # probs_production_gen = soft_max(scores_production_gen, alpha=1
+                                    # )
     # interpretation
 
     lprob_target, lprob_target_gen      = getLogProbContinuation(
@@ -224,30 +224,30 @@ def get_model_predictions(
     scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
     probs_interpretation = soft_max(scores_interpretation, alpha=1)
 
-    scores_interpretation_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
-    probs_interpretation_gen = soft_max(scores_production_gen, alpha=1
+    scores_interpretation_gen = np.array([lprob_target_gen, lprob_comp_gen, lprob_distractor_gen])
+    probs_interpretation_gen = soft_max(scores_interpretation_gen, alpha=1
                                     )
 
     output_dict = {
-        'alpha_production'              : alpha_production,
-        'scores_production_target'      : scores_production[0],
-        'scores_production_competitor'  : scores_production[1],
-        'scores_production_distractor1' : scores_production[2],
-        'scores_production_distractor2' : scores_production[3],
+        # 'alpha_production'              : alpha_production,
+        # 'scores_production_target'      : scores_production[0],
+        # 'scores_production_competitor'  : scores_production[1],
+        # 'scores_production_distractor1' : scores_production[2],
+        # 'scores_production_distractor2' : scores_production[3],
 
-        'scores_production_target_npnlg'      : scores_production_gen[0],
-        'scores_production_competitor_npnlg'  : scores_production_gen[1],
-        'scores_production_distractor1_npnlg' : scores_production_gen[2],
-        'scores_production_distractor2_npnlg' : scores_production_gen[3],
+        # 'scores_production_target_npnlg'      : scores_production_gen[0],
+        # 'scores_production_competitor_npnlg'  : scores_production_gen[1],
+        # 'scores_production_distractor1_npnlg' : scores_production_gen[2],
+        # 'scores_production_distractor2_npnlg' : scores_production_gen[3],
 
-        'prob_production_target'        : probs_production[0],
-        'prob_production_competitor'    : probs_production[1],
-        'prob_production_distractor1'   : probs_production[2],
-        'prob_production_distractor2'   : probs_production[3],
-        'prob_production_target_npnlg'        : probs_production_gen[0],
-        'prob_production_competitor_npnlg'    : probs_production_gen[1],
-        'prob_production_distractor1_npnlg'   : probs_production_gen[2],
-        'prob_production_distractor2_npnlg'   : probs_production_gen[3],
+        # 'prob_production_target'        : probs_production[0],
+        # 'prob_production_competitor'    : probs_production[1],
+        # 'prob_production_distractor1'   : probs_production[2],
+        # 'prob_production_distractor2'   : probs_production[3],
+        # 'prob_production_target_npnlg'        : probs_production_gen[0],
+        # 'prob_production_competitor_npnlg'    : probs_production_gen[1],
+        # 'prob_production_distractor1_npnlg'   : probs_production_gen[2],
+        # 'prob_production_distractor2_npnlg'   : probs_production_gen[3],
         # 'production_decoded': "|".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
@@ -281,8 +281,8 @@ def main(model_name):
     list_of_dicts = []
 
     # for comparability of results, use materials from GPT-3 results
-    vignettes = pd.read_csv('../02-data/results_GPT.csv')
-
+    #vignettes = pd.read_csv('../02-data/results_GPT.csv')
+    vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
     for i, vignette in tqdm(vignettes.iterrows()):
         predictions = get_model_predictions(
             vignette, 
