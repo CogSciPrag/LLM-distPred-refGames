@@ -326,7 +326,7 @@ def main(model_name):
     pprint(results_df)
     # TODO format results_df name to include model name
     name_for_saving = model_name.split('/')[-1]
-    results_name = f'results_wholePrompt_{name_for_saving}.csv'
+    results_name = f'results_sanity_check_data_{name_for_saving}.csv'
     results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
