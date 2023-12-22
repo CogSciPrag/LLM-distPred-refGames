@@ -199,10 +199,10 @@ def get_model_predictions(
         context_interpretation, '"' + vignette["interpretation_target"] + '"',
         model, tokenizer)
     lprob_competitor, lprob_comp_gen  = getLogProbContinuation(
-        context_interpretation, '"' + vignette["interpretation_competitor"] + '"',
+        context_interpretation, '"' +  vignette["interpretation_competitor"] + '"' ,
         model, tokenizer)
     lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
-        context_interpretation, '"' + vignette["interpretation_distractor"] + '"',
+        context_interpretation, '"'+ vignette["interpretation_distractor"]  + '"',
         model, tokenizer)
 
     scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
@@ -310,7 +310,7 @@ def main(model_name):
     pprint(results_df)
     # TODO format results_df name to include model name
     name_for_saving = model_name.split('/')[-1]
-    results_name = f'results_sanity_check_data_{name_for_saving}.csv'
+    results_name = f'results_sanity_check_data_{name_for_saving}_wQuots.csv'
     results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
