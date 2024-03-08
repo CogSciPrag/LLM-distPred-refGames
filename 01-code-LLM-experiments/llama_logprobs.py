@@ -180,13 +180,13 @@ def get_model_predictions(
         context_production, '"' + vignette["production_distractor2"] + '"',
         model, tokenizer)
     # for testing, also just sample a few productions
-    # predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
-    # production_samples = model.generate(
-    #     **predictions_prompt_ids,
-    #     do_sample = True,
-    #     num_return_sequences=5,
-    # )
-    # production_decoded = tokenizer.batch_decode(production_samples)
+    predictions_prompt_ids = tokenizer(context_production, return_tensors="pt")
+    production_samples = model.generate(
+        **predictions_prompt_ids,
+        do_sample = True,
+        temperature = 0.7,
+    )
+    production_decoded = tokenizer.batch_decode(production_samples)
     # print("productions decoded", production_decoded)
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
     probs_production = soft_max(scores_production, alpha=alpha_production)
@@ -204,6 +204,13 @@ def get_model_predictions(
     lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
         context_interpretation, '"'+ vignette["interpretation_distractor"]  + '"',
         model, tokenizer)
+    predictions_interpretation_ids = tokenizer(context_interpretation, return_tensors="pt")
+    interpretation_samples = model.generate(
+        **predictions_interpretation_ids,
+        do_sample = True,
+        temperature = 0.7,
+    )
+    interpretation_decoded = tokenizer.batch_decode(interpretation_samples)
 
     scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
     probs_interpretation = soft_max(scores_interpretation, alpha=1)
@@ -232,7 +239,7 @@ def get_model_predictions(
         'prob_production_competitor_npnlg'    : probs_production_gen[1],
         'prob_production_distractor1_npnlg'   : probs_production_gen[2],
         'prob_production_distractor2_npnlg'   : probs_production_gen[3],
-        # 'production_decoded': "|".join(production_decoded),
+        'production_decoded': "\n".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
@@ -245,7 +252,8 @@ def get_model_predictions(
         'scores_interpretation_distractor_npnlg' : scores_interpretation_gen[2],
         'prob_interpretation_target_npnlg'       : probs_interpretation_gen[0],
         'prob_interpretation_competitor_npnlg'   : probs_interpretation_gen[1],
-        'prob_interpretation_distractor_npnlg'   : probs_interpretation_gen[2]
+        'prob_interpretation_distractor_npnlg'   : probs_interpretation_gen[2],
+        'interpretation_decoded': "\n".join(interpretation_decoded),
     }
 
     return output_dict
@@ -311,7 +319,7 @@ def main(model_name):
     # TODO format results_df name to include model name
     name_for_saving = model_name.split('/')[-1]
 
-    results_name = f'results_wQuots_{name_for_saving}.csv'
+    results_name = f'results_wQuots_wSamples_{name_for_saving}.csv'
     results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
