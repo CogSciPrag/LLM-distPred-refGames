@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --partition=single
 #SBATCH --ntasks=1
-#SBATCH --time=1:00:00
-#SBATCH --mem=20gb
-#SBATCH --gres=gpu:A40:1
+#SBATCH --time=02:00:00
+#SBATCH --mem=150gb
+#SBATCH --gres=gpu:A40:2
 
 echo 'Running simulation'
 
@@ -27,4 +27,4 @@ echo " "
 module load devel/cuda/11.6
 
 python3 -u llama_logprobs.py \
-    --model_name="meta-llama/Llama-2-13b-chat-hf"
+    --model_name="meta-llama/Llama-2-7b-chat-hf"
