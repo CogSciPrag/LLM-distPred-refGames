@@ -22,7 +22,7 @@ wta_row <- function(matrix_of_scores) {
 }
 
 ##################################################
-## main function to pred data
+## main function to prepare data
 ##################################################
 
 get_prepped_data_for_model <- function(model_name, results_file) {
@@ -314,7 +314,9 @@ get_prepped_data_for_model <- function(model_name, results_file) {
     LLM_pred_inter_avg_probs  = LLM_pred_inter_avg_probs,
     LLM_pred_inter_WTA        = LLM_pred_inter_WTA,
     pred_items_prod           = pred_items_prod,
-    pred_items_inter          = pred_items_inter
+    pred_items_inter          = pred_items_inter,
+    matrix_itemLevel_prod     = matrix_itemLevel_prod,
+    matrix_itemLevel_inter    = matrix_itemLevel_inter
   )
   
   saveRDS(model_predictions, file = str_c("02-prepped-data/predictions-", model_name, ".rds"))

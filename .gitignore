@@ -15,3 +15,5 @@
 *.fls
 01-code-LLM-experiments/Untitled.Rmd
 01-code-LLM-experiments/__pycache__/*
+*.RDS
+*.rds
