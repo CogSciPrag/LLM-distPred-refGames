@@ -96,10 +96,14 @@ def getLogProbContinuation(
         return_dict_in_generate=True
     )
     if isinstance(outputs_generate.scores, tuple):
+        print("Using first method of retrieving logits")
         logits = outputs_generate.scores[0][0]
     else:
+        print("Using second method of retrieving logits")
         logits = outputs_generate.scores
 
+    print("Logits shape ", logits.shape)
+    print("Outputs generate sequences ", outputs_generate.sequences)
     input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
     print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
     answer_logits = logits[input_ids_continuation[0]].item()
@@ -180,13 +184,14 @@ def get_model_predictions(
         context_production, vignette["production_distractor2"],
         model, tokenizer)
     # for testing, also just sample a few productions
-   # predictions_prompt_ids = tokenizer(context_production, return_tensors="pt").to("cuda:0")
-    # production_samples = model.generate(
-    #    **predictions_prompt_ids,
-    #    do_sample = True,
-    #    temperature = 0.7,
-    # )
-    # production_decoded = tokenizer.batch_decode(production_samples)
+    predictions_prompt_ids = tokenizer(context_production, return_tensors="pt").to("cuda:0")
+    production_samples = model.generate(
+       **predictions_prompt_ids,
+       max_new_tokens=16,
+       # do_sample = True,
+       # temperature = 0.7,
+    )
+    production_decoded = tokenizer.batch_decode(production_samples)
     # print("productions decoded", production_decoded)
     scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
     probs_production = soft_max(scores_production, alpha=alpha_production)
@@ -239,7 +244,7 @@ def get_model_predictions(
         'prob_production_competitor_npnlg'    : probs_production_gen[1],
         'prob_production_distractor1_npnlg'   : probs_production_gen[2],
         'prob_production_distractor2_npnlg'   : probs_production_gen[3],
-        # 'production_decoded': "\n".join(production_decoded),
+        'production_decoded': "\n".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
@@ -273,7 +278,7 @@ def main(model_name):
     list_of_dicts = []
 
     # for comparability of results, use materials from GPT-3 results
-    vignettes = pd.read_csv('../02-data/results_GPT.csv')
+    vignettes = pd.read_csv('../02-data/results_GPT.csv')[:15]
     # vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
     for i, vignette in tqdm(vignettes.iterrows()):
         predictions = get_model_predictions(
@@ -319,7 +324,7 @@ def main(model_name):
     # TODO format results_df name to include model name
         name_for_saving = model_name.split('/')[-1]
 
-        results_name = f'results_wO_Quots_{name_for_saving}_{i}.csv'
+        results_name = f'results_wQuots_greedySampling_{name_for_saving}_{i}.csv'
         results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
