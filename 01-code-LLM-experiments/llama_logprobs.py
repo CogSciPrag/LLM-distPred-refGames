@@ -5,6 +5,7 @@ import os
 import argparse
 from tqdm import tqdm
 from pprint import pprint
+from datetime import datetime
 # import make_material
 from make_material import sample_vignette
 import torch
@@ -80,6 +81,7 @@ def getLogProbContinuation(
     continuationConditionalLogProbs = conditionalLogProbs[
         (input_ids_prompt.shape[-1]-1):
     ]
+    print("len cond log P ", len(conditionalLogProbs), input_ids_prompt.shape[-1]-1)
     print("Shape of retrieved log probs", continuationConditionalLogProbs.shape, continuationConditionalLogProbs)
     # compute continunation log prob
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
@@ -89,27 +91,32 @@ def getLogProbContinuation(
     ### alternative method of retrieving log probs of single words via generate ###
     # only pass the prompt and then retreive score of the respective tokens among the first predicted token
     outputs_generate = model.generate(
-        input_ids_prompt.to("cuda:0"), 
-        max_new_tokens=5,
+        input_ids_prompt.to("cuda:0"),
+        do_sample=False, 
+        max_new_tokens=16,
         output_scores=True,
         num_return_sequences=1,
         return_dict_in_generate=True
     )
     if isinstance(outputs_generate.scores, tuple):
         print("Using first method of retrieving logits")
-        logits = outputs_generate.scores[0][0]
+        logits = outputs_generate.scores #[0][0]
     else:
         print("Using second method of retrieving logits")
         logits = outputs_generate.scores
 
-    print("Logits shape ", logits.shape)
+    # print("Logits shape ", logits.shape)
     print("Outputs generate sequences ", outputs_generate.sequences)
+    first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
+    print("First generated sequence ", first_generated_sequence)
     input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
-    print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
-    answer_logits = logits[input_ids_continuation[0]].item()
-    print("input_ids_continuation[0][-1] ", input_ids_continuation[0])
+    # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
+    answer_logits = [logits[i][0, j].item() for i, j in enumerate(input_ids_continuation)]
+    print("input_ids_continuation[0][-1] ", input_ids_continuation)
     print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
     print("Answer logit retrieved with Jenn's method ", answer_logits)
+    first_log_probs_from_logits = sum([np.log(np.exp(i)/(1 + np.exp(i))) for i in answer_logits])
+    print("Logits transformed to log probs ", first_log_probs_from_logits)
     #print("Token predicted with 1 token generate ", outputs_generate.sequences, tokenizer.batch_decode(outputs_generate.sequences))
     ### sanity checking the llh results via nll loss comp
     manual_llh = torch.mean(conditionalLogProbs)
@@ -124,7 +131,7 @@ def getLogProbContinuation(
     relevant_labels = torch.clone(input_ids)
     for i in range(input_ids_prompt.shape[-1]):
         relevant_labels[0, i] = -100
-    print("Relevant labels ", relevant_labels)
+    # print("Relevant labels ", relevant_labels)
     output_masked = model(input_ids, labels=relevant_labels)
     print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]))
     # for doubke checking, compute the same with only the last tokens
@@ -158,8 +165,8 @@ def get_model_predictions(
         context_production = f"[INST]{vignette['context_production']}[/INST]"
         context_interpretation = f"[INST]{vignette['context_interpretation']}[/INST]"
     else:
-        context_production = vignette['context_production'].replace("I would choose the word ", "")
-        context_interpretation = vignette['context_interpretation'].replace("My friend wants to refer to ", "")
+        context_production = vignette['context_production'] #.replace("I would choose the word ", "")
+        context_interpretation = vignette['context_interpretation'] #.replace("My friend wants to refer to ", "")
     # general sanity check
     #testing_prompt = getLogProbContinuation(
     #    "Continue the following Christmas song: Dashing through the snow\nIn a one-horse open sleigh\nO'er the fields we go\nLaughing all the way\nBells on bobtails ring\nMaking spirits bright\nWhat fun it is to ride and sing\nA sleighing song tonight\nJingle bells, Jingle bells\n", "Jingle",
@@ -172,23 +179,23 @@ def get_model_predictions(
 
     # production
     lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_production, "I would choose the word " + vignette["production_target"],
+        context_production, vignette["production_target"],
         model, tokenizer)
     lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
-        context_production, "I would choose the word " + vignette["production_competitor"],
+        context_production, vignette["production_competitor"],
         model, tokenizer)
     lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
-        context_production,  "I would choose the word " + vignette["production_distractor1"],
+        context_production,  vignette["production_distractor1"],
         model, tokenizer)
     lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
-        context_production, "I would choose the word " + vignette["production_distractor2"],
+        context_production, vignette["production_distractor2"],
         model, tokenizer)
     # for testing, also just sample a few productions
     predictions_prompt_ids = tokenizer(context_production.strip(), return_tensors="pt").to("cuda:0")
     production_samples = model.generate(
        **predictions_prompt_ids,
        max_new_tokens=16,
-    #    do_sample = True,
+       do_sample = False,
     #    temperature = 0.7,
     )
     production_decoded = tokenizer.batch_decode(production_samples)
@@ -201,19 +208,19 @@ def get_model_predictions(
     # interpretation
 
     lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_interpretation, "My friend wants to refer to " +  vignette["interpretation_target"] ,
+        context_interpretation,  vignette["interpretation_target"] ,
         model, tokenizer)
     lprob_competitor, lprob_comp_gen  = getLogProbContinuation(
-        context_interpretation, "My friend wants to refer to " + vignette["interpretation_competitor"] ,
+        context_interpretation, vignette["interpretation_competitor"] ,
         model, tokenizer)
     lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
-        context_interpretation, "My friend wants to refer to " + vignette["interpretation_distractor"],
+        context_interpretation, vignette["interpretation_distractor"],
         model, tokenizer)
     predictions_interpretation_ids = tokenizer(context_interpretation.strip(), return_tensors="pt").to("cuda:0")
     interpretation_samples = model.generate(
        **predictions_interpretation_ids,
        max_new_tokens=16,
-    #    do_sample = True,
+       do_sample = False,
     #    temperature = 0.7,
     )
     interpretation_decoded = tokenizer.batch_decode(interpretation_samples)
@@ -266,6 +273,8 @@ def get_model_predictions(
 
 
 def main(model_name):
+    date_out = datetime.now().strftime("%Y%m%d_%H%M")
+    name_for_saving = model_name.split('/')[-1]
 
     # load model and tokenizer for Llama
     tokenizer = AutoTokenizer.from_pretrained(model_name, is_fast=False)
@@ -322,10 +331,8 @@ def main(model_name):
         results_df = pd.DataFrame(list_of_dicts)
 
 #    pprint(results_df)
-    # TODO format results_df name to include model name
-        name_for_saving = model_name.split('/')[-1]
-
-        results_name = f'results_wSamples_longSequence_data_{name_for_saving}_{i}.csv'
+    # continuous saving of results
+        results_name = f'results_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
         results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':
