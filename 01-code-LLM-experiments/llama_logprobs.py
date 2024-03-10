@@ -136,8 +136,8 @@ def getLogProbContinuation(
     print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]))
     # for doubke checking, compute the same with only the last tokens
     print("input ids continuation for checking NPNLG code" , input_ids_continuation)
-    output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
-    print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
+    # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
+    # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
     return sentLogProb, output_masked.loss.item()
             
