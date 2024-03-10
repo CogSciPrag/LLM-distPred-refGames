@@ -272,7 +272,7 @@ def get_model_predictions(
     return output_dict
 
 
-def main(model_name):
+def main(model_name, task='ref_game'):
     date_out = datetime.now().strftime("%Y%m%d_%H%M")
     name_for_saving = model_name.split('/')[-1]
 
@@ -288,52 +288,96 @@ def main(model_name):
     list_of_dicts = []
 
     # for comparability of results, use materials from GPT-3 results
-    vignettes = pd.read_csv('../02-data/results_GPT.csv')
-    # vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
-    for i, vignette in tqdm(vignettes.iterrows()):
-        predictions = get_model_predictions(
-            vignette, 
-            model, 
-            tokenizer, 
-            model_name,
-            0.5, 
-            0.5
-        )
+    if task == 'ref_game':
+        vignettes = pd.read_csv('../02-data/results_GPT.csv')
+        # vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
+        for i, vignette in tqdm(vignettes.iterrows()):
+            predictions = get_model_predictions(
+                vignette, 
+                model, 
+                tokenizer, 
+                model_name,
+                0.5, 
+                0.5
+            )
 
-        materials = {
-            'trial': i,
-            'utterances': vignette['utterances'],
-            'trigger_feature': vignette['trigger_feature'],	
-            'nuisance_feature': vignette['nuisance_feature'],	
-            'production_target': vignette['production_target'],	
-            'production_competitor': vignette['production_competitor'],	
-            'production_distractor1': vignette['production_distractor1'],
-            'production_distractor2': vignette['production_distractor2'],	
-            'production_index_target': vignette['production_index_target'],	
-            'production_index_competitor': vignette['production_index_competitor'],	
-            'production_index_distractor1': vignette['production_index_distractor1'],	
-            'production_index_distractor2': vignette['production_index_distractor2'],
-            'trigger_object': vignette['trigger_object'],	
-            'trigger_word': vignette['trigger_word'],	
-            'interpretation_target': vignette['interpretation_target'],	
-            'interpretation_competitor': vignette['interpretation_competitor'],	
-            'interpretation_distractor': vignette['interpretation_distractor'],	
-            'interpretation_index_target': vignette['interpretation_index_target'],	
-            'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
-            'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
-            'context_production': vignette['context_production'],	
-            'context_interpretation': vignette['context_interpretation']
-            
-        }
-        output = dict(**materials, **predictions)
-        list_of_dicts.append(output)
+            materials = {
+                'trial': i,
+                'utterances': vignette['utterances'],
+                'trigger_feature': vignette['trigger_feature'],	
+                'nuisance_feature': vignette['nuisance_feature'],	
+                'production_target': vignette['production_target'],	
+                'production_competitor': vignette['production_competitor'],	
+                'production_distractor1': vignette['production_distractor1'],
+                'production_distractor2': vignette['production_distractor2'],	
+                'production_index_target': vignette['production_index_target'],	
+                'production_index_competitor': vignette['production_index_competitor'],	
+                'production_index_distractor1': vignette['production_index_distractor1'],	
+                'production_index_distractor2': vignette['production_index_distractor2'],
+                'trigger_object': vignette['trigger_object'],	
+                'trigger_word': vignette['trigger_word'],	
+                'interpretation_target': vignette['interpretation_target'],	
+                'interpretation_competitor': vignette['interpretation_competitor'],	
+                'interpretation_distractor': vignette['interpretation_distractor'],	
+                'interpretation_index_target': vignette['interpretation_index_target'],	
+                'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
+                'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
+                'context_production': vignette['context_production'],	
+                'context_interpretation': vignette['context_interpretation']
+                
+            }
+            output = dict(**materials, **predictions)
+            list_of_dicts.append(output)
 
-        results_df = pd.DataFrame(list_of_dicts)
+            results_df = pd.DataFrame(list_of_dicts)
 
-#    pprint(results_df)
-    # continuous saving of results
-        results_name = f'results_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
-        results_df.to_csv(results_name, index = False)
+    #    pprint(results_df)
+        # continuous saving of results
+            results_name = f'results_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
+            results_df.to_csv(results_name, index = False)
+    elif task == "sanity_check":
+        vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
+        for i, vignette in tqdm(vignettes.iterrows()):
+            predictions = get_model_predictions(
+                vignette, 
+                model, 
+                tokenizer, 
+                model_name,
+                0.5, 
+                0.5
+            )
+
+            materials = {
+                'trial': i,	
+                'interpretation_target': vignette['interpretation_target'],	
+                'interpretation_competitor': vignette['interpretation_competitor'],	
+                'interpretation_distractor': vignette['interpretation_distractor'],	
+                'interpretation_index_target': vignette['interpretation_index_target'],	
+                'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
+                'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
+                'context_interpretation': vignette['context_interpretation'],
+                'scores_interpretation_target': getLogProbContinuation(
+                    vignette['context_interpretation'],  vignette["interpretation_target"] ,
+                    model, tokenizer)[0],
+                'scores_interpretation_competitor': getLogProbContinuation(
+                    vignette['context_interpretation'],  vignette["interpretation_competitor"] ,
+                    model, tokenizer)[0],
+                'scores_interpretation_distractor': getLogProbContinuation(
+                    vignette['context_interpretation'],  vignette["interpretation_distractor"] ,
+                    model, tokenizer)[0],
+                
+            }
+            output = dict(**materials, **predictions)
+            list_of_dicts.append(output)
+
+            results_df = pd.DataFrame(list_of_dicts)
+
+    #    pprint(results_df)
+        # continuous saving of results
+            results_name = f'results_sanity_check_{name_for_saving}_{date_out}.csv'
+            results_df.to_csv(results_name, index = False)
+    else:
+        raise ValueError("Task not recognized. Please use 'ref_game' or 'sanity_check'.")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -343,6 +387,12 @@ if __name__ == '__main__':
         default="meta-llama/Llama-2-7b-hf", 
         help="Model name"
     )
+    parser.add_argument(
+        "--task", 
+        type=str, 
+        default="ref_game", 
+        help="Model name"
+    )
     args = parser.parse_args()
 
-    main(args.model_name)
+    main(args.model_name, args.task)
