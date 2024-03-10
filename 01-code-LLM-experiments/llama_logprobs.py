@@ -158,7 +158,7 @@ def get_model_predictions(
         context_production = f"[INST]{vignette['context_production']}[/INST]"
         context_interpretation = f"[INST]{vignette['context_interpretation']}[/INST]"
     else:
-        context_production = vignette['context_production']
+        # context_production = vignette['context_production']
         context_interpretation = vignette['context_interpretation']
     # general sanity check
     #testing_prompt = getLogProbContinuation(
@@ -171,33 +171,33 @@ def get_model_predictions(
     #print("Christmas continuation ", testing_prompt2)
 
     # production
-    lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_production, vignette["production_target"],
-        model, tokenizer)
-    lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
-        context_production, vignette["production_competitor"],
-        model, tokenizer)
-    lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
-        context_production,  vignette["production_distractor1"],
-        model, tokenizer)
-    lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
-        context_production, vignette["production_distractor2"],
-        model, tokenizer)
+    # lprob_target, lprob_target_gen      = getLogProbContinuation(
+    #     context_production, vignette["production_target"],
+    #     model, tokenizer)
+    # lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
+    #     context_production, vignette["production_competitor"],
+    #     model, tokenizer)
+    # lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
+    #     context_production,  vignette["production_distractor1"],
+    #     model, tokenizer)
+    # lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
+    #     context_production, vignette["production_distractor2"],
+    #     model, tokenizer)
     # for testing, also just sample a few productions
-    predictions_prompt_ids = tokenizer(context_production, return_tensors="pt").to("cuda:0")
-    production_samples = model.generate(
-       **predictions_prompt_ids,
-       max_new_tokens=16,
+    # predictions_prompt_ids = tokenizer(context_production.strip(), return_tensors="pt").to("cuda:0")
+    # production_samples = model.generate(
+    #    **predictions_prompt_ids,
+    #    max_new_tokens=16,
        # do_sample = True,
        # temperature = 0.7,
-    )
-    production_decoded = tokenizer.batch_decode(production_samples)
+    # )
+    # production_decoded = tokenizer.batch_decode(production_samples)
     # print("productions decoded", production_decoded)
-    scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
-    probs_production = soft_max(scores_production, alpha=alpha_production)
+    # scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
+    # probs_production = soft_max(scores_production, alpha=alpha_production)
     # softmax the scores generated with alternative method
-    scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
-    probs_production_gen = soft_max(scores_production_gen, alpha=alpha_interpretation)
+    # scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
+    # probs_production_gen = soft_max(scores_production_gen, alpha=alpha_interpretation)
     # interpretation
 
     lprob_target, lprob_target_gen      = getLogProbContinuation(
@@ -226,25 +226,25 @@ def get_model_predictions(
 
     output_dict = {
         'alpha_production'              : alpha_production,
-        'scores_production_target'      : scores_production[0],
-        'scores_production_competitor'  : scores_production[1],
-        'scores_production_distractor1' : scores_production[2],
-        'scores_production_distractor2' : scores_production[3],
+        # 'scores_production_target'      : scores_production[0],
+        # 'scores_production_competitor'  : scores_production[1],
+        # 'scores_production_distractor1' : scores_production[2],
+        # 'scores_production_distractor2' : scores_production[3],
 
-        'scores_production_target_npnlg'      : scores_production_gen[0],
-        'scores_production_competitor_npnlg'  : scores_production_gen[1],
-        'scores_production_distractor1_npnlg' : scores_production_gen[2],
-        'scores_production_distractor2_npnlg' : scores_production_gen[3],
+        # 'scores_production_target_npnlg'      : scores_production_gen[0],
+        # 'scores_production_competitor_npnlg'  : scores_production_gen[1],
+        # 'scores_production_distractor1_npnlg' : scores_production_gen[2],
+        # 'scores_production_distractor2_npnlg' : scores_production_gen[3],
 
-        'prob_production_target'        : probs_production[0],
-        'prob_production_competitor'    : probs_production[1],
-        'prob_production_distractor1'   : probs_production[2],
-        'prob_production_distractor2'   : probs_production[3],
-        'prob_production_target_npnlg'        : probs_production_gen[0],
-        'prob_production_competitor_npnlg'    : probs_production_gen[1],
-        'prob_production_distractor1_npnlg'   : probs_production_gen[2],
-        'prob_production_distractor2_npnlg'   : probs_production_gen[3],
-        'production_decoded': "\n".join(production_decoded),
+        # 'prob_production_target'        : probs_production[0],
+        # 'prob_production_competitor'    : probs_production[1],
+        # 'prob_production_distractor1'   : probs_production[2],
+        # 'prob_production_distractor2'   : probs_production[3],
+        # 'prob_production_target_npnlg'        : probs_production_gen[0],
+        # 'prob_production_competitor_npnlg'    : probs_production_gen[1],
+        # 'prob_production_distractor1_npnlg'   : probs_production_gen[2],
+        # 'prob_production_distractor2_npnlg'   : probs_production_gen[3],
+        # 'production_decoded': "\n".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
@@ -278,8 +278,8 @@ def main(model_name):
     list_of_dicts = []
 
     # for comparability of results, use materials from GPT-3 results
-    vignettes = pd.read_csv('../02-data/results_GPT.csv')[:15]
-    # vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
+    # vignettes = pd.read_csv('../02-data/results_GPT.csv')[:15]
+    vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
     for i, vignette in tqdm(vignettes.iterrows()):
         predictions = get_model_predictions(
             vignette, 
@@ -292,26 +292,26 @@ def main(model_name):
 
         materials = {
             'trial': i,
-            'utterances': vignette['utterances'],
-            'trigger_feature': vignette['trigger_feature'],	
-            'nuisance_feature': vignette['nuisance_feature'],	
-            'production_target': vignette['production_target'],	
-            'production_competitor': vignette['production_competitor'],	
-            'production_distractor1': vignette['production_distractor1'],
-            'production_distractor2': vignette['production_distractor2'],	
-            'production_index_target': vignette['production_index_target'],	
-            'production_index_competitor': vignette['production_index_competitor'],	
-            'production_index_distractor1': vignette['production_index_distractor1'],	
-            'production_index_distractor2': vignette['production_index_distractor2'],
-            'trigger_object': vignette['trigger_object'],	
-            'trigger_word': vignette['trigger_word'],	
+            # 'utterances': vignette['utterances'],
+            # 'trigger_feature': vignette['trigger_feature'],	
+            # 'nuisance_feature': vignette['nuisance_feature'],	
+            # 'production_target': vignette['production_target'],	
+            # 'production_competitor': vignette['production_competitor'],	
+            # 'production_distractor1': vignette['production_distractor1'],
+            # 'production_distractor2': vignette['production_distractor2'],	
+            # 'production_index_target': vignette['production_index_target'],	
+            # 'production_index_competitor': vignette['production_index_competitor'],	
+            # 'production_index_distractor1': vignette['production_index_distractor1'],	
+            # 'production_index_distractor2': vignette['production_index_distractor2'],
+            # 'trigger_object': vignette['trigger_object'],	
+            # 'trigger_word': vignette['trigger_word'],	
             'interpretation_target': vignette['interpretation_target'],	
             'interpretation_competitor': vignette['interpretation_competitor'],	
             'interpretation_distractor': vignette['interpretation_distractor'],	
-            'interpretation_index_target': vignette['interpretation_index_target'],	
-            'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
-            'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
-            'context_production': vignette['context_production'],	
+            # 'interpretation_index_target': vignette['interpretation_index_target'],	
+            # 'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
+            # 'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
+            # 'context_production': vignette['context_production'],	
             'context_interpretation': vignette['context_interpretation']
             
         }
@@ -324,7 +324,7 @@ def main(model_name):
     # TODO format results_df name to include model name
         name_for_saving = model_name.split('/')[-1]
 
-        results_name = f'results_wQuots_greedySampling_{name_for_saving}_{i}.csv'
+        results_name = f'results_sanity_check_data_{name_for_saving}_{i}.csv'
         results_df.to_csv(results_name, index = False)
 
 if __name__ == '__main__':

@@ -1,0 +1,12 @@
+context_interpretation,interpretation_target,interpretation_competitor,interpretation_distractor
+"Continue the following Christmas song: Dashing through the snow\nIn a one-horse open sleigh\nO'er the fields we go\nLaughing all the way\nBells on bobtails ring\nMaking spirits bright\nWhat fun it is to ride and sing\nA sleighing song tonight\nJingle bells, Jingle bells\n",Jingle,Christmas,pen
+Continue the following song: We wish you a Merry ,Christmas,Easter,car
+Answer the following question:\nWho was the first president of the USA?\nAnswer options:\nA. Barack Obama\nB.George Washington\nC.Bill Clinton\nYour answer:  ,B,A,D
+Answer the following question:\nWho was the first president of the USA?\nAnswer options:\nA. Mickey Mouse\nB.George Washington\nC.Bill Clinton\nYour answer:  ,B,A,D
+Answer the following question:\nWho was the first president of the USA?\nAnswer options:\nBarack Obama\nGeorge Washington\nBill Clinton\nYour answer:  ,George Washington,Barack Obama,Abraham Lincoln
+Answer the following question:\nIs the Earth flat?\nWhich of the following words would you choose\n\nyes\nno,no,yes,none
+Answer the following question:\nIs the Earth flat?\nWhich of the following words would you choose\n\nYes\nNo,No,Yes,none
+Your friend wants to paraphrase the following sentence:\nThe flowers were put in the vase by the man.\n\nYour friend can choose fro the following list of sentences:\nMan the by vase the in put were flowers the.\nThe man put the flowers in the vase.\nWhich sentence should your friend choose?\n\nYour answer:\n\nMy friend should choose ,He took the flowers and put them in the vase.,Man the by vase the in put were flowers the.,The woman bought flowers and also bought a small vase.
+Your friend wants to paraphrase the following sentence:\nThe flowers were put in the vase by the man.\n\nYour friend can choose fro the following list of sentences:\nA. Man the by vase the in put were flowers the.\nB. The man put the flowers in the vase.\nWhich sentence should your friend choose?\n\nYour answer:\n\nMy friend should choose ,B,A,D
+Your task is to answer the following question:\nWhich color does a typical banana have?\n\nWhich of the following words would you choose:\n\nbanana\nred\nyellow\nblue\n\nI would choose the word ,yellow,blue,typical
+Your task is to answer the following question:\nWhat is the name of a geometric shape with three sides?\n\nWhich of the following words would you choose:\n\nbanana\nred\ntriangle\nsquare\n\nI would choose the word ,triangle,square,red
