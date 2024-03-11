@@ -179,16 +179,16 @@ def get_model_predictions(
 
     # production
     lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_production, vignette["production_target"],
+        context_production,'"' + vignette["production_target"] + '"',
         model, tokenizer)
     lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
-        context_production, vignette["production_competitor"],
+        context_production,'"' + vignette["production_competitor"]+ '"',
         model, tokenizer)
     lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
-        context_production,  vignette["production_distractor1"],
+        context_production, '"' + vignette["production_distractor1"] + '"',
         model, tokenizer)
     lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
-        context_production, vignette["production_distractor2"],
+        context_production, '"' + vignette["production_distractor2"] + '"',
         model, tokenizer)
     # for testing, also just sample a few productions
     predictions_prompt_ids = tokenizer(context_production.strip(), return_tensors="pt").to("cuda:0")
@@ -208,13 +208,13 @@ def get_model_predictions(
     # interpretation
 
     lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_interpretation,  vignette["interpretation_target"] ,
+        context_interpretation,'"' +  vignette["interpretation_target"] + '"',
         model, tokenizer)
     lprob_competitor, lprob_comp_gen  = getLogProbContinuation(
-        context_interpretation, vignette["interpretation_competitor"] ,
+        context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
         model, tokenizer)
     lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
-        context_interpretation, vignette["interpretation_distractor"],
+        context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
         model, tokenizer)
     predictions_interpretation_ids = tokenizer(context_interpretation.strip(), return_tensors="pt").to("cuda:0")
     interpretation_samples = model.generate(
@@ -333,28 +333,28 @@ def main(model_name, task='ref_game'):
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_wQuots_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
         for i, vignette in tqdm(vignettes.iterrows()):
-            predictions = get_model_predictions(
-                vignette, 
-                model, 
-                tokenizer, 
-                model_name,
-                0.5, 
-                0.5
-            )
+        #    predictions = get_model_predictions(
+        #        vignette, 
+        #        model, 
+        #        tokenizer, 
+        #        model_name,
+        #        0.5, 
+        #        0.5
+        #    )
 
             materials = {
                 'trial': i,	
                 'interpretation_target': vignette['interpretation_target'],	
                 'interpretation_competitor': vignette['interpretation_competitor'],	
                 'interpretation_distractor': vignette['interpretation_distractor'],	
-                'interpretation_index_target': vignette['interpretation_index_target'],	
-                'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
-                'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
+                # 'interpretation_index_target': vignette['interpretation_index_target'],	
+                # 'interpretation_index_competitor': vignette['interpretation_index_competitor'],	
+                # 'interpretation_index_distractor': vignette['interpretation_index_distractor'],	
                 'context_interpretation': vignette['context_interpretation'],
                 'scores_interpretation_target': getLogProbContinuation(
                     vignette['context_interpretation'],  vignette["interpretation_target"] ,
@@ -367,7 +367,7 @@ def main(model_name, task='ref_game'):
                     model, tokenizer)[0],
                 
             }
-            output = dict(**materials, **predictions)
+            output = dict(**materials) #, **predictions)
             list_of_dicts.append(output)
 
             results_df = pd.DataFrame(list_of_dicts)

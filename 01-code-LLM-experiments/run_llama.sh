@@ -26,9 +26,9 @@ echo " "
 # activate CUDA
 module load devel/cuda/11.6
 
-models=("meta-llama/Llama-2-13b-hf" "meta-llama/Llama-2-7b-hf")
+models=("meta-llama/Llama-2-13b-hf") #  "meta-llama/Llama-2-7b-hf")
 for i in ${!models[*]}; do
     python3 -u llama_logprobs.py \
         --model_name="${models[$i]}" \
-        --task="sanity_check"
+        --task="ref_game"
 done
