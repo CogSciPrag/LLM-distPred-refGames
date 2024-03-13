@@ -85,6 +85,7 @@ def getLogProbContinuation(
     print("Shape of retrieved log probs", continuationConditionalLogProbs.shape, continuationConditionalLogProbs)
     # compute continunation log prob
     sentLogProb = torch.sum(continuationConditionalLogProbs).item()
+    meanLogProb = torch.mean(continuationConditionalLogProbs).item()
     print("sent log prob ", sentLogProb)
     print("mean log prob ", torch.mean(continuationConditionalLogProbs).item())
 
@@ -139,7 +140,7 @@ def getLogProbContinuation(
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
     # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return sentLogProb, output_masked.loss.item()
+    return meanLogProb, output_masked.loss.item()
             
 
 def soft_max(scores, alpha=1):
@@ -333,7 +334,7 @@ def main(model_name, task='ref_game'):
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_wQuots_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_meanLogP_wQuots_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
