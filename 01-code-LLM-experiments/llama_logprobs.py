@@ -332,14 +332,15 @@ def use_surprisal(
         prompt.strip(),
         return_tensors="pt",
     ).input_ids
-    continuation_tokens = input_ids[0].shape[-1] - input_ids_prompt[0].shape[-1]
-    print("continuation tokens pulled for computation with surprisal package ", continuation_tokens)
-    print(surpr[-continuation_tokens:, "word"])
-    sumLogP = - surpr[-continuation_tokens:, "word"] 
-    print("Sum of log probs ", sumLogP)
-    meanLogP = sumLogP / continuation_tokens
+    input_chars = len(initialSequence)
+    prompt_chars = len(prompt)
+    continuation_num_chars = prompt_chars - input_chars
+    print("continuation tokens pulled for computation with surprisal package ", input_chars, prompt_chars, continuation_num_chars)
+    sum_surprisal = surpr[input_chars:prompt_chars] 
+    print("Sum surprisals ", sum_surprisal)
+    meanLogP = - sum_surprisal / continuation_num_chars
     print("Mean log prob ", meanLogP)
-    return meanLogP, sumLogP
+    return meanLogP, -sum_surprisal
 
 def main(
         model_name, 
