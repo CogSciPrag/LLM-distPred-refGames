@@ -334,7 +334,8 @@ def use_surprisal(
     ).input_ids
     continuation_tokens = input_ids[0].shape[-1] - input_ids_prompt[0].shape[-1]
     print("continuation tokens pulled for computation with surprisal package ", continuation_tokens)
-    sumLogP = - surpr[-continuation_tokens, "word"] 
+    print(surpr[-continuation_tokens:, "word"])
+    sumLogP = - surpr[-continuation_tokens:, "word"] 
     print("Sum of log probs ", sumLogP)
     meanLogP = sumLogP / continuation_tokens
     print("Mean log prob ", meanLogP)
@@ -358,8 +359,12 @@ def main(
         )
         model.eval()
     elif computation == "use_surprisal":
-        model = AutoHuggingFaceModel.from_pretrained(model_name)
+        model = AutoHuggingFaceModel.from_pretrained(model_name, model_class="gpt", precision='fp16')
         model.to('cuda')
+        [s] = model.surprise("The cat is on the mat")
+        print("Cat check ", [s])
+        print("Cat word aggregation ", s[3:6, "word"])
+        print("Cat char agregation ", s[3:6] )
     else:
         raise ValueError("Computation method not recognized. Please use 'use_own_scoring' or 'use_surprisal'.")
 
