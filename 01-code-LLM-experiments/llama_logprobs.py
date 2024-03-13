@@ -382,7 +382,7 @@ def use_jenns_method(
     initialSequence = preface + initialSequence
     prompt = preface + initialSequence + continuation
     
-    input_ids_prompt = tokenizer(initialSequence.strip(), return_tensors="pt").to(model.device)
+    input_ids_prompt = tokenizer(initialSequence.strip(), return_tensors="pt").input_ids.to(model.device)
     input_ids = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
     labels = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
     mask = []
@@ -390,9 +390,9 @@ def use_jenns_method(
     # NB: we cannot mask based on particular token ID because the same tokens might be re-used in the prompt
     # therefore, the masking is based on index of the tokens
     # Tokenize the inputs and labels.
-    max_id_prompt = input_ids_prompt.input_ids.shape[-1] - 1
+    max_id_prompt = input_ids_prompt.shape[-1] - 1
     print("max_id_prompt ", max_id_prompt)
-    for i, _ in enumerate(input_ids.input_ids[0]):
+    for i, _ in enumerate(input_ids[0]):
         mask.append(i <= max_id_prompt)
     mask_tensor = torch.BoolTensor(mask).to(model.device)
     print("Mask tensor ", mask_tensor)
@@ -421,7 +421,7 @@ def use_jenns_method(
     print("toal log prob ", total_logprob)
     avg_logprob = torch.mean(logprobs_to_sum).item()
     print("avg log prob ", avg_logprob)
-    
+
     return total_logprob, avg_logprob
 
 def main(
