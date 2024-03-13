@@ -252,6 +252,31 @@ def get_model_predictions(
             model, tokenizer)
         interpretation_decoded = ""
 
+    elif computation == "use_jenns_method":
+        prod_lprob_target, prod_lprob_target_gen      = use_jenns_method(
+            context_production,'"' + vignette["production_target"] + '"',
+            model, tokenizer)
+        prod_lprob_competitor, prod_lprob_competitor_gen  = use_jenns_method(
+            context_production,'"' + vignette["production_competitor"]+ '"',
+            model, tokenizer)
+        prod_lprob_distractor1, prod_lprob_distractor1_gen = use_jenns_method(
+            context_production, '"' + vignette["production_distractor1"] + '"',
+            model, tokenizer)
+        prod_lprob_distractor2, prod_lprob_distractor2_gen = use_jenns_method(
+            context_production, '"' + vignette["production_distractor2"] + '"',
+            model, tokenizer)
+        production_decoded = ""
+        int_lprob_target, int_lprob_target_gen      = use_jenns_method(
+            context_interpretation,'"' +  vignette["interpretation_target"] + '"',
+            model, tokenizer)
+        int_lprob_competitor, int_lprob_comp_gen  = use_jenns_method(
+            context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
+            model, tokenizer)
+        int_lprob_distractor, int_lprob_distractor_gen  = use_jenns_method(
+            context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
+            model, tokenizer)
+        interpretation_decoded = ""
+
     else:
         raise ValueError("Computation method not recognized. Please use 'use_own_scoring' or 'use_surprisal'.")
 
@@ -312,7 +337,8 @@ def use_surprisal(
         tokenizer,
         preface = ''):
     """
-    Helper for retrieving log probability of different response types from Llama-2 of various sizes.
+    Helper for retrieving log probability with package surprisal
+    https://github.com/aalok-sathe/surprisal
     """
 
     initialSequence = preface + initialSequence
@@ -342,6 +368,62 @@ def use_surprisal(
     print("Mean log prob ", meanLogP)
     return meanLogP, -sum_surprisal
 
+def use_jenns_method(
+        initialSequence, 
+        continuation, 
+        model,
+        tokenizer,
+        preface = ''
+    ):
+    """
+    Helper for retrieving log probability with Jennifer Hu's method
+    from this paper: https://github.com/aalok-sathe/surprisal
+    """
+    initialSequence = preface + initialSequence
+    prompt = preface + initialSequence + continuation
+    
+    input_ids_prompt = tokenizer(initialSequence.strip(), return_tensors="pt").to(model.device)
+    input_ids = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
+    labels = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
+    mask = []
+    # get the tokens of the initial sequence that we do not want to retrieve log probs for
+    # NB: we cannot mask based on particular token ID because the same tokens might be re-used in the prompt
+    # therefore, the masking is based on index of the tokens
+    # Tokenize the inputs and labels.
+    max_id_prompt = input_ids_prompt.input_ids.shape[-1] - 1
+    print("max_id_prompt ", max_id_prompt)
+    for i, _ in enumerate(input_ids.input_ids[0]):
+        mask.append(i <= max_id_prompt)
+    mask_tensor = torch.BoolTensor(mask).to(model.device)
+    print("Mask tensor ", mask_tensor)
+    # Model forward.
+    with torch.no_grad():
+        outputs = model(input_ids=input_ids, labels=labels)
+
+    # Turn logits into log probabilities.
+    logits = outputs.logits
+    logprobs = torch.nn.functional.log_softmax(logits, dim=-1)
+    print('logprobs shape ', logprobs.shape)
+    # Subset the labels and logprobs we care about,
+    # i.e. the non-"special" tokens (e.g., "<extra_id_0>").
+    # mask = torch.BoolTensor([tok_id not in self.ids_to_ignore for tok_id in labels[0]])
+    # TODO: note that the logprobs are not shifted!
+    relevant_labels = labels[0][mask_tensor]
+    relevant_logprobs = logprobs[0][mask_tensor]
+    print("relevant labels ", relevant_labels)
+    print("relevant logprobs ", relevant_logprobs)
+    # Index into logprob tensor using the relevant token IDs.
+    logprobs_to_sum = [
+        relevant_logprobs[i][tok_id] 
+        for i, tok_id in enumerate(relevant_labels)
+    ]
+    total_logprob = sum(logprobs_to_sum).item()
+    print("toal log prob ", total_logprob)
+    avg_logprob = torch.mean(logprobs_to_sum).item()
+    print("avg log prob ", avg_logprob)
+    
+    return total_logprob, avg_logprob
+
 def main(
         model_name, 
         task='ref_game',
@@ -352,7 +434,7 @@ def main(
 
     # load model and tokenizer for Llama
     tokenizer = AutoTokenizer.from_pretrained(model_name, is_fast=False)
-    if computation == "use_own_scoring":
+    if (computation == "use_own_scoring") or (computation == "use_jenns_method"):
         model = AutoModelForCausalLM.from_pretrained(
             model_name, 
             device_map='auto', 
@@ -418,7 +500,7 @@ def main(
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_meanLogP_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_jennsMethod_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')

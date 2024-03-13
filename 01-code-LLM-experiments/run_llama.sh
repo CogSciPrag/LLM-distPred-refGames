@@ -31,5 +31,5 @@ for i in ${!models[*]}; do
     python3 -u llama_logprobs.py \
         --model_name="${models[$i]}" \
         --task="ref_game" \
-        --computation="use_surprisal"
+        --computation="use_jenns_method"
 done
