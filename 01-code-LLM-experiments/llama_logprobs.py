@@ -13,6 +13,9 @@ from transformers import (
     AutoModelForCausalLM, 
     AutoTokenizer
 )
+from surprisal import AutoHuggingFaceModel
+
+
 # get device count
 num_devices = torch.cuda.device_count()
 print("NUM DEVICES: ", num_devices)
@@ -155,7 +158,8 @@ def get_model_predictions(
         tokenizer,
         model_name,
         alpha_production, 
-        alpha_interpretation
+        alpha_interpretation,
+        computation,
     ):
 
     # take care of special tokens for chat models
@@ -177,61 +181,90 @@ def get_model_predictions(
     #    "Continue the following Christmas song: Dashing through the snow\nIn a one-horse open sleigh\nO'er the fields we go\nLaughing all the way\nBells on bobtails ring\nMaking spirits bright\nWhat fun it is to ride and sing\nA sleighing song tonight\nJingle bells, Jingle bells\n", "Christmas",
     #    model, tokenizer)
     #print("Christmas continuation ", testing_prompt2)
+    if computation == "use_own_scoring":
+        # production
+        prod_lprob_target, prod_lprob_target_gen      = getLogProbContinuation(
+            context_production,'"' + vignette["production_target"] + '"',
+            model, tokenizer)
+        prod_lprob_competitor, prod_lprob_competitor_gen  = getLogProbContinuation(
+            context_production,'"' + vignette["production_competitor"]+ '"',
+            model, tokenizer)
+        prod_lprob_distractor1, prod_lprob_distractor1_gen = getLogProbContinuation(
+            context_production, '"' + vignette["production_distractor1"] + '"',
+            model, tokenizer)
+        prod_lprob_distractor2, prod_lprob_distractor2_gen = getLogProbContinuation(
+            context_production, '"' + vignette["production_distractor2"] + '"',
+            model, tokenizer)
+        # for testing, also just sample a few productions
+        predictions_prompt_ids = tokenizer(context_production.strip(), return_tensors="pt").to("cuda:0")
+        production_samples = model.generate(
+            **predictions_prompt_ids,
+            max_new_tokens=16,
+            do_sample = False,
+            #    temperature = 0.7,
+        )
+        production_decoded = tokenizer.batch_decode(production_samples)
+        print("### productions_decoded", production_decoded)
+        
+        # interpretation
 
-    # production
-    lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_production,'"' + vignette["production_target"] + '"',
-        model, tokenizer)
-    lprob_competitor, lprob_competitor_gen  = getLogProbContinuation(
-        context_production,'"' + vignette["production_competitor"]+ '"',
-        model, tokenizer)
-    lprob_distractor1, lprob_distractor1_gen = getLogProbContinuation(
-        context_production, '"' + vignette["production_distractor1"] + '"',
-        model, tokenizer)
-    lprob_distractor2, lprob_distractor2_gen = getLogProbContinuation(
-        context_production, '"' + vignette["production_distractor2"] + '"',
-        model, tokenizer)
-    # for testing, also just sample a few productions
-    predictions_prompt_ids = tokenizer(context_production.strip(), return_tensors="pt").to("cuda:0")
-    production_samples = model.generate(
-       **predictions_prompt_ids,
-       max_new_tokens=16,
-       do_sample = False,
-    #    temperature = 0.7,
-    )
-    production_decoded = tokenizer.batch_decode(production_samples)
-    print("### productions_decoded", production_decoded)
-    scores_production = np.array([lprob_target, lprob_competitor, lprob_distractor1, lprob_distractor2])
+        int_lprob_target, int_lprob_target_gen      = getLogProbContinuation(
+            context_interpretation,'"' +  vignette["interpretation_target"] + '"',
+            model, tokenizer)
+        int_lprob_competitor, int_lprob_comp_gen  = getLogProbContinuation(
+            context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
+            model, tokenizer)
+        int_lprob_distractor, int_lprob_distractor_gen  = getLogProbContinuation(
+            context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
+            model, tokenizer)
+        predictions_interpretation_ids = tokenizer(context_interpretation.strip(), return_tensors="pt").to("cuda:0")
+        interpretation_samples = model.generate(
+            **predictions_interpretation_ids,
+            max_new_tokens=16,
+            do_sample = False,
+            #    temperature = 0.7,
+        )
+        interpretation_decoded = tokenizer.batch_decode(interpretation_samples)
+        print("### Interpretation_decoded ", interpretation_decoded)
+
+    elif computation == "use_surprisal":
+        prod_lprob_target, prod_lprob_target_gen      = use_surprisal(
+            context_production,'"' + vignette["production_target"] + '"',
+            model, tokenizer)
+        prod_lprob_competitor, prod_lprob_competitor_gen  = use_surprisal(
+            context_production,'"' + vignette["production_competitor"]+ '"',
+            model, tokenizer)
+        prod_lprob_distractor1, prod_lprob_distractor1_gen = use_surprisal(
+            context_production, '"' + vignette["production_distractor1"] + '"',
+            model, tokenizer)
+        prod_lprob_distractor2, prod_lprob_distractor2_gen = use_surprisal(
+            context_production, '"' + vignette["production_distractor2"] + '"',
+            model, tokenizer)
+        production_decoded = ""
+        int_lprob_target, int_lprob_target_gen      = use_surprisal(
+            context_interpretation,'"' +  vignette["interpretation_target"] + '"',
+            model, tokenizer)
+        int_lprob_competitor, int_lprob_comp_gen  = use_surprisal(
+            context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
+            model, tokenizer)
+        int_lprob_distractor, int_lprob_distractor_gen  = use_surprisal(
+            context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
+            model, tokenizer)
+        interpretation_decoded = ""
+
+    else:
+        raise ValueError("Computation method not recognized. Please use 'use_own_scoring' or 'use_surprisal'.")
+
+    scores_production = np.array([prod_lprob_target, prod_lprob_competitor, prod_lprob_distractor1, prod_lprob_distractor2])
     probs_production = soft_max(scores_production, alpha=alpha_production)
     # softmax the scores generated with alternative method
-    scores_production_gen = np.array([lprob_target_gen, lprob_competitor_gen, lprob_distractor1_gen, lprob_distractor2_gen])
+    scores_production_gen = np.array([prod_lprob_target_gen, prod_lprob_competitor_gen, prod_lprob_distractor1_gen, prod_lprob_distractor2_gen])
     probs_production_gen = soft_max(scores_production_gen, alpha=alpha_interpretation)
-    # interpretation
-
-    lprob_target, lprob_target_gen      = getLogProbContinuation(
-        context_interpretation,'"' +  vignette["interpretation_target"] + '"',
-        model, tokenizer)
-    lprob_competitor, lprob_comp_gen  = getLogProbContinuation(
-        context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
-        model, tokenizer)
-    lprob_distractor, lprob_distractor_gen  = getLogProbContinuation(
-        context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
-        model, tokenizer)
-    predictions_interpretation_ids = tokenizer(context_interpretation.strip(), return_tensors="pt").to("cuda:0")
-    interpretation_samples = model.generate(
-       **predictions_interpretation_ids,
-       max_new_tokens=16,
-       do_sample = False,
-    #    temperature = 0.7,
-    )
-    interpretation_decoded = tokenizer.batch_decode(interpretation_samples)
-    print("### Interpretation_decoded ", interpretation_decoded)
-    scores_interpretation = np.array([lprob_target, lprob_competitor, lprob_distractor])
+    scores_interpretation = np.array([int_lprob_target, int_lprob_competitor, int_lprob_distractor])
     probs_interpretation = soft_max(scores_interpretation, alpha=1)
 
-    scores_interpretation_gen = np.array([lprob_target_gen, lprob_comp_gen, lprob_distractor_gen])
-    probs_interpretation_gen = soft_max(scores_interpretation_gen, alpha=1
-                                    )
+    scores_interpretation_gen = np.array([int_lprob_target_gen, int_lprob_comp_gen, int_lprob_distractor_gen])
+    probs_interpretation_gen = soft_max(scores_interpretation_gen, alpha=alpha_interpretation)
 
     output_dict = {
         'alpha_production'              : alpha_production,
@@ -272,19 +305,63 @@ def get_model_predictions(
 
     return output_dict
 
+def use_surprisal(
+        initialSequence, 
+        continuation, 
+        model,
+        tokenizer,
+        preface = ''):
+    """
+    Helper for retrieving log probability of different response types from Llama-2 of various sizes.
+    """
 
-def main(model_name, task='ref_game'):
+    initialSequence = preface + initialSequence
+    prompt = preface + initialSequence + continuation
+    print(initialSequence)
+    print(prompt)
+    # get surprisal of entire sequence
+    [surpr] = model.surprise(prompt)
+    print("Surprisal computed with surprisal package ", surpr)
+    # tokenizee schole prompt and input only separately to be able to pull last continuation
+    # tokens only
+    input_ids_prompt = tokenizer(
+        initialSequence.strip(),
+        return_tensors="pt",
+    ).input_ids
+    input_ids = tokenizer(
+        prompt.strip(),
+        return_tensors="pt",
+    ).input_ids
+    continuation_tokens = input_ids[0].shape[-1] - input_ids_prompt[0].shape[-1]
+    print("continuation tokens pulled for computation with surprisal package ", continuation_tokens)
+    sumLogP = - surpr[-continuation_tokens, "word"] 
+    print("Sum of log probs ", sumLogP)
+    meanLogP = sumLogP / continuation_tokens
+    print("Mean log prob ", meanLogP)
+    return meanLogP, sumLogP
+
+def main(
+        model_name, 
+        task='ref_game',
+        computation='use_own_scoring',
+    ):
     date_out = datetime.now().strftime("%Y%m%d_%H%M")
     name_for_saving = model_name.split('/')[-1]
 
     # load model and tokenizer for Llama
     tokenizer = AutoTokenizer.from_pretrained(model_name, is_fast=False)
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name, 
-        device_map='auto', 
-        torch_dtype=torch.float16
-    )
-    model.eval()
+    if computation == "use_own_scoring":
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name, 
+            device_map='auto', 
+            torch_dtype=torch.float16
+        )
+        model.eval()
+    elif computation == "use_surprisal":
+        model = AutoHuggingFaceModel.from_pretrained(model_name)
+        model.to('cuda')
+    else:
+        raise ValueError("Computation method not recognized. Please use 'use_own_scoring' or 'use_surprisal'.")
 
     list_of_dicts = []
 
@@ -299,7 +376,8 @@ def main(model_name, task='ref_game'):
                 tokenizer, 
                 model_name,
                 0.5, 
-                0.5
+                0.5,
+                computation,
             )
 
             materials = {
@@ -334,7 +412,7 @@ def main(model_name, task='ref_game'):
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_meanLogP_wQuots_wSamples_greedyDecode_data_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_meanLogP_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
@@ -392,8 +470,19 @@ if __name__ == '__main__':
         "--task", 
         type=str, 
         default="ref_game", 
-        help="Model name"
+        help="Task to run. Either 'ref_game' or 'sanity_check'."
     )
+    parser.add_argument(
+        "--computation", 
+        type=str, 
+        default="use_own_scoring", 
+        help="Type of score retrieval implementation to use."
+    )
+
     args = parser.parse_args()
 
-    main(args.model_name, args.task)
+    main(
+        args.model_name, 
+        args.task,
+        args.computation,
+    )
