@@ -386,30 +386,32 @@ def use_jenns_method(
     input_ids = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
     labels = tokenizer(prompt.strip(), return_tensors="pt").input_ids.to(model.device)
     mask = []
+    print(input_ids_prompt)
+    print(input_ids)
     # get the tokens of the initial sequence that we do not want to retrieve log probs for
     # NB: we cannot mask based on particular token ID because the same tokens might be re-used in the prompt
     # therefore, the masking is based on index of the tokens
     # Tokenize the inputs and labels.
     max_id_prompt = input_ids_prompt.shape[-1] - 1
     print("max_id_prompt ", max_id_prompt)
-    for i, _ in enumerate(input_ids[0]):
-        mask.append(i <= max_id_prompt)
+    for i, _ in enumerate(input_ids[0, 1:]):
+        mask.append(i >= max_id_prompt)
     mask_tensor = torch.BoolTensor(mask).to(model.device)
-    print("Mask tensor ", mask_tensor)
+    print("Mask tensor ",mask_tensor.shape,  mask_tensor)
     # Model forward.
     with torch.no_grad():
         outputs = model(input_ids=input_ids, labels=labels)
 
     # Turn logits into log probabilities.
     logits = outputs.logits
-    logprobs = torch.nn.functional.log_softmax(logits, dim=-1)
+    logprobs = torch.nn.functional.log_softmax(logits, dim=-1)[:, :-1]
     print('logprobs shape ', logprobs.shape)
     # Subset the labels and logprobs we care about,
     # i.e. the non-"special" tokens (e.g., "<extra_id_0>").
     # mask = torch.BoolTensor([tok_id not in self.ids_to_ignore for tok_id in labels[0]])
     # TODO: note that the logprobs are not shifted!
-    relevant_labels = labels[0][mask_tensor]
-    relevant_logprobs = logprobs[0][mask_tensor]
+    relevant_labels = labels[0, 1:][mask_tensor]
+    relevant_logprobs = logprobs[0][mask_tensor].cpu()
     print("relevant labels ", relevant_labels)
     print("relevant logprobs ", relevant_logprobs)
     # Index into logprob tensor using the relevant token IDs.
@@ -419,7 +421,7 @@ def use_jenns_method(
     ]
     total_logprob = sum(logprobs_to_sum).item()
     print("toal log prob ", total_logprob)
-    avg_logprob = torch.mean(logprobs_to_sum).item()
+    avg_logprob = np.mean(logprobs_to_sum).item()
     print("avg log prob ", avg_logprob)
 
     return total_logprob, avg_logprob
@@ -500,7 +502,7 @@ def main(
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_jennsMethod_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_jennsMethodShifted_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
