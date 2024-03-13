@@ -108,18 +108,20 @@ def getLogProbContinuation(
     else:
         print("Using second method of retrieving logits")
         logits = outputs_generate.scores
-
+    generate_logprobs = logsoftmax(torch.stack(logits))
+    print("stack shape ", torch.stack(logits).shape)
+    print("generation log probs shape", generate_logprobs.shape)
     # print("Logits shape ", logits.shape)
     print("Outputs generate sequences ", outputs_generate.sequences)
     first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
     print("First generated sequence ", first_generated_sequence)
     input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
     # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
-    answer_logits = [logits[i][0, j].item() for i, j in enumerate(input_ids_continuation)]
+    answer_logits = [logits[i, j].item() for i, j in enumerate(input_ids_continuation)]
     print("input_ids_continuation[0][-1] ", input_ids_continuation)
     print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
-    print("Answer logit retrieved with Jenn's method ", answer_logits)
-    first_log_probs_from_logits = sum([np.log(np.exp(i)/(1 + np.exp(i))) for i in answer_logits])
+    print("Answer logit retrieved with og Jenn's method ", answer_logits)
+    first_log_probs_from_logits = sum(answer_logits)
     print("Logits transformed to log probs ", first_log_probs_from_logits)
     #print("Token predicted with 1 token generate ", outputs_generate.sequences, tokenizer.batch_decode(outputs_generate.sequences))
     ### sanity checking the llh results via nll loss comp
@@ -143,7 +145,7 @@ def getLogProbContinuation(
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
     # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return meanLogProb, output_masked.loss.item()
+    return meanLogProb, output_masked.loss.item(), first_generated_sequence, first_log_probs_from_logits
             
 
 def soft_max(scores, alpha=1):
@@ -183,16 +185,16 @@ def get_model_predictions(
     #print("Christmas continuation ", testing_prompt2)
     if computation == "use_own_scoring":
         # production
-        prod_lprob_target, prod_lprob_target_gen      = getLogProbContinuation(
+        prod_lprob_target, prod_lprob_target_gen, gen_seq_target, gen_p_target      = getLogProbContinuation(
             context_production,'"' + vignette["production_target"] + '"',
             model, tokenizer)
-        prod_lprob_competitor, prod_lprob_competitor_gen  = getLogProbContinuation(
+        prod_lprob_competitor, prod_lprob_competitor_gen, gen_seq_competitor, gen_p_competitor   = getLogProbContinuation(
             context_production,'"' + vignette["production_competitor"]+ '"',
             model, tokenizer)
-        prod_lprob_distractor1, prod_lprob_distractor1_gen = getLogProbContinuation(
+        prod_lprob_distractor1, prod_lprob_distractor1_gen, gen_seq_distractor1, gen_p_distractor1  = getLogProbContinuation(
             context_production, '"' + vignette["production_distractor1"] + '"',
             model, tokenizer)
-        prod_lprob_distractor2, prod_lprob_distractor2_gen = getLogProbContinuation(
+        prod_lprob_distractor2, prod_lprob_distractor2_gen, gen_seq_distractor2, gen_p_distractor2  = getLogProbContinuation(
             context_production, '"' + vignette["production_distractor2"] + '"',
             model, tokenizer)
         # for testing, also just sample a few productions
@@ -208,13 +210,13 @@ def get_model_predictions(
         
         # interpretation
 
-        int_lprob_target, int_lprob_target_gen      = getLogProbContinuation(
+        int_lprob_target, int_lprob_target_gen, gen_seq_target_int, gen_p_target_int       = getLogProbContinuation(
             context_interpretation,'"' +  vignette["interpretation_target"] + '"',
             model, tokenizer)
-        int_lprob_competitor, int_lprob_comp_gen  = getLogProbContinuation(
+        int_lprob_competitor, int_lprob_comp_gen, gen_seq_competitor_int, gen_p_competitor_int   = getLogProbContinuation(
             context_interpretation, '"' +vignette["interpretation_competitor"] + '"',
             model, tokenizer)
-        int_lprob_distractor, int_lprob_distractor_gen  = getLogProbContinuation(
+        int_lprob_distractor, int_lprob_distractor_gen, gen_seq_distractor_int, gen_p_distractor_int   = getLogProbContinuation(
             context_interpretation,'"' + vignette["interpretation_distractor"] + '"',
             model, tokenizer)
         predictions_interpretation_ids = tokenizer(context_interpretation.strip(), return_tensors="pt").to("cuda:0")
@@ -298,19 +300,19 @@ def get_model_predictions(
         'scores_production_distractor1' : scores_production[2],
         'scores_production_distractor2' : scores_production[3],
 
-        'scores_production_target_npnlg'      : scores_production_gen[0],
-        'scores_production_competitor_npnlg'  : scores_production_gen[1],
-        'scores_production_distractor1_npnlg' : scores_production_gen[2],
-        'scores_production_distractor2_npnlg' : scores_production_gen[3],
+        'scores_production_target_npnlg'      : gen_p_target, #scores_production_gen[0],
+        'scores_production_competitor_npnlg'  : gen_p_competitor, #scores_production_gen[1],
+        'scores_production_distractor1_npnlg' : gen_p_distractor1, #scores_production_gen[2],
+        'scores_production_distractor2_npnlg' : gen_p_distractor2,#scores_production_gen[3],
 
         'prob_production_target'        : probs_production[0],
         'prob_production_competitor'    : probs_production[1],
         'prob_production_distractor1'   : probs_production[2],
         'prob_production_distractor2'   : probs_production[3],
-        'prob_production_target_npnlg'        : probs_production_gen[0],
-        'prob_production_competitor_npnlg'    : probs_production_gen[1],
-        'prob_production_distractor1_npnlg'   : probs_production_gen[2],
-        'prob_production_distractor2_npnlg'   : probs_production_gen[3],
+        'prob_production_target_npnlg'        : gen_seq_target, #probs_production_gen[0],
+        'prob_production_competitor_npnlg'    : gen_seq_competitor, #probs_production_gen[1],
+        'prob_production_distractor1_npnlg'   : gen_seq_distractor1, #probs_production_gen[2],
+        'prob_production_distractor2_npnlg'   : gen_seq_distractor2, #probs_production_gen[3],
         'production_decoded': "\n".join(production_decoded),
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
@@ -500,7 +502,7 @@ def main(
 
     #    pprint(results_df)
         # continuous saving of results
-            results_name = f'results_jennsMethod_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
+            results_name = f'results_oldJennsMethodWithGenerate_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
             results_df.to_csv(results_name, index = False)
     elif task == "sanity_check":
         vignettes = pd.read_csv('../02-data/sanity_check_data.csv')
