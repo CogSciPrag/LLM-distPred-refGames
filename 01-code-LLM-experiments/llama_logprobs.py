@@ -13,7 +13,7 @@ from transformers import (
     AutoModelForCausalLM, 
     AutoTokenizer
 )
-from surprisal import AutoHuggingFaceModel
+# from surprisal import AutoHuggingFaceModel
 
 
 # get device count
