@@ -364,6 +364,7 @@ def get_model_predictions(
         'prob_production_distractor1_npnlg'   : gen_seq_distractor1, #probs_production_gen[2],
         'prob_production_distractor2_npnlg'   : gen_seq_distractor2, #probs_production_gen[3],
         'production_decoded': "\n".join(production_decoded),
+        
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
