@@ -203,7 +203,7 @@ def getLogProbContinuation(
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
     # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return meanLogProb, output_masked.loss.item(), generated_continuation, first_log_probs_from_logits
+    return meanLogProb, sentLogProb, generated_continuation, output_masked.loss.item()
             
 
 def soft_max(scores, alpha=1):

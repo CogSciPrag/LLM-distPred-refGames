@@ -48,7 +48,7 @@ def main(
 
     list_of_dicts = []
 
-    vignettes = pd.read_csv("../02-data/super_glue_formatted_boolq.csv")
+    vignettes = pd.read_csv("../02-data/super_glue_formatted_boolq.csv")[:145]
     options = ["yes", "no"]
     
     if "chat" in model_name:
