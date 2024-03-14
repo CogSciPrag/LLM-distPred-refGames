@@ -152,23 +152,27 @@ def getLogProbContinuation(
         generated_continuation,
         tokens_map = TOKENS_MAP,
     )
-    relevant_tokens = outputs_generate.sequences[0][
-        input_ids_prompt.shape[-1]:(input_ids_prompt.shape[-1]+relevant_tokens_num)
-    ]
-    print("relevant token nums ", relevant_tokens_num)
-    print("relevant tokens ", relevant_tokens)
-    # get their log P
-    relevant_word_log_probs = []
-    for i in range(relevant_tokens_num):
-        relevant_word_log_probs.append(generate_logprobs[i, relevant_tokens[i]].item())
-    print("relevant word log probs ", relevant_word_log_probs)
-    # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
-    print("input_ids_continuation[0][-1] ", input_ids_continuation)
-    print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
-    print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
-    first_log_probs_from_logits = sum(relevant_word_log_probs)
-    first_mean_log_probs_from_logits = np.mean(relevant_word_log_probs)
-    print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
+    if relevant_tokens_num is not None:
+        relevant_tokens = outputs_generate.sequences[0][
+            input_ids_prompt.shape[-1]:(input_ids_prompt.shape[-1]+relevant_tokens_num)
+        ]
+        print("relevant token nums ", relevant_tokens_num)
+        print("relevant tokens ", relevant_tokens)
+        # get their log P
+        relevant_word_log_probs = []
+        for i in range(relevant_tokens_num):
+            relevant_word_log_probs.append(generate_logprobs[i, relevant_tokens[i]].item())
+        print("relevant word log probs ", relevant_word_log_probs)
+        # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
+        print("input_ids_continuation[0][-1] ", input_ids_continuation)
+        print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
+        print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
+        first_log_probs_from_logits = sum(relevant_word_log_probs)
+        first_mean_log_probs_from_logits = np.mean(relevant_word_log_probs)
+        print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
+    else:
+        generated_continuation = "NONE"
+        first_log_probs_from_logits = None
     ############# END of production-task specific exploration ########
     ### sanity checking the llh results via nll loss comp
     manual_llh = torch.mean(conditionalLogProbs)
