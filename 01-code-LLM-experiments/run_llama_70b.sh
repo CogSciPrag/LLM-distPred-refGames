@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --partition=single
 #SBATCH --ntasks=1
-#SBATCH --time=5:30:00
+#SBATCH --time=2:30:00
 #SBATCH --mem=237gb
 #SBATCH --gres=gpu:A100:2
 
@@ -26,5 +26,7 @@ echo " "
 # activate CUDA
 module load devel/cuda/11.6
 
-python3 -u llama_logprobs.py \
-    --model_name="meta-llama/Llama-2-70b-hf"
+python3 -u llama_boolq_test.py \
+    --model_name="meta-llama/Llama-2-70b-hf" \
+    --task="ref_game" \
+    --computation="use_own_scoring"
