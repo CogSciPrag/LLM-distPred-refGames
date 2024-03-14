@@ -118,3 +118,32 @@ def main(
         # continuous saving of results
         results_name = f'boolq_ownMeanScores_greedySamples_wQuots_{computation}_{name_for_saving}_{date_out}.csv'
         results_df.to_csv(results_name, index = False)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--model_name", 
+        type=str, 
+        default="meta-llama/Llama-2-7b-hf", 
+        help="Model name"
+    )
+    parser.add_argument(
+        "--task", 
+        type=str, 
+        default="ref_game", 
+        help="Task to run. Either 'ref_game' or 'sanity_check'."
+    )
+    parser.add_argument(
+        "--computation", 
+        type=str, 
+        default="use_own_scoring", 
+        help="Type of score retrieval implementation to use."
+    )
+
+    args = parser.parse_args()
+
+    main(
+        args.model_name, 
+        args.task,
+        args.computation,
+    )
