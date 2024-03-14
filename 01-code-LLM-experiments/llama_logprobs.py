@@ -196,7 +196,7 @@ def getLogProbContinuation(
         relevant_labels[0, i] = -100
     # print("Relevant labels ", relevant_labels)
     output_masked = model(input_ids, labels=relevant_labels)
-    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (input_ids_continuation.shape[-1]))
+    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (continuationConditionalLogProbs.shape[-1]))
     # for doubke checking, compute the same with only the last tokens
     print("input ids continuation for checking NPNLG code" , input_ids_continuation)
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
