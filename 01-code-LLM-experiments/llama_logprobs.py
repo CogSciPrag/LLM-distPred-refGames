@@ -117,6 +117,8 @@ def getLogProbContinuation(
     print("sent log prob ", sentLogProb)
     print("mean log prob ", torch.mean(continuationConditionalLogProbs).item())
 
+    input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
+    print("input ids continuation shape ", input_ids_continuation.shape)
     ###### production-task specific exploration #######
     ### alternative method of retrieving log probs of single words via generate ###
     # only pass the prompt and then retreive score of the respective tokens among the first predicted token
@@ -143,8 +145,7 @@ def getLogProbContinuation(
         print("Outputs generate sequences ", outputs_generate.sequences)
         first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
         print("First generated sequence ", first_generated_sequence)
-        input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
-        print("input ids continuation shape ", input_ids_continuation.shape)
+        
         generated_continuation = tokenizer.decode(
             outputs_generate.sequences[0][input_ids_prompt.shape[-1]:]
         )
