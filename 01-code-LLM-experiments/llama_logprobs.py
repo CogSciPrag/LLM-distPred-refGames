@@ -129,6 +129,9 @@ def getLogProbContinuation(
             do_sample=False, 
             max_new_tokens=5,
             output_scores=True,
+            ### NOTE: new param so as to test the effect of the non-zero temperature
+            output_logits=True,
+            ###
             num_return_sequences=1,
             return_dict_in_generate=True
         )
@@ -138,6 +141,11 @@ def getLogProbContinuation(
         else:
             print("Using second method of retrieving logits")
             logits = outputs_generate.scores
+        raw_logits = outputs_generate.logits 
+        print("Raw logits length and shape ", len(raw_logits), raw_logits[0].shape)
+        # check if raw logits and scores are the same
+        print("Are raw logits and scores the same? ", torch.allclose(logits[0], raw_logits[0], equal_nan=True))
+
         generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
         print("stack shape ", torch.stack(logits).shape)
         print("generation log probs shape", generate_logprobs.shape)
