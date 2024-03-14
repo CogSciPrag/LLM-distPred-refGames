@@ -167,7 +167,7 @@ def getLogProbContinuation(
     print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
     print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
     first_log_probs_from_logits = sum(relevant_word_log_probs)
-    first_mean_log_probs_from_logits = torch.mean(relevant_word_log_probs)
+    first_mean_log_probs_from_logits = np.mean(relevant_word_log_probs)
     print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
     ############# END of production-task specific exploration ########
     ### sanity checking the llh results via nll loss comp
@@ -191,7 +191,7 @@ def getLogProbContinuation(
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
     # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return meanLogProb, output_masked.loss.item(), first_generated_sequence, first_log_probs_from_logits
+    return meanLogProb, output_masked.loss.item(), generated_continuation, first_log_probs_from_logits
             
 
 def soft_max(scores, alpha=1):
