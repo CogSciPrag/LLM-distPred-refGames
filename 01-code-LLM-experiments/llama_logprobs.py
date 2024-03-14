@@ -26,6 +26,29 @@ for i in range(num_devices):
 # define logsoftmax for retrieving logprobs from scores
 logsoftmax = torch.nn.LogSoftmax(dim=-1)
 
+TOKENS_MAP = {
+    '"triangle"': 3,
+    '"circle"': 3,
+    '"hexagon"': 4,
+    '"square"': 3,
+    '"red"': 3,
+    '"blue"': 3,
+    '"green"': 3,
+    '"orange"': 4,
+    '"stripes"': 5,
+    '"spades"': 4,
+    '"dots"': 3,
+    '"stars"': 4
+}
+
+def get_relevant_generated_tokens(
+    generated_sequence,
+    tokens_map=TOKENS_MAP,
+):
+    for token, num in tokens_map.items():
+        if token in generated_sequence:
+            return num
+
 def getLogProbContinuation(
         initialSequence, 
         continuation, 
@@ -92,12 +115,13 @@ def getLogProbContinuation(
     print("sent log prob ", sentLogProb)
     print("mean log prob ", torch.mean(continuationConditionalLogProbs).item())
 
+    ###### production-task specific exploration #######
     ### alternative method of retrieving log probs of single words via generate ###
     # only pass the prompt and then retreive score of the respective tokens among the first predicted token
     outputs_generate = model.generate(
         input_ids_prompt.to("cuda:0"),
         do_sample=False, 
-        max_new_tokens=16,
+        max_new_tokens=5,
         output_scores=True,
         num_return_sequences=1,
         return_dict_in_generate=True
@@ -108,7 +132,7 @@ def getLogProbContinuation(
     else:
         print("Using second method of retrieving logits")
         logits = outputs_generate.scores
-    generate_logprobs = logsoftmax(torch.stack(logits))
+    generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
     print("stack shape ", torch.stack(logits).shape)
     print("generation log probs shape", generate_logprobs.shape)
     # print("Logits shape ", logits.shape)
@@ -116,14 +140,36 @@ def getLogProbContinuation(
     first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
     print("First generated sequence ", first_generated_sequence)
     input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
+    print("input ids continuation shape ", input_ids_continuation.shape)
+    generated_continuation = tokenizer.decode(
+        outputs_generate.sequences[0][input_ids_prompt.shape[-1]:]
+    )
+    print("Generated continuation ", generated_continuation)
+    # grab the first word's log prob (because that is one of the options in quotes)
+    # via poor man's mapping: we check if the tokens of each of the options are in the continuation
+    # and grad the respective log probs
+    relevant_tokens_num = get_relevant_generated_tokens(
+        generated_continuation,
+        tokens_map = TOKENS_MAP,
+    )
+    relevant_tokens = outputs_generate.sequences[0][
+        input_ids_prompt.shape[-1]:(input_ids_prompt.shape[-1]+relevant_tokens_num)
+    ]
+    print("relevant token nums ", relevant_tokens_num)
+    print("relevant tokens ", relevant_tokens)
+    # get their log P
+    relevant_word_log_probs = []
+    for i in range(relevant_tokens_num):
+        relevant_word_log_probs.append(generate_logprobs[i, relevant_tokens[i]].item())
+    print("relevant word log probs ", relevant_word_log_probs)
     # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
-    answer_logits = [logits[i, j].item() for i, j in enumerate(input_ids_continuation)]
     print("input_ids_continuation[0][-1] ", input_ids_continuation)
     print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
-    print("Answer logit retrieved with og Jenn's method ", answer_logits)
-    first_log_probs_from_logits = sum(answer_logits)
-    print("Logits transformed to log probs ", first_log_probs_from_logits)
-    #print("Token predicted with 1 token generate ", outputs_generate.sequences, tokenizer.batch_decode(outputs_generate.sequences))
+    print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
+    first_log_probs_from_logits = sum(relevant_word_log_probs)
+    first_mean_log_probs_from_logits = torch.mean(relevant_word_log_probs)
+    print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
+    ############# END of production-task specific exploration ########
     ### sanity checking the llh results via nll loss comp
     manual_llh = torch.mean(conditionalLogProbs)
     auto_llh = model(
