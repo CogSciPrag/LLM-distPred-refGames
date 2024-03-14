@@ -84,7 +84,7 @@ def getLogProbContinuation(
     with torch.no_grad():
         outputs = model(
             input_ids,
-            labels=input_ids
+            # labels=input_ids
         )
     # transform logits to probabilities
     print("shape of logits ", outputs.logits.shape)
@@ -144,15 +144,18 @@ def getLogProbContinuation(
         raw_logits = outputs_generate.logits 
         print("Raw logits length and shape ", len(raw_logits), raw_logits[0].shape)
         # check if raw logits and scores are the same
-        print("Are raw logits and scores the same? ", torch.allclose(logits[0], raw_logits[0], equal_nan=True))
-
+        print("Are raw logits and scores the same? ", torch.equal(torch.stack(logits), torch.stack(raw_logits)))
+        print("scores logits ", logits[0])
+        print("raw logits : ", raw_logits[0])
         generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
+        print("###### Are my own forward log probs and generate logprobs the same?", torch.equal(outputs.logits[0][(input_ids_prompt.shape[-1]-1)], logits[0]))
+        print("###### Are my own forward log probs and generate logprobs the same?", torch.equal(outputs.logits[0][(input_ids_prompt.shape[-1])], logits[0]))
         print("stack shape ", torch.stack(logits).shape)
         print("generation log probs shape", generate_logprobs.shape)
         # print("Logits shape ", logits.shape)
-        print("Outputs generate sequences ", outputs_generate.sequences)
+        # print("Outputs generate sequences ", outputs_generate.sequences)
         first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
-        print("First generated sequence ", first_generated_sequence)
+        # print("First generated sequence ", first_generated_sequence)
         
         generated_continuation = tokenizer.decode(
             outputs_generate.sequences[0][input_ids_prompt.shape[-1]:]
@@ -192,26 +195,26 @@ def getLogProbContinuation(
     ############# END of production-task specific exploration ########
     ### sanity checking the llh results via nll loss comp
     manual_llh = torch.mean(conditionalLogProbs)
-    auto_llh = model(
-       input_ids,
-       labels=input_ids
-    ).loss
+    #auto_llh = model(
+    #   input_ids,
+    #   labels=input_ids
+    #).loss
     print("manually computed LL ", manual_llh)
-    print("loss computation based nll ", auto_llh)
+    #print("loss computation based nll ", auto_llh)
 
     # another sanity check with MF's NPNLG code
-    relevant_labels = torch.clone(input_ids)
-    for i in range(input_ids_prompt.shape[-1]):
-        relevant_labels[0, i] = -100
+    #relevant_labels = torch.clone(input_ids)
+    #for i in range(input_ids_prompt.shape[-1]):
+    #    relevant_labels[0, i] = -100
     # print("Relevant labels ", relevant_labels)
-    output_masked = model(input_ids, labels=relevant_labels)
-    print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (continuationConditionalLogProbs.shape[-1]))
+    #output_masked = model(input_ids, labels=relevant_labels)
+    #print("Output loss (i.e., mean) computed with NPNLG approach ", output_masked.loss.item(), output_masked.loss.item() * (continuationConditionalLogProbs.shape[-1]))
     # for doubke checking, compute the same with only the last tokens
     print("input ids continuation for checking NPNLG code" , input_ids_continuation)
     # output_last_tokens_loss = model(input_ids_continuation.unsqueeze(0), labels=input_ids_continuation.unsqueeze(0))
     # print("npnlg double checking loss ", output_last_tokens_loss.loss.item())
 
-    return meanLogProb, sentLogProb, generated_continuation, output_masked.loss.item()
+    return meanLogProb, sentLogProb, generated_continuation, first_log_probs_from_logits #output_masked.loss.item()
             
 
 def soft_max(scores, alpha=1):
