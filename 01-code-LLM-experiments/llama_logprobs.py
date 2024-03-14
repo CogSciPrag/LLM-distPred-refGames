@@ -134,7 +134,7 @@ def getLogProbContinuation(
         logits = outputs_generate.scores
     generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
     print("stack shape ", torch.stack(logits).shape)
-    print("generation log probs shape", generate_logprobs.shape)
+    print("generation log probs shape", generate_logprobs.shape, generate_logprobs[-5:, :])
     # print("Logits shape ", logits.shape)
     print("Outputs generate sequences ", outputs_generate.sequences)
     first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
