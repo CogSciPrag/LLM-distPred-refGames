@@ -75,13 +75,15 @@ def main(
             '"' + row["correct"].lower() + '"',
             model,
             tokenizer,
+            do_generate_check=False,
         )
         print("#### Predictions correct: ", predictions_correct)
-        predictions_incorrect = predictions_correct = getLogProbContinuation(
+        predictions_incorrect = getLogProbContinuation(
             prompt, 
             '"' + row["incorrect"].lower() + '"',
             model,
             tokenizer,
+            do_generate_check=False,
         )
         print("#### Predictions incorrect: ", predictions_incorrect)
 

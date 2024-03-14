@@ -41,6 +41,7 @@ TOKENS_MAP = {
     '"stars"': 4
 }
 
+
 def get_relevant_generated_tokens(
     generated_sequence,
     tokens_map=TOKENS_MAP,
@@ -54,7 +55,8 @@ def getLogProbContinuation(
         continuation, 
         model,
         tokenizer,
-        preface = ''):
+        preface = '',
+        do_generate_check = True):
     """
     Helper for retrieving log probability of different response types from Llama-2 of various sizes.
     """
@@ -118,58 +120,63 @@ def getLogProbContinuation(
     ###### production-task specific exploration #######
     ### alternative method of retrieving log probs of single words via generate ###
     # only pass the prompt and then retreive score of the respective tokens among the first predicted token
-    outputs_generate = model.generate(
-        input_ids_prompt.to("cuda:0"),
-        do_sample=False, 
-        max_new_tokens=5,
-        output_scores=True,
-        num_return_sequences=1,
-        return_dict_in_generate=True
-    )
-    if isinstance(outputs_generate.scores, tuple):
-        print("Using first method of retrieving logits")
-        logits = outputs_generate.scores #[0][0]
-    else:
-        print("Using second method of retrieving logits")
-        logits = outputs_generate.scores
-    generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
-    print("stack shape ", torch.stack(logits).shape)
-    print("generation log probs shape", generate_logprobs.shape)
-    # print("Logits shape ", logits.shape)
-    print("Outputs generate sequences ", outputs_generate.sequences)
-    first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
-    print("First generated sequence ", first_generated_sequence)
-    input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
-    print("input ids continuation shape ", input_ids_continuation.shape)
-    generated_continuation = tokenizer.decode(
-        outputs_generate.sequences[0][input_ids_prompt.shape[-1]:]
-    )
-    print("Generated continuation ", generated_continuation)
-    # grab the first word's log prob (because that is one of the options in quotes)
-    # via poor man's mapping: we check if the tokens of each of the options are in the continuation
-    # and grad the respective log probs
-    relevant_tokens_num = get_relevant_generated_tokens(
-        generated_continuation,
-        tokens_map = TOKENS_MAP,
-    )
-    if relevant_tokens_num is not None:
-        relevant_tokens = outputs_generate.sequences[0][
-            input_ids_prompt.shape[-1]:(input_ids_prompt.shape[-1]+relevant_tokens_num)
-        ]
-        print("relevant token nums ", relevant_tokens_num)
-        print("relevant tokens ", relevant_tokens)
-        # get their log P
-        relevant_word_log_probs = []
-        for i in range(relevant_tokens_num):
-            relevant_word_log_probs.append(generate_logprobs[i, relevant_tokens[i]].item())
-        print("relevant word log probs ", relevant_word_log_probs)
-        # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
-        print("input_ids_continuation[0][-1] ", input_ids_continuation)
-        print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
-        print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
-        first_log_probs_from_logits = sum(relevant_word_log_probs)
-        first_mean_log_probs_from_logits = np.mean(relevant_word_log_probs)
-        print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
+    if do_generate_check:
+
+        outputs_generate = model.generate(
+            input_ids_prompt.to("cuda:0"),
+            do_sample=False, 
+            max_new_tokens=5,
+            output_scores=True,
+            num_return_sequences=1,
+            return_dict_in_generate=True
+        )
+        if isinstance(outputs_generate.scores, tuple):
+            print("Using first method of retrieving logits")
+            logits = outputs_generate.scores #[0][0]
+        else:
+            print("Using second method of retrieving logits")
+            logits = outputs_generate.scores
+        generate_logprobs = logsoftmax(torch.stack(logits)).squeeze()
+        print("stack shape ", torch.stack(logits).shape)
+        print("generation log probs shape", generate_logprobs.shape)
+        # print("Logits shape ", logits.shape)
+        print("Outputs generate sequences ", outputs_generate.sequences)
+        first_generated_sequence = tokenizer.decode(outputs_generate.sequences[0])
+        print("First generated sequence ", first_generated_sequence)
+        input_ids_continuation = input_ids[0][input_ids_prompt.shape[-1]:]
+        print("input ids continuation shape ", input_ids_continuation.shape)
+        generated_continuation = tokenizer.decode(
+            outputs_generate.sequences[0][input_ids_prompt.shape[-1]:]
+        )
+        print("Generated continuation ", generated_continuation)
+        # grab the first word's log prob (because that is one of the options in quotes)
+        # via poor man's mapping: we check if the tokens of each of the options are in the continuation
+        # and grad the respective log probs
+        relevant_tokens_num = get_relevant_generated_tokens(
+            generated_continuation,
+            tokens_map = TOKENS_MAP,
+        )
+        if relevant_tokens_num is not None:
+            relevant_tokens = outputs_generate.sequences[0][
+                input_ids_prompt.shape[-1]:(input_ids_prompt.shape[-1]+relevant_tokens_num)
+            ]
+            print("relevant token nums ", relevant_tokens_num)
+            print("relevant tokens ", relevant_tokens)
+            # get their log P
+            relevant_word_log_probs = []
+            for i in range(relevant_tokens_num):
+                relevant_word_log_probs.append(generate_logprobs[i, relevant_tokens[i]].item())
+            print("relevant word log probs ", relevant_word_log_probs)
+            # print("indices of nonzero generation scores ", (logits > -torch.inf).nonzero())        
+            print("input_ids_continuation[0][-1] ", input_ids_continuation)
+            print("outputs generate scores shape ", len(outputs_generate.scores), outputs_generate.scores[0][0].shape, outputs_generate.scores[0].shape)
+            print("Answer logit retrieved with og Jenn's method ", relevant_word_log_probs)
+            first_log_probs_from_logits = sum(relevant_word_log_probs)
+            first_mean_log_probs_from_logits = np.mean(relevant_word_log_probs)
+            print("Logits transformed to log probs ", first_log_probs_from_logits, first_mean_log_probs_from_logits)
+        else:
+            generated_continuation = "NONE"
+            first_log_probs_from_logits = None
     else:
         generated_continuation = "NONE"
         first_log_probs_from_logits = None
@@ -364,7 +371,7 @@ def get_model_predictions(
         'prob_production_distractor1_npnlg'   : gen_seq_distractor1, #probs_production_gen[2],
         'prob_production_distractor2_npnlg'   : gen_seq_distractor2, #probs_production_gen[3],
         'production_decoded': "\n".join(production_decoded),
-        
+
         'alpha_interpretation'             : alpha_interpretation,
         'scores_interpretation_target'     : scores_interpretation[0],
         'scores_interpretation_competitor' : scores_interpretation[1],
