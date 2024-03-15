@@ -17,7 +17,7 @@ Further, the directory names reflect the method of retrieving the scores.
   * the entire prompt (including the option) is passed to the forward method of the model along with masked labels. Specifically, all tokens except for the option tokens are masked with -100.
   * the loss is retrieved from this forward pass.
   * the loss corresponds to the average negative log probability of the non-masked tokens.
-* `mean_scores_generate`: the score was retrieved based on the values returned under "scores" when the HuiggingFace `.generate()` utility is used. This is based on the method used for huggingface models by Jenn. **NOTE:** this was only explored for a few base models and for the production task only. Some cells contain None values of the scores which indicates that the prediction deviated from <"option"> format. The file formatting is intended for visual inspection and also *slightly differs* (ask Polina).
+* `mean_scores_generate`: the score was retrieved based on the values returned under "scores" when the HuiggingFace `.generate()` utility is used. This is based on the method used for huggingface models by Jenn. 
   * here, the prompt *without* the option to be scored was passed as input to .generate().
   * maximally five tokens were generated and the scores of the generated sequence were retrieved.
   * here, no shifting of the logits was applied since only the scores of the completion tokens are available. 
