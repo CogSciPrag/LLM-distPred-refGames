@@ -152,7 +152,7 @@ get_model_fits_RSA <- function(rerun = FALSE) {
   
   # save everything
   save_fit_object(fit_prod_RSA, model_path, "fit_prod_RSA.RDS")
-  save_fit_object(fit_inter_RSA, model_path, "fit_iter_RSA.RDS")
+  save_fit_object(fit_inter_RSA, model_path, "fit_inter_RSA.RDS")
   save_fit_object(fit_items_prod_RSA, model_path, "fit_items_prod_RSA.RDS")
   save_fit_object(fit_items_inter_RSA, model_path, "fit_items_inter_RSA.RDS")
   saveRDS(pp_prod_RSA, file = str_c(model_path, "pp_prod_RSA.RDS"))
@@ -365,10 +365,3 @@ for (model in model_names) {
 # model_fits_13b      <- get_model_fits("LLaMA2-hf-13b", rerun = T)
 # model_fits_07b      <- get_model_fits("LLaMA2-hf-7b", rerun = T)
 # model_fits_GPT      <- get_model_fits("GPT", rerun = T)
-
-
-
-
-
-
-

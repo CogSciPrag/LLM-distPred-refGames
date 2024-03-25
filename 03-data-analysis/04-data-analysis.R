@@ -290,9 +290,6 @@ retrieve_results_model_fits <- function(model_name) {
   write_csv(sumStats_combined, file = str_c("04-analysis-results/", model_name, "sumStats.csv"))
   
   
- 
-  
-  
   #######################################################
   ## interpreting alpha-fits for item-level analysis
   #######################################################
@@ -394,6 +391,8 @@ sumStats_LLaMA2_hf_13b      <- read_csv("04-analysis-results/LLaMA2-hf-13bsumSta
 sumStats_LLaMA2_hf_7b       <- read_csv("04-analysis-results/LLaMA2-hf-7bsumStats.csv")
 sumStats_GPT                <- read_csv("04-analysis-results/GPTsumStats.csv")
 
+# table of all model results (LaTeX)
+
 # bind all sumStats together
 sumStats_all <- 
   rbind(
@@ -409,21 +408,183 @@ sumStats_all <-
   mutate(
     model = factor(model, levels = c("RSA", "GPT", 
                                      "LLaMA2-hf-7b", "LLaMA2-hf-13b", "LLaMA2-hf-70b", 
-                                     "LLaMA2-chat-hf-7b", "LLaMA2-chat-hf-13b", "LLaMA2-chat-hf-70b")),
+                                     "LLaMA2-chat-hf-7b", "LLaMA2-chat-hf-13b", "LLaMA2-chat-hf-70b"))
+  ) |> 
+    
+  # specify levels for 'backend models'
+  mutate(backend = case_when(
+    model == "LLaMA2-hf-7b" ~ "L2-hf-7b",
+    model == "LLaMA2-hf-13b" ~ "L2-hf-13b",
+    model == "LLaMA2-hf-70b" ~ "L2-hf-70b",
+    model == "LLaMA2-chat-hf-7b" ~ "L2-chat-7b",
+    model == "LLaMA2-chat-hf-13b" ~ "L2-chat-13b",
+    model == "LLaMA2-chat-hf-70b" ~ "L2-chat-70b",
+    T ~ model
+  )) |> 
+  mutate(model = factor(backend, 
+                          levels = c(
+                            "RSA", "GPT", 
+                            "L2-hf-7b", "L2-hf-13b", "L2-hf-70b", 
+                            "L2-chat-7b", "L2-chat-13b", "L2-chat-70b"
+                            ))) |> 
+  mutate(
     condition = factor(condition, levels = c("prd.", "int.")),
     method = factor(method, levels = c("avg. scores", "avg. prob.", "avg. WTA", "---")),
     data = factor(data, levels = c("item", "cond."))
   ) |> 
   arrange(model, data, method, condition) |> 
+  select(-backend) |> 
   mutate(
     ` ` = ifelse(is.na(significant), "!", "")
   ) |> 
   select(' ', everything()) |> 
   select(-significant)
 
-
 # print in LaTeX format
 capture.output(print(xtable::xtable(data.frame(sumStats_all), include.rownames = FALSE)))|>
   str_replace_all(pattern = "_alpha", "") |>
   str_replace_all(pattern = "_epsilon", "") |>
   paste(collapse = "\n") |> cat()
+
+##################################################
+# visual posterior predictive checks 
+# for all LLaMA models (condensed version)
+##################################################
+
+# extract data for a given model
+extract_PPC_data <- function(backend, backend_name) {
+  PPC_data = rbind(
+    backend$pp_prod_avg_scores,
+    backend$pp_prod_avg_probs,
+    backend$pp_prod_WTA,
+    backend$pp_prod_RSA,
+    backend$pp_inter_avg_scores,
+    backend$pp_inter_avg_probs,
+    backend$pp_inter_WTA,
+    backend$pp_inter_RSA
+  ) |> select(-row) |> 
+    mutate(model = case_when(model == "avg. probabilities" ~ "avg. prob.", T ~ model)) |> 
+    mutate(
+      condition = factor(condition, levels = c("production", "interpretation")),
+      model     = factor(model, levels = rev(c("avg. scores", "avg. prob.","avg. WTA", "RSA"))),
+      backend   = backend_name
+    )  
+  return(PPC_data)
+}
+
+# assemble data for plotting
+vPPC_data_all_models <- rbind(
+  extract_PPC_data(GPT, "GPT"),
+  extract_PPC_data(RSA, "RSA"),
+  extract_PPC_data(LLaMA2_chat_hf_70b, "LLaMA2-chat-hf-70b"),
+  extract_PPC_data(LLaMA2_chat_hf_13b, "LLaMA2-chat-hf-13b"),
+  extract_PPC_data(LLaMA2_chat_hf_7b, "LLaMA2-chat-hf-7b"),
+  extract_PPC_data(LLaMA2_hf_70b, "LLaMA2-hf-70b"),
+  extract_PPC_data(LLaMA2_hf_13b, "LLaMA2-hf-13b"),
+  extract_PPC_data(LLaMA2_hf_7b, "LLaMA2-hf-7b")
+) |> 
+  # specify levels for 'backend models'
+  mutate(backend = case_when(
+    backend == "LLaMA2-hf-7b" ~ "L2-hf-7b",
+    backend == "LLaMA2-hf-13b" ~ "L2-hf-13b",
+    backend == "LLaMA2-hf-70b" ~ "L2-hf-70b",
+    backend == "LLaMA2-chat-hf-7b" ~ "L2-chat-7b",
+    backend == "LLaMA2-chat-hf-13b" ~ "L2-chat-13b",
+    backend == "LLaMA2-chat-hf-70b" ~ "L2-chat-70b",
+    T ~ backend
+  )) |> 
+  mutate(backend = factor(backend, 
+                         levels = c(
+                           "L2-hf-7b", "L2-hf-13b", "L2-hf-70b", 
+                           "L2-chat-7b", "L2-chat-13b", "L2-chat-70b",
+                           "GPT", "RSA"))) |> 
+  # norm to human data
+  mutate(
+    `|95%` = `|95%` - observed,
+    mean   =  mean  - observed,
+    `95%|` = `95%|` - observed
+  ) |> 
+  mutate(
+    response_short = case_when(
+      response == "target"     ~ "trgt",
+      response == "competitor" ~ "cmpt",
+      response == "distractor" ~ "dstr"
+    ),
+    condition_short = case_when(
+      condition == "production"     ~ "prd_",
+      condition == "interpretation" ~ "int_"
+    ),
+    cond_resp_shrt = str_c(condition_short, response_short),
+    cond_resp_short = factor(cond_resp_shrt, levels = c("prd_trgt", "prd_cmpt", "prd_dstr", "int_trgt", "int_cmpt", "int_dstr"))
+  )
+  
+# make the plot
+vPPC_data_all_models |> 
+  filter(model != "RSA") |>
+  filter(backend != "GPT") |>
+  ggplot() +
+  geom_hline(aes(yintercept = 0), color = project_colors[3]) +
+  geom_pointrange(aes(x = cond_resp_short, y = mean, ymin = `|95%`, ymax = `95%|`, shape = response, 
+                      group = response, color = condition), 
+                  position = position_dodge(width = 0.75), size = 0.6, linewidth = 0.8) +
+  facet_grid(model ~ backend, scales = "free") +
+  ylab("") + xlab("") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.box = "horizontal")
+
+# save plot to file
+ggsave("../04-paper/00-pics/vPPC_all_LLaMA_models.pdf", width = 12, height = 6, scale = 1.0)
+
+
+##################################################
+##  inspecting model fit diagnostics
+##################################################
+model = GPT
+
+extract_main_diagnostics <- function(model) {
+  message("Extracting diagnostics for model: ", model$model_name)
+  diagnostics <- tibble(
+    model = model$name_name,
+    data  = c("item", "item", "condition", "condition", "condition", "condition", "condition", "condition"),
+    method = c("---", "---", "avg. scores", "avg. scores", "avg. prob.", "avg. prob.", "avg. WTA", "avg. WTA"),
+    condition = c("production", "interpretation", "production", "interpretation", 
+                  "production", "interpretation", "production", "interpretation"),
+    max_rhat = c(model$fit_items_prod$summary() |> filter(variable != "at_least_as_extreme") |>  pull(rhat) |> max(),
+                 model$fit_items_inter$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_prod_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_inter_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_prod_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_inter_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_prod_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
+                 model$fit_inter_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max() ),
+    min_ess  = c(model$fit_items_prod$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_items_inter$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_prod_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_inter_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_prod_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_inter_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_prod_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
+                 model$fit_inter_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min())
+  ) 
+  
+  return(diagnostics)
+  
+}
+
+main_diagnostics <- 
+  rbind(
+    print_main_diagnostics(GPT),
+    print_main_diagnostics(LLaMA2_chat_hf_70b),
+    print_main_diagnostics(LLaMA2_chat_hf_13b),
+    print_main_diagnostics(LLaMA2_chat_hf_7b),
+    print_main_diagnostics(LLaMA2_hf_70b),
+    print_main_diagnostics(LLaMA2_hf_13b),
+    print_main_diagnostics(LLaMA2_hf_7b),
+    print_main_diagnostics(RSA)    
+  )
+
+
+
+
+
+

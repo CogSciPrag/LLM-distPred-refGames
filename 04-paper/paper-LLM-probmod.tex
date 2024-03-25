@@ -435,31 +435,30 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
 
 \begin{table}[t]
 \centering
-\begin{tabular}{llllcrlcrcl}
+\begin{tabular}{cllllcrlcrlc}
   \toprule
   &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
-  data & model & condition & $|$95\%\ & mean\ & 95\%$|$\ & $|$95\%\ & mean\ & 95\%$|$\ & Bpppv & \\
+  & model & data & method & condition & |95\% & mean\ & 95\%| & |95\% & mean\ & 95\%| & Bpppv \\
   \midrule
-
-  item-level  & RSA                & production     & 2.62 & 3.13 & 3.69 & 0.08 & 0.12 & 0.16 & 0.29 &  \\
-  item-level  & RSA                & interpretation & 0.21 & 0.67 & 1.08 & 0.08 & 0.14 & 0.19 & 0.21 &  \\
-  item-level  & LLM                & production     & 0.15 & 0.19 & 0.24 & 0.00 & 0.07 & 0.16 & 0.00 & * \\
-  item-level  & LLM                & interpretation & 0.08 & 0.11 & 0.14 & 0.00 & 0.09 & 0.22 & 0.00 & * \\
-  cond.-level & RSA                & production     & 2.62 & 3.14 & 3.70 & 0.08 & 0.12 & 0.17 & 0.50 &  \\
-  cond.-level & RSA                & interpretation & 0.27 & 0.68 & 1.13 & 0.09 & 0.14 & 0.19 & 0.51 &  \\
-  cond.-level & avg. scores        & production     & 0.19 & 0.22 & 0.25 & 0.00 & 0.03 & 0.08 & 0.05 &  \\
-  cond.-level & avg. scores        & interpretation & 0.15 & 0.18 & 0.20 & 0.00 & 0.02 & 0.05 & 0.00 & * \\
-  cond.-level & avg. probabilities & production     & 0.86 & 1.03 & 1.22 & 0.08 & 0.12 & 0.17 & 0.47 &  \\
-  cond.-level & avg. probabilities & interpretation & 0.36 & 0.46 & 0.59 & 0.00 & 0.04 & 0.10 & 0.00 & * \\
-  cond.-level & avg. WTA           & production     & 0.86 & 1.04 & 1.22 & 0.08 & 0.12 & 0.17 & 0.48 &  \\
-  cond.-level & avg. WTA           & interpretation & 0.15 & 0.37 & 0.58 & 0.03 & 0.12 & 0.18 & 0.49 &  \\
-
+  ! & RSA & item  & ---         & prd. & 2.62 & 3.13 & 3.69  & 0.08 & 0.12 & 0.16 & 0.29 \\
+  ! & RSA & item  & ---         & int. & 0.21 & 0.67 & 1.08  & 0.08 & 0.14 & 0.19 & 0.21 \\
+  ! & RSA & cond. & ---         & prd. & 2.62 & 3.14 & 3.70  & 0.08 & 0.12 & 0.17 & 0.50 \\
+  ! & RSA & cond. & ---         & int. & 0.27 & 0.68 & 1.13  & 0.09 & 0.14 & 0.19 & 0.51 \\ \addlinespace[0.5em]
+    & GPT & item  & ---         & prd. & 0.40 & 0.51 & 0.62  & 0.07 & 0.12 & 0.17 & 0.00 \\
+    & GPT & item  & ---         & int. & 0.52 & 0.66 & 0.82  & 0.00 & 0.05 & 0.15 & 0.00 \\
+  ! & GPT & cond. & avg. scores & prd. & 0.61 & 0.74 & 0.87  & 0.08 & 0.12 & 0.17 & 0.49 \\
+    & GPT & cond. & avg. scores & int. & 0.99 & 1.17 & 1.35  & 0.00 & 0.02 & 0.06 & 0.00 \\
+  ! & GPT & cond. & avg. prob.  & prd. & 0.81 & 5.00 & 14.58 & 0.08 & 0.12 & 0.16 & 0.61 \\
+    & GPT & cond. & avg. prob.  & int. & 1.36 & 2.04 & 2.67  & 0.00 & 0.03 & 0.08 & 0.00 \\
+  ! & GPT & cond. & avg. WTA    & prd. & 0.86 & 1.04 & 1.22  & 0.08 & 0.12 & 0.17 & 0.48 \\
+  ! & GPT & cond. & avg. WTA    & int. & 0.16 & 0.43 & 0.69  & 0.06 & 0.13 & 0.19 & 0.50 \\
    \bottomrule \\
 \end{tabular}
 \caption{
   Summary statistics for model fits.
-  Columns show the means and 95\% credible intervals for posterior samples for each parameter, as well as the Bayesian posterior predictive $p$-values for each model, condition and data level.
-  Asterisks mark Bppp-values no higher than $0.05$, flagging relative inability to capture the structure of the data.
+  Columns show the means and 95\% credible intervals for posterior samples for each parameter, as well as the Bayesian posterior predictive $p$-values for each model, data type (item- or condition-level data), aggregation method (for condition-level data), and condition.
+  The final column shows the Bayesian posterior predictive $p$-values.
+  The first columns marks whether the row's Bayesian posterior predictive $p$-values are higher / lower than $0.05$, flagging relative inability to capture the structure of the data.
 }
 \label{tab:sumStats}
 \end{table}
@@ -742,6 +741,85 @@ This work may therefore serve as starting point for a wider investigation of mor
 
 \newpage
 \appendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results from LLaMA2}
+\label{sec:LLaMA-results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.9\textwidth]{00-pics/vPPC_all_LLaMA_models.pdf}
+  \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies.}
+  \label{fig:LLaMA-results-vPPC}
+\end{figure}
+
+
+\begin{table}[t]
+\centering
+\begin{tabular}{cllllcrlcrlc}
+  \toprule
+  &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
+  & model & data & method & condition & |95\% & mean\ & 95\%| & |95\% & mean\ & 95\%| & Bpppv \\
+  \midrule
+
+    & L2-hf-7b    & item  & ---         & prd. & 1.09  & 1.30   & 1.51   & 0.00 & 0.02 & 0.06 & 0.00 \\
+    & L2-hf-7b    & item  & ---         & int. & 1.90  & 2.52   & 3.13   & 0.00 & 0.04 & 0.12 & 0.00 \\
+  ! & L2-hf-7b    & cond. & avg. scores & prd. & 9.65  & 11.50  & 13.62  & 0.08 & 0.12 & 0.16 & 0.48 \\
+    & L2-hf-7b    & cond. & avg. scores & int. & 6.80  & 7.96   & 9.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
+    & L2-hf-7b    & cond. & avg. prob.  & prd. & 4.98  & 16.44  & 33.06  & 0.06 & 0.10 & 0.13 & 0.00 \\
+    & L2-hf-7b    & cond. & avg. prob.  & int. & 20.06 & 79.30  & 163.94 & 0.00 & 0.01 & 0.04 & 0.00 \\
+  ! & L2-hf-7b    & cond. & avg. WTA    & prd. & 4.17  & 4.96   & 5.85   & 0.07 & 0.12 & 0.16 & 0.48 \\
+    & L2-hf-7b    & cond. & avg. WTA    & int. & 0.87  & 1.02   & 1.18   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
+    & L2-hf-13b   & item  & ---         & prd. & 1.37  & 1.91   & 2.47   & 0.00 & 0.07 & 0.12 & 0.00 \\
+    & L2-hf-13b   & item  & ---         & int. & 2.13  & 2.90   & 3.69   & 0.00 & 0.05 & 0.14 & 0.00 \\
+  ! & L2-hf-13b   & cond. & avg. scores & prd. & 13.73 & 16.32  & 19.10  & 0.08 & 0.12 & 0.16 & 0.50 \\
+    & L2-hf-13b   & cond. & avg. scores & int. & 7.73  & 9.11   & 10.42  & 0.00 & 0.02 & 0.05 & 0.00 \\
+    & L2-hf-13b   & cond. & avg. prob.  & prd. & 69.84 & 185.80 & 360.44 & 0.06 & 0.09 & 0.13 & 0.00 \\
+    & L2-hf-13b   & cond. & avg. prob.  & int. & 13.63 & 39.72  & 88.28  & 0.00 & 0.02 & 0.05 & 0.00 \\
+  ! & L2-hf-13b   & cond. & avg. WTA    & prd. & 2.28  & 2.70   & 3.18   & 0.08 & 0.12 & 0.16 & 0.51 \\
+    & L2-hf-13b   & cond. & avg. WTA    & int. & 0.78  & 0.94   & 1.12   & 0.00 & 0.03 & 0.07 & 0.03 \\ \addlinespace[0.5em]
+    & L2-hf-70b   & item  & ---         & prd. & 1.53  & 1.86   & 2.22   & 0.00 & 0.03 & 0.07 & 0.00 \\
+    & L2-hf-70b   & item  & ---         & int. & 3.20  & 4.01   & 4.74   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  ! & L2-hf-70b   & cond. & avg. scores & prd. & 44.57 & 53.17  & 62.44  & 0.08 & 0.12 & 0.17 & 0.48 \\
+    & L2-hf-70b   & cond. & avg. scores & int. & 6.86  & 8.14   & 9.32   & 0.00 & 0.02 & 0.05 & 0.00 \\
+    & L2-hf-70b   & cond. & avg. prob.  & prd. & 10.51 & 26.59  & 45.73  & 0.07 & 0.10 & 0.14 & 0.00 \\
+    & L2-hf-70b   & cond. & avg. prob.  & int. & 10.86 & 23.63  & 42.16  & 0.00 & 0.03 & 0.09 & 0.00 \\
+  ! & L2-hf-70b   & cond. & avg. WTA    & prd. & 5.88  & 7.03   & 8.19   & 0.08 & 0.12 & 0.17 & 0.50 \\
+    & L2-hf-70b   & cond. & avg. WTA    & int. & 0.55  & 0.68   & 0.81   & 0.00 & 0.03 & 0.07 & 0.04 \\ \addlinespace[0.5em]
+    & L2-chat-7b  & item  & ---         & prd. & 0.34  & 0.41   & 0.49   & 0.00 & 0.03 & 0.07 & 0.00 \\
+    & L2-chat-7b  & item  & ---         & int. & 0.79  & 1.05   & 1.34   & 0.00 & 0.05 & 0.15 & 0.00 \\
+  ! & L2-chat-7b  & cond. & avg. scores & prd. & 58.47 & 69.64  & 81.79  & 0.08 & 0.12 & 0.16 & 0.48 \\
+    & L2-chat-7b  & cond. & avg. scores & int. & 2.03  & 2.37   & 2.73   & 0.00 & 0.02 & 0.05 & 0.00 \\
+    & L2-chat-7b  & cond. & avg. prob.  & prd. & 8.05  & 27.26  & 55.30  & 0.07 & 0.11 & 0.15 & 0.00 \\
+    & L2-chat-7b  & cond. & avg. prob.  & int. & 2.86  & 19.24  & 51.41  & 0.00 & 0.01 & 0.04 & 0.00 \\
+  ! & L2-chat-7b  & cond. & avg. WTA    & prd. & 12.18 & 14.70  & 17.21  & 0.08 & 0.12 & 0.16 & 0.50 \\
+    & L2-chat-7b  & cond. & avg. WTA    & int. & 0.86  & 1.01   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
+    & L2-chat-13b & item  & ---         & prd. & 0.36  & 0.44   & 0.53   & 0.00 & 0.03 & 0.08 & 0.00 \\
+    & L2-chat-13b & item  & ---         & int. & 0.68  & 0.90   & 1.11   & 0.00 & 0.05 & 0.13 & 0.00 \\
+  ! & L2-chat-13b & cond. & avg. scores & prd. & 5.56  & 6.63   & 7.76   & 0.08 & 0.12 & 0.16 & 0.49 \\
+    & L2-chat-13b & cond. & avg. scores & int. & 1.70  & 2.05   & 2.40   & 0.00 & 0.02 & 0.06 & 0.01 \\
+    & L2-chat-13b & cond. & avg. prob.  & prd. & 3.90  & 22.25  & 74.12  & 0.06 & 0.10 & 0.14 & 0.00 \\
+  ! & L2-chat-13b & cond. & avg. prob.  & int. & 2.85  & 4.70   & 7.01   & 0.00 & 0.03 & 0.07 & 0.08 \\
+  ! & L2-chat-13b & cond. & avg. WTA    & prd. & 4.28  & 5.11   & 5.99   & 0.07 & 0.12 & 0.16 & 0.49 \\
+  ! & L2-chat-13b & cond. & avg. WTA    & int. & 0.15  & 0.32   & 0.51   & 0.02 & 0.11 & 0.18 & 0.50 \\ \addlinespace[0.5em]
+    & L2-chat-70b & item  & ---         & prd. & 0.28  & 0.35   & 0.42   & 0.00 & 0.03 & 0.08 & 0.00 \\
+    & L2-chat-70b & item  & ---         & int. & 1.03  & 1.24   & 1.47   & 0.00 & 0.03 & 0.08 & 0.00 \\
+    & L2-chat-70b & cond. & avg. scores & prd. & 0.40  & 0.55   & 0.74   & 0.00 & 0.04 & 0.10 & 0.00 \\
+  ! & L2-chat-70b & cond. & avg. scores & int. & 1.91  & 2.37   & 2.89   & 0.00 & 0.03 & 0.08 & 0.16 \\
+    & L2-chat-70b & cond. & avg. prob.  & prd. & 0.43  & 0.66   & 0.96   & 0.00 & 0.04 & 0.10 & 0.00 \\
+    & L2-chat-70b & cond. & avg. prob.  & int. & 2.82  & 5.21   & 8.43   & 0.00 & 0.01 & 0.04 & 0.02 \\
+    & L2-chat-70b & cond. & avg. WTA    & prd. & 0.14  & 0.21   & 0.35   & 0.00 & 0.06 & 0.13 & 0.00 \\
+    & L2-chat-70b & cond. & avg. WTA    & int. & 0.85  & 1.00   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
+
+   \bottomrule \\
+\end{tabular}
+\caption{
+  Summary statistics for model fits based on LLaMA2 backends.
+  The information shown is the same as in Table~\ref{tab:sumStats}.
+}
+\label{tab:sumStats-LLaMA2}
+\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

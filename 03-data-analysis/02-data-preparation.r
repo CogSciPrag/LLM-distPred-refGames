@@ -1,4 +1,5 @@
 source('00-premable.r')
+data_folder <- '../02-data/refgame/with_quotes/mean_scores_forward/'
 
 ##################################################
 ## helper functions 
@@ -27,7 +28,7 @@ wta_row <- function(matrix_of_scores) {
 
 get_prepped_data_for_model <- function(model_name, results_file) {
   
-  d_raw <- read_csv('../02-data/data-raw-human.csv') |> 
+  d_raw <- read_csv(str_c(data_folder, 'data-raw-human.csv')) |> 
     select(- c(
       "experiment_duration", "experiment_end_time", "experiment_start_time",
       "prolific_pid", "prolific_session_id", "prolific_study_id"  )) |> 
@@ -181,7 +182,8 @@ get_prepped_data_for_model <- function(model_name, results_file) {
     filter(condition == "production") |> 
     select(submission_id, trial_nr, item, condition, starts_with("scores_produ")) |> 
     mutate(scores_production_distractor = 
-             log(exp(scores_production_distractor1) + exp(scores_production_distractor2))) |> 
+             scores_production_distractor1 + scores_production_distractor2) |> 
+             # log(exp(scores_production_distractor1) + exp(scores_production_distractor2))) |> 
     select(-scores_production_distractor1, -scores_production_distractor2)
   
   # narrow- and intermediate-scope predictions for production
@@ -239,7 +241,8 @@ get_prepped_data_for_model <- function(model_name, results_file) {
     filter(condition == "production") |> 
     select(item, starts_with("scores_produ")) |> 
     mutate(scores_production_distractor = 
-             log(exp(scores_production_distractor1) + exp(scores_production_distractor2))) |> 
+             scores_production_distractor1 + scores_production_distractor2) |> 
+             # log(exp(scores_production_distractor1) + exp(scores_production_distractor2))) |> 
     select(-scores_production_distractor1, -scores_production_distractor2) |> 
     group_by(item) |> 
     mutate(n = n()) |>  
@@ -323,10 +326,29 @@ get_prepped_data_for_model <- function(model_name, results_file) {
   
 }
 
-get_prepped_data_for_model("LLaMA2-chat-hf-70b", "../02-data/results_Llama-2-70b-chat-hf.csv")
-get_prepped_data_for_model("LLaMA2-chat-hf-13b", "../02-data/results_Llama-2-13b-chat-hf.csv")
-get_prepped_data_for_model("LLaMA2-chat-hf-7b" , "../02-data/results_Llama-2-7b-chat-hf.csv")
-get_prepped_data_for_model("LLaMA2-hf-70b"     , "../02-data/results_Llama-2-70b-hf.csv")
-get_prepped_data_for_model("LLaMA2-hf-13b"     , "../02-data/results_Llama-2-13b-hf.csv")
-get_prepped_data_for_model("LLaMA2-hf-7b"      , "../02-data/results_Llama-2-7b-hf.csv")
-get_prepped_data_for_model("GPT"               , "../02-data/results_GPT.csv")
+get_prepped_data_for_model("LLaMA2-chat-hf-70b", str_c(data_folder, "results_Llama-2-70b-chat-hf.csv"))
+get_prepped_data_for_model("LLaMA2-chat-hf-13b", str_c(data_folder, "results_Llama-2-13b-chat-hf.csv"))
+get_prepped_data_for_model("LLaMA2-chat-hf-7b" , str_c(data_folder, "results_Llama-2-7b-chat-hf.csv"))
+get_prepped_data_for_model("LLaMA2-hf-70b"     , str_c(data_folder, "results_Llama-2-70b-hf.csv"))
+get_prepped_data_for_model("LLaMA2-hf-13b"     , str_c(data_folder, "results_Llama-2-13b-hf.csv"))
+get_prepped_data_for_model("LLaMA2-hf-7b"      , str_c(data_folder, "results_Llama-2-7b-hf.csv"))
+get_prepped_data_for_model("GPT"               , str_c(data_folder, "results_GPT.csv"))
+
+# inspect prepped data
+model_prep_70b_chat <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-chat-hf-70b", ".rds"))
+model_prep_13b_chat <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-chat-hf-13b", ".rds"))
+model_prep_07b_chat <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-chat-hf-7b", ".rds"))
+model_prep_70b      <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-hf-70b", ".rds"))
+model_prep_13b      <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-hf-13b", ".rds"))
+model_prep_07b      <- readRDS(str_c("02-prepped-data/predictions-", "LLaMA2-hf-7b", ".rds"))
+model_prep_GPT      <- readRDS(str_c("02-prepped-data/predictions-", "GPT", ".rds"))
+
+model_prep_70b_chat$LLM_pred_prod_WTA
+model_prep_13b_chat$LLM_pred_prod_WTA
+model_prep_07b_chat$LLM_pred_prod_WTA
+model_prep_70b$LLM_pred_prod_WTA     
+model_prep_13b$LLM_pred_prod_WTA     
+model_prep_07b$LLM_pred_prod_WTA     
+model_prep_GPT$LLM_pred_prod_WTA     
+
+

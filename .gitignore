@@ -1,8 +1,7 @@
-*/DS_Store
-*/.DS_Store
-*/.auctex-auto
-*/.Rhistory
-/.DS_Store
+.DS_Store
+**/.DS_Store
+**/.auctex-auto
+**/.Rhistory
 *.gz
 *.xml
 *.log
