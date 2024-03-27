@@ -540,49 +540,57 @@ ggsave("../04-paper/00-pics/vPPC_all_LLaMA_models.pdf", width = 12, height = 6, 
 ##  inspecting model fit diagnostics
 ##################################################
 model = GPT
+model = LLaMA2_hf_13b
 
 extract_main_diagnostics <- function(model) {
   message("Extracting diagnostics for model: ", model$model_name)
+  
+  get_rhat_ess <- function(fit) {
+    summary <- fit$summary()
+    tibble(max_rhat = summary |> filter(variable != "at_least_as_extreme") |>  pull(rhat) |> max(),
+           min_ess  = summary |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min())
+  }
+  
+  fits_ordered <- c(
+    model$fit_items_prod,
+    model$fit_items_inter,
+    model$fit_prod_avg_scores,
+    model$fit_inter_avg_scores,
+    model$fit_prod_avg_probs,
+    model$fit_inter_avg_probs,
+    model$fit_prod_WTA,
+    model$fit_inter_WTA  
+  )
+  
+  results <- map_df(fits_ordered, function(fit) get_rhat_ess(fit))
+  
   diagnostics <- tibble(
-    model = model$name_name,
+    model = model$model_name,
     data  = c("item", "item", "condition", "condition", "condition", "condition", "condition", "condition"),
     method = c("---", "---", "avg. scores", "avg. scores", "avg. prob.", "avg. prob.", "avg. WTA", "avg. WTA"),
     condition = c("production", "interpretation", "production", "interpretation", 
-                  "production", "interpretation", "production", "interpretation"),
-    max_rhat = c(model$fit_items_prod$summary() |> filter(variable != "at_least_as_extreme") |>  pull(rhat) |> max(),
-                 model$fit_items_inter$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_prod_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_inter_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_prod_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_inter_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_prod_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max(),
-                 model$fit_inter_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(rhat) |> max() ),
-    min_ess  = c(model$fit_items_prod$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_items_inter$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_prod_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_inter_avg_scores$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_prod_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_inter_avg_probs$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_prod_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min(),
-                 model$fit_inter_WTA$summary() |> filter(variable != "at_least_as_extreme") |> pull(ess_bulk) |> min())
-  ) 
-  
+                  "production", "interpretation", "production", "interpretation")) |> 
+    bind_cols(results)
+    
   return(diagnostics)
   
 }
 
 main_diagnostics <- 
   rbind(
-    print_main_diagnostics(GPT),
-    print_main_diagnostics(LLaMA2_chat_hf_70b),
-    print_main_diagnostics(LLaMA2_chat_hf_13b),
-    print_main_diagnostics(LLaMA2_chat_hf_7b),
-    print_main_diagnostics(LLaMA2_hf_70b),
-    print_main_diagnostics(LLaMA2_hf_13b),
-    print_main_diagnostics(LLaMA2_hf_7b),
-    print_main_diagnostics(RSA)    
+    extract_main_diagnostics(GPT),
+    extract_main_diagnostics(LLaMA2_chat_hf_70b),
+    extract_main_diagnostics(LLaMA2_chat_hf_13b),
+    extract_main_diagnostics(LLaMA2_chat_hf_7b),
+    extract_main_diagnostics(LLaMA2_hf_70b),
+    extract_main_diagnostics(LLaMA2_hf_13b),
+    extract_main_diagnostics(LLaMA2_hf_7b)
   )
 
+# fits with "LLaMA2-hf-13b" for condition-level data and average-probs aggregation
+# has some NAs due to predictions at ceiling for some items, but this is not indicative
+# of a systematic failure of the HMC inference (inferences for some parameters are 
+# "uncertainty-less" clamped to 1)
 
 
 
