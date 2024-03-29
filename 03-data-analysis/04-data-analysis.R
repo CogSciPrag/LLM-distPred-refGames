@@ -14,7 +14,7 @@ model_names = c(
   "GPT"
 )
 
-model_name = model_names[4]
+model_name = model_names[7]
 
 retrieve_results_model_fits <- function(model_name) {
 
@@ -310,8 +310,10 @@ retrieve_results_model_fits <- function(model_name) {
       select(`|95%`,  mean, `95%|`) |> 
       as.numeric()
     
+    xMax <- sumStats[3]+ 0.1*sumStats[2]
+    
     plot_data <- tibble(
-      alpha = c(sumStats,seq(0,0.5, length.out = 1000)),
+      alpha = c(sumStats,seq(0, xMax, length.out = 1000)),
       mean_target_prob = map_dbl(alpha, function(x) mean_target_prob(x, current_condition))
     ) 
     
@@ -330,10 +332,10 @@ retrieve_results_model_fits <- function(model_name) {
         data = filter(plot_data, alpha >= sumStats[1] & alpha <= sumStats[3]), 
         fill = "gray", alpha = 0.5) +
       geom_polygon(data = polygon_df, fill = "gray", alpha = 0.5) +
-      geom_segment(aes(y = 1/3, yend = 1/3, x=0, xend = 0.5), 
+      geom_segment(aes(y = 1/3, yend = 1/3, x=0, xend = xMax), 
                    color = project_colors[1], 
                    linetype = "dotted", size = 1.1) +
-      geom_segment(aes(y = 1, yend = 1, x=0, xend = 0.5), 
+      geom_segment(aes(y = 1, yend = 1, x=0, xend = xMax), 
                    color = project_colors[4], 
                    linetype = "dotted", size = 1.1) +
       geom_line(size = 1.5) +
