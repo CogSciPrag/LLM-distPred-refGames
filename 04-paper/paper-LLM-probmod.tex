@@ -132,7 +132,7 @@ As this point is crucial for our investigation, the following elaborates briefly
 \begin{figure}[t]
   \centering
   \includegraphics[width = 0.8\textwidth]{00-pics/condition-item-level-prediction.png}
-  \caption{Schematic representation of key conceptual differences between different types of statistical models.}
+  \caption{Schematic representation of key conceptual differences between different types of statistical models. \mf{picture is cropped}}
   \label{fig:stats-model-types}
 \end{figure}
 
@@ -715,29 +715,30 @@ Additionally, we also find variability in which method of aggregation works well
 \label{sec:conclusion}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-While the common practice in evaluating the capabilities of LLMs is based on accuracy averaged over large collections of data, this work took the alternative route to explore what we learn if we subjected LLMs to the same routines and strong demands on distributional quality of fit to human data as we normally do for probabilistic cognitive models.
-Taking this perspective, a main contribution of this paper is methodological, showing how statistical model criticism can be used for LLMs in the first place, and, more specifically, how it can be insightful in the detailed assessment of how LLMs might or might not be able to predict human data at the degree of accuracy that we would normally aspire for when dealing with explanatory statistical models in cognitive science.
+While the common practice in evaluating the capabilities of LLMs is based on accuracy averaged over large collections of data, this work took the alternative route to explore what we learn if we subjected LLMs to the same routines and strong demands on distributional quality of fit to human data as we normally do for statistical or probabilistic cognitive models.
+Knowledge of the adequacy of LLMs' full distributional predictions for simple tasks that require human like judgement or decisions is important to gauge in how far LLMs can be trusted to provide such information in applications such as hybrid, neuro-symbolic models \mf{refs}.
+A main contribution of this paper is methodological, showing how statistical model criticism can be used for LLMs in the first place, and, more specifically, how it can be insightful in the detailed assessment of how LLMs might or might not be able to predict human data at the degree of accuracy that we would normally aspire for when dealing with explanatory statistical models in cognitive science.
 Applying this comparative approach to a minimal, but non-trivial data set, we find that the LLM predictions on a per-item level predict variance that is not attested in the human data.
 From several candidate predictor measures for aggregate condition-level data, only one was not refuted by the human data, but this was one that relied on the empirically implausible WTA-strategy at the item-level, incidentally the same strategy that is commonly used in accuracy-based benchmark testing \citep{srivastava2023-BIGbench}.
 
 \paragraph{Explanatory power.}
-The comparison of LLMs and PCMs led to a simple but consequential observation, namely that the atomic predictions or LLMs are at the item level, while explanatory PCMs usually make predictions at a more abstract level of conceptualization, similar to the level of an experimental condition.
-This is one sense in which LLMs may be felt to be less, or not at all, explanatory.
-They do not offer, at least not directly, a human-comprehensible compression of reality into a \emph{kind} of response pattern, over and beyond making a predicting for each particular situation.
+A basic observation brought to the foreground by our approach is that LLMs' atomic predictions are for individual items and that some aggregation method is needed to derive more abstract, condition- or task-level predictions.
+This is potential one sense in which LLMs may be felt to be less, or not at all, explanatory.
+They do not offer, at least not directly, a human-comprehensible compression of reality into a \emph{kind} of response pattern, over and beyond making a prediction for each particular situation.
 As this kind of compression is arguably important for a sense of understanding \citep{Dellsen2020:Beyond-Explanat,Grimm2021:Understanding}, the direct comparison of LLMs with common practices in experimental psychology and with probabilistic cognitive models, provides an interesting perspective on why LLMs are often felt to be lacking in explanatory power.
 
 This perspective on the explanatory role of LLMs goes beyond the factors of performance, indirect support and parsimony identified by \citet{SortNoopDeemtervan-Deemter2023:Dimensions-of-E}.
-It is also subtly different from considerations of an LLMs ability to generalize \citep{HupkesDankers2020:Compositionalit}.
+It is also subtly different from considerations of an LLM's ability to generalize \citep{HupkesDankers2020:Compositionalit}.
 It rather suggests that \emph{transferability} is a dimension to ``explanatory power'' that is important as well.
 Imagine that models $M$ and $M'$ have been designed for and trained on data from a situation $S$, but need to be applied to a different situation $T$.
-Assume that for model $M$ the only way to make prediction for $T$ is to collect data pertaining to $T$, and either retrain or fine-tune the model.
-In contrast, for model $M'$ can make predictions for $T$ without novel data collection by recognizing a meaningful difference between $S$ and $T$ and consequently manually changing parameter values or model-internal mechanics to accommodate for this change.
+Assume that for model $M$ the only way to make predictions for $T$ is to collect data pertaining to $T$, and either retrain or fine-tune the model.
+In contrast, model $M'$ can make predictions for $T$ without novel data collection by recognizing a meaningful difference between $S$ and $T$ and consequently manually changing parameter values or model-internal mechanics to accommodate for this change.
 In that case, model $M'$ would be more transferable than model $M$.
 For example, if we change the experimental setting for a reference game to consist of data from a special population, such as very young children or language-impaired adults, a potentially reasonable architectural change to a model like the RSA model is to consider differences in the sets of alternative utterances for the speaker \citep[e.g.][]{Noveck2001:When-Children-a}.
-Even though this is only a vague explication of a notion of transferability, it suffices to corroborate the intuition that models like PCMs, which are designed to operate at a higher level of conceptual abstraction, will often appear more transferable than models like LLMs, which make predictions not for \emph{kinds} of situations but for \emph{particular} situations.
+Even though this is only a vague explication of a notion of transferability, it suffices to corroborate the intuition that probabilistic cognitive models like the Rational Speech Act model, which are designed to operate at a higher level of conceptual abstraction, will often appear more transferable than models like LLMs, which make predictions not for \emph{kinds} of situations but for \emph{particular} situations.
 Whether any given model's transfer-ability is correct, is an orthogonal empirical question.
 It is also an empirical question, exactly to which extent and in which areas LLMs are (not) transferable, especially if we consider prompting a transfer strategy \citep{LiuLiu2022:Generated-Knowl,XieRaghunathan2022:An-Explanation-}.
-In any case, the comparison between LLMs and PCMs started here suggests systematic research into the transfer-ability and explanatory value of LLMs, e.g., by prompting strategies that are empirically insightful or by their use in composite neuro-symbolic models that implement theoretically-meaningful conceptual differences between types of situations.
+In any case, the comparison between LLMs and other statistical or probabilistic cognitive models started here suggests systematic research into the transfer-ability and explanatory value of LLMs, e.g., by prompting strategies that are empirically insightful or by their use in composite neuro-symbolic models that implement theoretically-meaningful conceptual differences between types of situations.
 
 
 % SNIPPET from previous Section 2
@@ -752,11 +753,11 @@ In any case, the comparison between LLMs and PCMs started here suggests systemat
 
 \paragraph{Variability in predictions and performance measures.}
 Despite being anchored in a small, but detailed case-study, the fact that different plausible methods of aggregating item-level information led to condition-level predictions of variable quality is worrisome.
-Similarly, we argued that the wide-spread reliance on a winner-takes-all strategy might be inconsistent with the actual use practices of LLMs, which may not always rely on a temperature-zero sampling strategy (see Section~\ref{motivation}).
-In conclusion, research on LLM should systematically study the conceptual and empirical consequences of seemingly minor decisions in evaluation or application settings.
-Variability of performance measures also comes with a well-known risk for robust and reproducible science.
+The wide-spread reliance on a winner-takes-all strategy might be inconsistent with the actual use practices of LLMs, which may not always rely on a temperature-zero sampling strategy (see Appendix~\ref{sec:aver-prob-vs}).
+In conclusion, research on LLMs should systematically study the conceptual and empirical consequences of seemingly minor decisions in evaluation or application settings.
+Variability of performance measures also comes with a well-known risk for robust and reproducible science \citep[c.f.][]{HuLevy2023:Prompt-based-me,TsvilodubWang2024:Predictions-fro}.
 The more researcher degrees of freedom there are, the higher the risk of false results, even in the absence of intentions to mislead \citep[e.g.][]{Ioannidis2005:Why-Most-Publis,Chambers2017:The-Seven-Deadl}.
-The comparison of LLMs with PCMs here raises awareness for the issue of robust research methods also in NLP \citep{WielingRawee2018:Reproducibility}.
+Testing LLMs as predictors in statistical models should raise awareness for the issue of robust research methods also in NLP \citep{WielingRawee2018:Reproducibility}.
 
 The work presented here also contains considerable researcher degrees of freedom.
 We only considered one out of several conceivable ways of carving a parameterized likelihood function from LLM-based predictors.
@@ -764,10 +765,11 @@ If future work would contribute to systematically exploring these, the main goal
 
 \paragraph{Human-like predictions from LLM.}
 The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-Moreover, to the extent that LLMs are used as part of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-}.
-Based on the data set and the detailed analyses conducted here, it seems not infeasible to use numerical predictions from LLMs are part of predictive probabilistic models.
+Moreover, to the extent that LLMs are used as parts of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-,TsvilodubCarcassi2024:Towards-Neuro-S}.
+Based on the data set and the detailed analyses conducted here, it seems not infeasible to use numerical predictions from LLMs as part of predictive probabilistic models.
 But, ideally, low-level variation, such as from order of presentation or similar ``nuisance variables,'' should be averaged out or taken into account in some way or other, at least as long as we do not understand what causes this variation in the predictions of models and further research that investigates when exactly this variation accords with empirically observed patterns.
 In sum, we conjecture that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is taken into account.
+This, however, entails that each LLM component in a hybrid model is independently tested against at least a modestly sized empirical data set.
 
 
 \paragraph{No substitute for human subjects.}
@@ -777,15 +779,16 @@ For the particular case of pragmatic language use, prior research has shown that
 It is an open question whether predictions from LLMs reflect the same kind of variation.
 The results presented here recommend skepticism.
 We therefore side with the cautious voices that do not recommend replacing human participants with LLMs in psychological research \citep{DillionTandon2023:Can-AI-language,HardingDAlessandro2023:AI-language-mod}.
-In contrast, there is a challenge for LLM research.
-The fact that aggregate predictions can track aggregate human behaviour means that the variance in on both sides is washed out to achieve a similar result.
+In contrast, this points to an important challenge for future LLM research.
+The fact that aggregate predictions can track aggregate human behaviour means that the variance on both sides is washed out to achieve a similar result.
 This raises the issue of finding the systematic differences between LLMs and human answerers.
 The task then would be to find cases where the differences do \emph{not} wash out and ask: What if anything do these cases share?
 
 \paragraph{Limitations and follow-up work.}
 The scope of our experimental investigation was deliberately small but perspicuous.
-Focusing on the methodological contributions and details in performance assessments, we focused on a minimal non-trivial case study where we could triangulate LLMs, PCMs and human data.
+Focusing on the methodological contributions and details in performance assessments, we investigated a minimal non-trivial case study where we could triangulate LLMs, probabilistic cognitive models and human data.
 This work may therefore serve as starting point for a wider investigation of more complex data sets and case studies in which LLMs are analyzed as and directly compared to explanatory PCMs.
+
 
 
 \printbibliography[heading=bibintoc]
