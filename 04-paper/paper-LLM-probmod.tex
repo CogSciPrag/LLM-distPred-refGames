@@ -597,8 +597,6 @@ Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predic
 However, based on the results from the previous section, the item-level predictions for the WTA strategy are demonstrably incongruent with the human data.
 In general, the average-probability and average-WTA predictors can lead to qualitatively different results about task-level accuracy (see Appendix~\ref{sec:aver-prob-vs}).
 
-\mf{UP TO HERE}
-
 Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, we can build likelihood functions for condition-level data around the three predictors introduced above.
 With the same priors and methods used before, we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
 Summary statistics for posteriors over model parameters are shown in Table~\ref{tab:sumStats}.
@@ -626,20 +624,6 @@ The model seems to be ``right for the wrong reasons.''
 \label{sec:gener-other-llm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-All previous results where obtained for LMM predictions derived from GPT-3.5 turbo.
-To investigate whether key results replicate for other LLMs and scales, we ran the exact same analyses for item- and condition-level data also for scores derived from variants of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}, in particular the 7, 13 and 70 billion parameter versions of the versions fine-tuned with human feedback only (marked as `hf' in the following) and based on human feedback and chat data (marked as `chat').
-Table~\ref{tab:sumStats-LLaMA2} shows the relevant summary statistics and Bayesian posterior predictive $p$-values.
-Figure~\ref{fig:LLaMA-results-vPPC} shows visual posterior predictive checks for the condition-level data.
-The plots show the differences between human counts for each condition and option and the models' posterior predictions.
-We find that the average-WTA predictor is consistently able to capture the data from the production condition except for one of the six models (LLaMA2-chat 70B).
-However, the average-WTA predictor only recovers the interpretation data for only one of the six models (LLaMA2-chat 13B).
-Interestingly, for this LLM as backend for scoring, also the average-probability predictor is able to recover the interpretation data, unlike for the GPT-3.5 backend.
-
-\mf{TODO: item-level; check estimated alphas for condition-level!?}
-
-
-In sum, we find general support for the previous conclusion that the average-WTA predictor is most successful in capturing the condition-level data, but we also find variability in which method of aggregation works well with which LLM as scoring model.
-
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/vPPC_all_LLaMA_models.pdf}
@@ -647,6 +631,17 @@ In sum, we find general support for the previous conclusion that the average-WTA
   \label{fig:LLaMA-results-vPPC}
 \end{figure}
 
+All previous results where obtained for LMM predictions derived from GPT-3.5 turbo.
+To investigate whether key results replicate for other LLMs and scales, we ran the same analyses also for scores derived from variants of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}, in particular the 7, 13 and 70 billion parameter versions of the models fine-tuned with human feedback only (marked as `hf' in the following) and based on human feedback and chat data (marked as `chat').
+Table~\ref{tab:sumStats-LLaMA2} shows the relevant summary statistics and Bayesian posterior predictive $p$-values.
+Figure~\ref{fig:LLaMA-results-vPPC} shows visual posterior predictive checks for the condition-level data.
+The plots show the \emph{differences} between observed counts and the models' posterior predictions for expected counts for each condition and response option.
+We find that the average-WTA predictor is consistently able to capture the data from the production condition, except for one of the six models (LLaMA2-chat 70B).
+However, the average-WTA predictor recovers the interpretation data for only one of the six models (LLaMA2-chat 13B, see also Table~\ref{tab:sumStats-LLaMA2}).
+Interestingly, for LLaMA2-chat 13B also the average-probability predictor is able to recover the interpretation data, unlike for the GPT-3.5.
+As for GPT-3.5, no model captured the item-level variance observed in the human data.
+In sum, we find general support for the previous conclusions that the average-WTA predictor is most successful in capturing the condition-level data, and therefore that, where models manage to recover the condition-level data, they seem to be ``right for the wrong reasons.''
+Additionally, we also find variability in which method of aggregation works well with which LLM as scoring model.
 
 \begin{table}[t]
 \centering
@@ -857,18 +852,18 @@ I would choose the word
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Average-probability vs.~average-WTA for accuracy scores}
+\section{Excursion: Accuracy scores from average-probability vs.~average-WTA predictors}
 \label{sec:aver-prob-vs}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Standard benchmark testing looks at \emph{task accuracy}, defined as the probability of selecting the ``gold standard'' response, usually based on a WTA selection of the highest scoring option.
-We can generalize this and define the \emph{softmax-based accuracy}, $P_{\text{cond}}^{\text{SM}}\left(r_{1} \right)$, as the average probability of choosing the designated target response option $r_{1}$ for the \emph{condition-level soft-max prediction}:
+Standard benchmark testing looks at \emph{task accuracy}, defined as the probability of selecting the ``gold standard'' response, usually based on ``winner-takes-all'' (WTA) selection of the highest scoring option.
+We can generalize this and define the \emph{softmax-based accuracy} as the average probability of choosing the designated target response option $r_{1}$ for the \emph{condition-level soft-max prediction} (notation as defined in main text):
 \begin{align*}
-  P_{\text{cond}}^{\text{SM}}\left(r_{i} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{ki} \right)\,.
+  P_{\text{cond}}^{\text{SM}}\left(r_{1} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{k1} \right)\,.
 \end{align*}
-As before, the average-WTA task accuracy is the special case of $\alpha \rightarrow\infty$.
+The WTA-based accuracy (the standard measure in most benchmark testing) is the special case of $\alpha \rightarrow\infty$.
 
-Indeed, WTA-based accuracy can differ qualitatively from softmax-based accuracy, as shown by the following example.
+The WTA-based accuracy can differ qualitatively from the more general softmax-based accuracy, as shown by the following example.
 The example shows that differences between accuracy measures depend on the variation in item-level scores, in particular on the relation between score-ordering and score-differences.
 Note that the example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
 %
