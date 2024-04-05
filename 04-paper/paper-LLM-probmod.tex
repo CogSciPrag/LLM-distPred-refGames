@@ -419,7 +419,6 @@ Fitting the RSA model to the partitioned data set, we find estimates of Bppp val
 This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from the RSA model.
 In other words, the condition-level RSA predictions seem to adequately capture also the item-level data.
 
-
 The following sections apply the same methods of Bayesian model criticism also to models built around predictor values from LLMs.
 Section~\ref{sec:item-level-pred} first looks at the item-level data, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
 
@@ -428,22 +427,26 @@ Section~\ref{sec:item-level-pred} first looks at the item-level data, before Sec
 \label{sec:item-level-pred}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-An LLM is design to predict the next token given an input string.
+An (autoregressive) LLM is designed to predict the next token given an input string.\footnote{
+  Nothing of substance changes when a Bayesian statistical model is built around scores from a masked language model.
+  We focus on autoregressive, left-to-right language modeling and next-token prediction for ease of reference, since all models tested here are autoregressive.
+}
 This is essentially an item-level prediction: next-token probabilities are specified for concrete strings after a concrete instance of a task, i.e., an item of the task, not for the task as such.
 From these next-token probabilities, we can derive probabilities for multiple-choice answers for each item (this section) and for a condition (next section).
 
+\paragraph{Notation.}
 Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
 Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ tokens, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
-For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same response category $r_{i}$.
-For the case at hand these categories are: target, competitor, distractor, so that $y_{k1}$ always corresponds to the designated \emph{target option}, $r_{1}$, that is the ``gold standard'' answer.
+For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same response category $R_{i}$.
+For the case at hand these categories are: target, competitor, distractor, so that $y_{k1}$ always corresponds to the designated \emph{target option}, $R_{1}$.
 
+\paragraph{LLM scores \& predictions.}
 The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
-  \mf{TODO: Add quick word on how this can in principle be extended to masked language models.}
   More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
   For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
-  \mf{check whether this is correct also after new LLaMA results.}
+  \mf{@PT: check whether this is correct also after new LLaMA results.}
 }
 %
 \begin{align*}
@@ -464,6 +467,7 @@ Notice that the usual item-level prediction used in benchmark testing is actuall
 Here, the $\alpha_{C}$ parameter corresponds to inverse temperature, so that $\alpha_{C} \rightarrow \infty$ corresponds to greedy sampling with temperature zero.
 Like in the RSA model, we use an independent soft-max parameter for each condition.
 
+\paragraph{Bayesian statistical modeling with LLM predictors.}
 As mentioned previously, the items of the reference game experiment from Section~\ref{experiment-reference-games} differ in which levels of features (color, shape, texture) instantiate the structure of the task shown in Figure \ref{fig:ref-game}, as well as the order of presentation of objects and words.
 We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references prompt variation}
 It therefore becomes an empirical question of whether item-level predictions from LLMs provide a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
@@ -481,15 +485,15 @@ Similar to the RSA model fit, we allow for random errors with probability $\epsi
   = \epsilon_{c} \  P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
 \end{align*}
 %
-The resulting likelihood function for item-level data with item-level predictions is, where priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}.:
+The resulting likelihood function for item-level data with item-level predictions is, where priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}:
 %
 \begin{align*}
- P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
+ P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le i \le 3} \right )\,.
 \end{align*}
 %
 
 Summary statistics for samples from the posterior distribution over parameters are shown in Table~\ref{tab:sumStats} (rows 4 and 5).
-Credible values of $\alpha$ parameters are comparatively low for the LLM-based model, suggesting that the predicted scores have rather large differences, which have to be compensated for by the softmax link-function to adequately fit the data.
+Credible values of $\alpha$ parameters are comparatively low for the LLM-based item-level model, suggesting that the predicted scores have rather large differences, which have to be compensated for by the softmax link-function to adequately fit the data.
 Figure~\ref{fig:closeness-target-item-level} shows the mean of the probabilities for the highest scoring answer category, averaged over all items, for different parameter values of $\alpha$, highlighting that for \textit{a posteriori} credible values of $\alpha$ (gray shaded areas), the predictions are clearly distinct from the predictions of a WTA strategy (which assigns probability 1 to the highest scoring option for each item).
 This suggests that the WTA strategy, which is the special limiting case for $\alpha \rightarrow \infty$, provides a substantially worse fit for item-level choices than those provided by less extreme values of $\alpha$.
 
@@ -505,6 +509,16 @@ This suggests that the WTA strategy, which is the special limiting case for $\al
   \label{fig:closeness-target-item-level}
 \end{figure}
 
+Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (see Table~\ref{tab:sumStats}), suggesting that the unaggregated LLM scores are inadequate predictors of the human data.
+To corroborate this conclusion, Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM-based model predicts variance which is not borne out by the human data.
+Concretely, the plots show, for each condition and item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data ($y$-axis).
+There is ample variation in the model's predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
+So, the model itself predicts systematic variability at the item level.
+The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
+These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
+Put more strongly, a model that uses the most obvious item-level score to predict what human participants choose on a by-item level is ruled out by the current experimental data.
+
+
 \begin{figure}[t]
   \centering
 
@@ -519,16 +533,6 @@ This suggests that the WTA strategy, which is the special limiting case for $\al
   }
   \label{fig:item-level-obs-pred}
 \end{figure}
-
-Sampling-based approximations of Bayesian posterior predictive $p$-values for the by-item analysis are very low (see Table~\ref{tab:sumStats}), suggesting that the unaggregated LLM scores are inadequate predictors of the human data.
-To corroborate this conclusion, Figure~\ref{fig:item-level-obs-pred} shows that the item-level LLM scores predict variance which is not borne out by the human data.
-Concretely, the plots show, for each condition and item, mean posterior estimates of the model's predicted probability of choosing the target option ($x$-axis), together with the observed proportion of target choices in the human data ($y$-axis).
-There is ample variation in the model's predictions, especially visible in the production condition, owing to the fact that the item-level scores of the LLM sometimes clearly favor another option than the target choice.
-So, the model itself predicts systematic variability at the item level.
-The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
-These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
-Put more strongly, a model that uses the most obvious item-level score to predict what human participants choose on a by-item level is ruled out by the current experimental data.
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
