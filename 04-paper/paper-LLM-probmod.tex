@@ -100,11 +100,13 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 Enabled by the invention of deep neural transformer architectures \citep{VaswaniShazeer2017:Attention-is-Al}, recent years have brought a new generation of powerful large language models  \citep{DevlinChang2019:BERT:-Pre-train,ChungHou2022:Scaling-Instruc,OpenAI2023:GPT-4-Technical,TouvronLavril2023:LLaMA:-Open-and}.
 State-of-the-art LLMs excel on many benchmark data sets \citep[e.g.,][]{srivastava2023-BIGbench,PerezRinger2023:Discovering-Lan}, and so promise to serve as foundation models for a vast and diverse set of applications, both in industry and academia \citep{BommasaniHudson2021:On-the-opportun}.
 Yet, for any downstream application of LLMs, it is crucial to understand what LLMs can or cannot reliably do.
+
 The way in which LLM capabilities should be assessed depends on what their intended application is.
-For many industrial applications, the prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' or ``gold standard'' exists, averaged over many instances of this task.
+For many industrial applications, the prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' or ``gold standard'' exists, averaged over many instances of this task \citep[e.g.,][]{srivastava2023-BIGbench}, but more encompassing approaches also highlight the importance of a more holistic assessments of LLM, including factors such as robustness, fairness and efficiency \citep{LiangBommasani2023:Holistic-Evalua}.
 Benchmark-driven assessments are very useful for engineering purposes, when the main issue is whether a given system can perform a particular task correctly.
-Benchmark testing is also useful to systematically study of the effects of scale \citep[e.g.,][]{srivastava2023-BIGbench}, to uncover areas in which LLMs might under-perform on some standard that is practically relevant, and to thereby direct the community's attention to what needs improvement.
-More encompassing approaches also highlight the importance of including multiple factors in holistic assessments of LLM, such as robustness, fairness and efficiency \citep{LiangBommasani2023:Holistic-Evalua}.
+
+% Benchmark testing is also useful to systematically study of the effects of scale \citep[e.g.,][]{srivastava2023-BIGbench}, to uncover areas in which LLMs might under-perform on some standard that is practically relevant, and to thereby direct the community's attention to what needs improvement.
+
 
 % especially when augmented with supervised fine-tuning  \citep{ChungHou2022:Scaling-Instruc} and reinforcement learning from human \citep{StiennonOuyang2022:Learning-to-sum} or other \citep{BaiKadavath2022:Constitutional-} feedback.
 
@@ -116,6 +118,7 @@ For example, information from LLMs can be used to generate alternatives for deli
 LLMs may also be used to rank or numerically score options in open-ended applications, e.g., to mimic human judgements of relevance or interestingness \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
 In many of these applications, LLMs essentially serve as a cheap, compressed stand-in for (average) human judgements, associations or choice behavior.
 To assess the quality of LLMs in such contexts, it is less important to compare against a gold standard, and more important to compare against the full distribution of the human behavior that is to be captured by the LLM.
+In sum, at least for some practical applications, the ``gold standard'' is not a single ``correct'' answer, but the full distribution of human responses.
 
 Taking inspiration from experimental psychology, an increasing number of studies compares LLM predictions to human choice behavior in psychological experiments and investigates whether LLMs predict patterns of human answer behavior  \citep[e.g.,][]{BinzSchulz2023:Using-cognitive,Hagendorff2023:Machine-Psychol,ShiffrinMitchell2023:Probing-the-psy}.
 The main focus is often to compare qualitative patterns in LLM predictions and human data, but there is also work investigating whether LLMs can make adequate \emph{quantitative predictions}.
@@ -125,6 +128,7 @@ The work presented in this paper seeks to extend the investigation of the human-
 Our foremost concern is methodological: How can we derive full distributional predictions from information supplied by LLMs, and how can we stringently test whether these distributional predictions are adequate given suitable empirical data?
 In short, while a lot of previous like-minded work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the more specific perspective of the probabilistic / statistical modeller.
 Taking numerical predictor values generated from LLMs as input, we explore strategies of building a Bayesian statistical model around them, and to scrutinize these LLM-grounded Bayesian statistical models with the usual methods of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A}.
+
 A main conceptual take-away of this investigation, is that statistical models built around LLMs are by design fundamentally different from common statistical or probabilistic cognitive models; an observation which also reflects back on the possibility of seeing LLMs as potentially explanatory for human behavior or cognition.
 Concretely, LLMs make predictions for each individual item, rather than specifying a predictor of central tendency at a more aggregate level, such as at the level of an experimental condition, as standard statistical models or probabilistic cognitive models normally do (see Figure~\ref{fig:stats-model-types}).
 As this point is crucial for our investigation, the following elaborates briefly.
@@ -157,8 +161,9 @@ First, we need to ask whether the item-level predictions made by LLMs are empiri
 Second, the implied methodological challenge lies in specifying how item-level information can be used, e.g., by different aggregation methods, to make robust predictions at a more abstract level (condition, task, $\dots$).
 To investigate these issues, this paper introduces different ways of building a Bayesian probabilistic model around core predictor values derived from various LLMs.
 We then use the standard tools of Bayesian data analysis, to fit and check the resulting statistical models based on data from human multiple-choice experiments.
-Rather than aiming for scale and large-coverage, we focus on transparency and zoom in on a single case study of pragmatic language production and interpretation, so-called reference games \mf{references}, for which a widely used probabilistic cognitive model exists, the Rational Speech Act model \citep{FrankGoodman2012:Predicting-Prag}, so that we can compare a theoretically motivated probabilistic cognitive model (PCM) against a probabilistic model built on top of LLM predictions.
-We find that variability predicted by the LLM at the item-level is generally not borne out by the human data, that some but not all ways of constructing condition-level predictions are equally good, and that different LLMs as backends may prefer to use different aggregation strategies.
+Rather than aiming for scale and large-coverage, we focus on transparency and zoom in on a single case study of pragmatic language production and interpretation, namely so-called reference games \citep[e.g.][]{DeemterSluis2006:Building-a-Sema,DegenFranke2013:Cost-Based-Prag,GrafDegen2016:Animal-dog-or-d,SikosVenhuizen2021:Reevaluating-pr}.,
+For reference games, a widely used probabilistic cognitive model exists, namely the Rational Speech Act model \citep{FrankGoodman2012:Predicting-Prag}, so that we can compare a theoretically motivated probabilistic cognitive model (PCM) against a probabilistic model built on top of LLM predictions.
+We find that variability predicted by the LLM at the item-level is generally not borne out by the human data, that not all ways of constructing condition-level predictions are equally good, and that different LLMs as backends may prefer to use different aggregation strategies.
 
 % For the purposes of this investigation, a probabilistic cognitive model (PCM) is characterized by providing a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each possible data observation $D_{C}$ for any experimental condition $C$ and parameter values $\theta$ \citep[e.g.,][]{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
 % % Usually, conditions $C$ provide a categorization of different tasks which is meaningful against the theoretical background of experimental investigation, and parameters $\theta$ modulate the predicted likelihood of the data in human interpretable ways (see Section~\ref{motivation} for more detail).
@@ -178,12 +183,11 @@ We find that variability predicted by the LLM at the item-level is generally not
 % The conceptual comparison of LLMs and PCMs also clearly identifies a sense in which the latter are explanatory, while the former are not.
 
 The paper is structured as follows.
-Section~\ref{motivation} motivates the investigation in this paper by highlighting relevant differences in the way LLMs and common probabilistic statistical models make predictions about data from forced-choice tasks.
-Section~\ref{experiment-reference-games} describes a simple but non-trivial forced-choice experiment, namely a text-based reference game.
-Section~\ref{sec:model-pred-from} introduces the Rational Speech Act (RSA) model \citep{FrankGoodman2012:Predicting-Prag} for the human data from the reference game experiment.
+Section~\ref{experiment-reference-games} describes an experiment with human participants with a text-based reference game.
+Section~\ref{sec:model-pred-from} introduces the Rational Speech Act (RSA) model for the human data from the reference game experiment.
 Section~\ref{sec:item-level-pred} exposes a statistical model for item-level predictions derived from LLM scores and investigates whether this adequately captures the human data at the item-level based on scores from GPT-3.5 \citep{BrownMann2020:Language-Models}.
 Section~\ref{llm-predictions-for-reference-games} discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
-Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}
+Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}.
 
 
 
