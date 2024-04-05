@@ -166,7 +166,7 @@ First, we need to ask whether the item-level predictions made by LLMs are empiri
 Second, the implied methodological challenge lies in specifying how item-level information can be used, e.g., by different aggregation methods, to make robust predictions at a more abstract level (condition, task, $\dots$).
 To investigate these issues, this paper introduces different ways of building a Bayesian probabilistic model around core predictor values derived from various LLMs.
 We then use the standard tools of Bayesian data analysis, to fit and check the resulting statistical models based on data from human multiple-choice experiments.
-Rather than aiming for scale and large-coverage, we focus on transparency and zoom in on a single case study of pragmatic language production and interpretation, namely so-called reference games \citep[e.g.][]{DeemterSluis2006:Building-a-Sema,DegenFranke2013:Cost-Based-Prag,GrafDegen2016:Animal-dog-or-d,SikosVenhuizen2021:Reevaluating-pr}.,
+Rather than aiming for scale and large-coverage, we focus on transparency and zoom in on a single case study of pragmatic language production and interpretation, namely so-called reference games \citep[e.g.,][]{DeemterSluis2006:Building-a-Sema,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,GrafDegen2016:Animal-dog-or-d,SikosVenhuizen2021:Reevaluating-pr}.
 For reference games, a widely used probabilistic cognitive model exists, namely the Rational Speech Act model \citep{FrankGoodman2012:Predicting-Prag}, so that we can compare a theoretically motivated probabilistic cognitive model (PCM) against a probabilistic model built on top of LLM predictions.
 We find that variability predicted by the LLM at the item-level is generally not borne out by the human data, that not all ways of constructing condition-level predictions are equally good, and that different LLMs as backends may prefer to use different aggregation strategies.
 
@@ -195,7 +195,6 @@ Section~\ref{llm-predictions-for-reference-games} discusses different ways of de
 Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}.
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Experiment: Reference games}
 \label{experiment-reference-games}
@@ -210,7 +209,7 @@ Finally, Section~\ref{sec:gener-other-llm} explores whether previous results gen
   \label{fig:ref-game}
 \end{figure}
 
-Reference games are an established, well-understood and austere experimental paradigm to test human decision making in abstract communicative tasks \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,SikosVenhuizen2021:Reevaluating-pr}.
+Reference games are an established, well-understood and austere experimental paradigm to test human decision making in abstract communicative tasks.
 A reference game consists of two players, a speaker and an interpreter, who jointly observe a set of objects, usually referred to as context (see Figure~\ref{fig:ref-game}).
 In the \textbf{production condition}, the speaker is assigned a \emph{trigger object} from the context set which they have to describe to the interpreter.
 In the \textbf{interpretation condition}, the interpreter observes a description, here called \emph{trigger word}, and chooses one of the objects from the context set.
@@ -231,61 +230,42 @@ If participants engage in pragmatic thought, they might reason that \emph{if} th
 The \textbf{competitor object} is the other object of which the trigger word is true.
 The \textbf{distractor object} is the object of which the trigger word is false.
 
-We replicated a simple reference game with human participants in which each trial instantiated the structure of the example shown in Figure~\ref{fig:ref-game}.
+We implemented a simple reference game for human participants in which each trial instantiated the structure of the example shown in Figure~\ref{fig:ref-game}.
 While previous reference games with human participants used pictorial representations of objects, and sometimes even pictorial representations of messages, we implemented a text-only version in order to be able to compare the predictions of LLMs for human data, when both LLMs and humans processed the same textual representation of the stimuli.
 The experiment was realized as an online task using \texttt{magpie} \citep{FrankeJi:magpie:-Minimal}.\footnote{
   The code for the experiment can be found at \href{https://github.com/magpie-ea/magpie3-text-refgame}{https://github.com/magpie-ea/magpie3-text-refgame}, and a live version of the experiment can be tested at \href{https://magpie-ea.github.io/magpie3-text-refgame/}{https://magpie-ea.github.io/magpie3-text-refgame/}.
 }
 
 
-\subsection{Participants}
-\label{participants}
-
+\paragraph{Participants.}
 A total of 302 participants were recruited via Prolific for monetary
 compensation (\textsterling0.45, corresponding to roughly \textsterling 15.40 per hour).
 All participants self-identified as native speakers of English.
 
-\subsection{Materials \& design}
-\label{materials-design}
-
+\paragraph{Materials \& design.}
 We created 100 different items as stimulus material via a stochastic process.
 Each item is a different textual description of a reference game with the same logical structure as the example from Figure~\ref{fig:ref-game}.
-For each item, the context consisted of three objects.
+For each item, the context consists of three objects.
 As in the original paper by \citet{FrankGoodman2012:Predicting-Prag}, objects are defined by a triple of properties, namely a color, a shape and a texture.
 For each property, there were four possible values, e.g., blue, green, red, and orange for color.
 The sampled items differed in terms of the properties of the objects in the context set, and in terms of the order in which the objects and expression alternatives were presented in the text.
 Figures~\ref{fig:refgame-screenshot-production} and \ref{fig:refgame-screenshot-interpretation} from Appendix~\ref{sec:scre-from-online} show example screenshots from the experiment.
 
-\subsection{Procedure}
-\label{procedure}
-
-For each participant the experiment sampled four different items.
+\paragraph{Procedure.}
+Each participant saw four different items sampled randomly from the pre-generated item set.
 Participants first played two of these in the production condition, then the other two in the interpretation condition.
 
 
-\subsection{Results}\label{results}
-
-The overall distribution of choices that correspond to the target, competitor, and distractor states is shown in Figure~\ref{fig:refgame-counts}.\footnote{
+\paragraph{Results.}
+The overall distribution of choices that correspond to the target, competitor, and distractor states is shown in Figure~\ref{fig:refgame-counts} (together with model checking results to be introduced later).\footnote{
   The production condition actually has two distractor choices.
   Here and in the following, these are lumped together as a single category, also when modeling random errors in later models.
-  This is a simplification but does not change anything of substance.}
+  }
 It is interesting that the distractor options were chosen rather often.
 We also see that the number of target choices is higher in the production condition than in the interpretation condition.
 This is in line with previous experimental results on human reference games.
 % \citep{QingFranke2013:Variations-on-a}.
 For example, in previous forced-choice reference games with human participants with pictorial presentations of objects, \citet{QingFranke2013:Variations-on-a} observed the following proportions of target, competitor and distractor options: $\tuple{0.882, 0.118, 0}$ in the production and $\tuple{0.492, 0.506, 0.003}$ in the interpretation condition (for 288 observations in each condition).
-
-\begin{figure}[t]
-  \centering
-
-    \includegraphics[width=0.9\linewidth]{00-pics/PPC-alpha-eps-model.pdf}
-
-    \caption{Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of four models (shapes and error bars).
-      Shapes show the mean of the posterior predictive distributions of the RSA model and three further models derived from item-level LLM-supplied scores.
-      Error-bars show corresponding 95\% credible intervals of the posterior predictive.
-    }
-  \label{fig:refgame-counts}
-\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -293,10 +273,22 @@ For example, in previous forced-choice reference games with human participants w
 \label{sec:model-pred-from}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
+  \caption{
+    Example of predictions from the RSA model.
+    The semantic meaning is shown as a matrix of binary truth-values.
+    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents) for $\alpha=1$, and are shown as row-stochastic matrices.
+  }
+  \label{fig:RSA-example}
+\end{figure}
+
 Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
 Common to these approaches is that they derive or define, based on some explicit conceptual motivation, a parameterized stochastic speaker policy, $P_{S}(u \mid s; \theta_{S})$, modulated by parameters $\theta_{S}$, for a speaker's choice of expression or utterance $u$ given a referent or state $s$, which the speaker wants to communicate;
 and a stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the probability of choosing a referent $s$ for utterance $u$.
 
+\paragraph{The Rational Speech Act model.}
 As a concrete example, we introduce the Rational Speech Act (RSA) model first described in this form by \citet{FrankGoodman2012:Predicting-Prag} \citep[for overview see][]{FrankeJager2015:Probabilistic-p,GoodmanFrank2016:Pragmatic-Langu,StevensBenz2018:Game-Theoretic-,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
 The RSA model defines pragmatic reasoning as a sequence of iterated (soft-)optmization of policies, grounding out in literal interpretation.
 If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping each pair of state $s$ and utterance $u$ to a (binary) truth-value, and if $P_{\text{prior}}(s)$ is a prior over states, a literal listener policy is defined as:
@@ -319,27 +311,19 @@ Finally, the pragmatic listener is defined as the policy resulting from applying
   P_{L}(s \mid u, \alpha) \propto  P_{S}(u \mid s, \alpha) \  P_{\text{prior}}(s) \,.
 \end{align}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
-  \caption{
-    Example of predictions from the RSA model (with $\alpha=1$).
-    The semantic meaning is shown as a matrix of binary truth-values.
-    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents) for $\alpha=1$ are shown as row-stochastic matrices.
-  }
-  \label{fig:RSA-example}
-\end{figure}
 
 Figure~\ref{fig:RSA-example} gives example calculations (assuming a flat prior and $\alpha=1$) for the reference game from Figure~\ref{fig:ref-game}.
 For $\alpha=1$, the model predicts that the probabilities of target, competitor and distractor options are $\tuple{\nicefrac{2}{3}, \nicefrac{1}{3}, 0}$ for the production, and $\tuple{\nicefrac{3}{5}, \nicefrac{2}{5}, 0}$ for the interpretation condition.
 Increasing $\alpha$ will increase the odds of target over competitor choices.
+
+\paragraph{Condition-level predictions.}
 In sum, the condition-level predictions of the RSA model are a parameterized function $P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c})$, assigning a probability to each response category $R_{l}$ (target, competitor, or distractor) in each condition $C$ (production or interpretation).
 
 The model constructed so far predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
 It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, so that we get:
 %
 \begin{align*}
-  P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon_{c}) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
+  P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c}, \epsilon_{c}) = (1 - \epsilon_{c}) \  P_{r}(R_{l}, C; \alpha_{c}) +  \nicefrac{\epsilon_{c}}{3}\,,
 \end{align*}
 %
 where $\epsilon_{c}$ is a (condition-specific) parameter giving the probability that a choice was made by randomly guessing.\footnote{
@@ -357,11 +341,12 @@ The parameterized likelihood function entailed by the RSA model for condition-le
 %
 \begin{align}
   \label{eq:RSA-likelihood}
- P^{\text{RSA}}_{\text{cond}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \text{Multinomial}(D_{C}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
+ P^{\text{RSA}}_{\text{cond}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \text{Multinomial}(D_{C}, \tuple{P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3})\,.
 \end{align}
 %
 The result is a four-parameter model, one pair of parameters per condition.
 
+\paragraph{Bayesian posteriors \& model checking.}
 Parameterized predictions, like in Equation~(\ref{eq:RSA-likelihood}), can be assessed in the light of the empirical data with the usual tools of Bayesian data analysis \citep[e.g.][]{GelmanCarlin2014:Bayesian-Data-A,McElreath2016:Statistical-Ret,Lambert2018:A-Students-Guid}.
 Let $\alpha_{c}\sim \text{log-Normal}(1,1)$ have a reasonably wide log-Normal prior, and let $\epsilon_{c} \sim \text{Beta}(1,15)$ have a Beta prior favoring small values.
 Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain estimates of posterior credible values of model parameters (summary statistics of which are shown in Table~\ref{tab:sumStats}).\footnote{
@@ -372,21 +357,21 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
 \centering
 \begin{tabular}{cllllcrlcrlc}
   \toprule
-  &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
+  &&&&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){6-8} \cmidrule(l){9-11}
   & model & data & method & condition & |95\% & mean\ & 95\%| & |95\% & mean\ & 95\%| & Bpppv \\
   \midrule
-  ! & RSA & item  & ---         & prd. & 2.62 & 3.13 & 3.69  & 0.08 & 0.12 & 0.16 & 0.29 \\
-  ! & RSA & item  & ---         & int. & 0.21 & 0.67 & 1.08  & 0.08 & 0.14 & 0.19 & 0.21 \\
-  ! & RSA & cond. & ---         & prd. & 2.62 & 3.14 & 3.70  & 0.08 & 0.12 & 0.17 & 0.50 \\
-  ! & RSA & cond. & ---         & int. & 0.27 & 0.68 & 1.13  & 0.09 & 0.14 & 0.19 & 0.51 \\ \addlinespace[0.5em]
-    & GPT & item  & ---         & prd. & 0.40 & 0.51 & 0.62  & 0.07 & 0.12 & 0.17 & 0.00 \\
-    & GPT & item  & ---         & int. & 0.52 & 0.66 & 0.82  & 0.00 & 0.05 & 0.15 & 0.00 \\
-  ! & GPT & cond. & avg. scores & prd. & 0.61 & 0.74 & 0.87  & 0.08 & 0.12 & 0.17 & 0.49 \\
-    & GPT & cond. & avg. scores & int. & 0.99 & 1.17 & 1.35  & 0.00 & 0.02 & 0.06 & 0.00 \\
-  ! & GPT & cond. & avg. prob.  & prd. & 0.81 & 5.00 & 14.58 & 0.08 & 0.12 & 0.16 & 0.61 \\
-    & GPT & cond. & avg. prob.  & int. & 1.36 & 2.04 & 2.67  & 0.00 & 0.03 & 0.08 & 0.00 \\
-  ! & GPT & cond. & avg. WTA    & prd. & 0.86 & 1.04 & 1.22  & 0.08 & 0.12 & 0.17 & 0.48 \\
-  ! & GPT & cond. & avg. WTA    & int. & 0.16 & 0.43 & 0.69  & 0.06 & 0.13 & 0.19 & 0.50 \\
+  \textcolor{fern-main}{$\checkmark$} & RSA & item  & ---         & prd. & 2.62 & 3.13 & 3.69  & 0.08 & 0.12 & 0.16 & 0.29 \\
+  \textcolor{fern-main}{$\checkmark$} & RSA & item  & ---         & int. & 0.21 & 0.67 & 1.08  & 0.08 & 0.14 & 0.19 & 0.21 \\
+  \textcolor{fern-main}{$\checkmark$} & RSA & cond. & ---         & prd. & 2.62 & 3.14 & 3.70  & 0.08 & 0.12 & 0.17 & 0.50 \\
+  \textcolor{fern-main}{$\checkmark$} & RSA & cond. & ---         & int. & 0.27 & 0.68 & 1.13  & 0.09 & 0.14 & 0.19 & 0.51 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & GPT & item  & ---         & prd. & 0.40 & 0.51 & 0.62  & 0.07 & 0.12 & 0.17 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & GPT & item  & ---         & int. & 0.52 & 0.66 & 0.82  & 0.00 & 0.05 & 0.15 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & GPT & cond. & avg. scores & prd. & 0.61 & 0.74 & 0.87  & 0.08 & 0.12 & 0.17 & 0.49 \\
+  \textcolor{shimmer-main}{$\times$} & GPT & cond. & avg. scores & int. & 0.99 & 1.17 & 1.35  & 0.00 & 0.02 & 0.06 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & GPT & cond. & avg. prob.  & prd. & 0.81 & 5.00 & 14.58 & 0.08 & 0.12 & 0.16 & 0.61 \\
+  \textcolor{shimmer-main}{$\times$} & GPT & cond. & avg. prob.  & int. & 1.36 & 2.04 & 2.67  & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & GPT & cond. & avg. WTA    & prd. & 0.86 & 1.04 & 1.22  & 0.08 & 0.12 & 0.17 & 0.48 \\
+  \textcolor{fern-main}{$\checkmark$} & GPT & cond. & avg. WTA    & int. & 0.16 & 0.43 & 0.69  & 0.06 & 0.13 & 0.19 & 0.50 \\
    \bottomrule \\
 \end{tabular}
 \caption{
@@ -400,7 +385,7 @@ Using Stan \citep{Team2023:The-Stan-Core-L} for Bayesian inference, we obtain es
 
 To assess goodness-of-fit, we use the \emph{posterior predictive distribution}, i.e., the model's predictions about data of the same size and structure as the training data.
 Figure~\ref{fig:refgame-counts} shows summary statistics (means and 95\% credible intervals) for the posterior predictive distribution of the RSA model (among other models for condition-level data, which are to be introduced later).
-We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, which require that the distribution of posterior predictions includes the observed choice rates for each answer option.
+We see that for both conditions the RSA model passes a ``visual posterior predictive check'' \citep{Kruschke2011:Doing-Bayesian-}, which requires that the distribution of posterior predictions includes the observed choice rates for each answer option.
 To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values (Bppp values), using likelihood of the observed data as a test statistics.
 These Bppp values approximate the probability that a model conditioned on observed data $D_{\text{obs}}$ predicts future data $D_{rep}$, of the same size and format as $D_{obs}$, that is at least as likely as the data $D_{\text{obs}}$ itself is (given the posterior predictive distribution).
 Very small Bppp values indicate that the model might be inadequate for reproducing the data it was trained on, so to speak.
@@ -408,22 +393,35 @@ This is clearly not the case for the RSA model with Bppp values close to 0.5, as
 In sum, the condition-level predictions by the RSA model, a theoretically motivated PCM, are not discredited by the condition-level data.
 Reversely, the RSA model seems to adequately capture the condition-level data.
 
-We can also use the condition-level predictions for predicting the item-level data.
-If the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, the likelihood function for analysis at the item-level uses the same (condition-level) predictor to separately predict data from each item, so that the likelihood function becomes:
+\begin{figure}[t]
+  \centering
+
+    \includegraphics[width=0.9\linewidth]{00-pics/GPT-PPC-alpha-eps-model.pdf}
+
+    \caption{
+      Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of four models (shapes and error bars).
+      Shapes show the mean of the posterior predictive distributions of the RSA model and three aggregated condition-level predictors derived from item-level LLM scores (introduced in Section~\ref{llm-predictions-for-reference-games}).
+      Error-bars show corresponding 95\% credible intervals of the posterior predictive.
+    }
+  \label{fig:refgame-counts}
+\end{figure}
+
+\paragraph{Item-level predictions.}
+To test item-level predictions, the whole data set for condition $C$ is chunked into item-level data, $D_{C} = \tuple{D^{1}_{C}, \dots, D^{m}_{C} }$, where $D_{C}^{k}$ is the data collected for the $k$-th out of $m$ items for condition $C$.
+Probabilistic cognitive models, like the RSA model, may holistically combine condition- and item-level information in their predictions, as shown in the middle of Figure~\ref{fig:ref-game}, e.g., by incorporating further parameters to capture variance based on different item-classes, such as the empirically observed preference for selecting shape terms over color terms in reference games \citep[e.g.][]{QingFranke2013:Variations-on-a}.
+But for present purposes, we simply use the same (condition-level) predictor to separately predict data from each item, so that the likelihood function for item-level data becomes:
 %
 \begin{align*}
- P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial} \left (D_{C}^{k}, \tuple{P_{r}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3} \right )\,.
+ P^{\text{RSA}}_{\text{item}}(D_{C} \mid C, \alpha_{C}, \epsilon_{C}) = \prod_{k = 1}^{m} \text{Multinomial} \left (D_{C}^{k}, \tuple{P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c}, \epsilon_{c}}_{1 \le l \le 3} \right )\,.
 \end{align*}
 %
 Fitting the RSA model to the partitioned data set, we find estimates of Bppp values that do not discredit the model (see Table~\ref{tab:sumStats}).
-This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from a theoretically motivated PCM.
+This suggests that the item-level variation in the human data is not so pronounced as to provide strong evidence against the condition-level predictor from the RSA model.
 In other words, the condition-level RSA predictions seem to adequately capture also the item-level data.
 
 
-The following sections apply these tests of Bayesian model criticism also to models built around predictor values from LLMs.
+The following sections apply the same methods of Bayesian model criticism also to models built around predictor values from LLMs.
 Section~\ref{sec:item-level-pred} first looks at the item-level data, before Section~\ref{llm-predictions-for-reference-games} investigates different ways for deriving condition-level predictions.
-
-\mf{metion (somewhere) where item-level effects could be added!}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Item-level predictions from LLMs}
