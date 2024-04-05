@@ -80,11 +80,11 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \begin{abstract}
   State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks and are increasingly used as components in larger applications, where LLM-based predictions serve as proxies for human judgements.
   This raises questions about the human-likeness of LLM-derived information and whether LLMs, if they deliver human-like behavior, could possibly be considered explanatory models of (aspects of) human cognition or language use.
-  To shed more light on these issues, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of probabilistic cognitive modeling.
-  We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
-  Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level), and that this is a sense in which LLMs may be said to be not explanatory.
+  To shed more light on these issues, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of Bayesian statistical modeling.
+  % We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
+  % Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level), and that this is a sense in which LLMs may be said to be not explanatory.
   Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs fail to capture the variance in the human data at the item-level.
-  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, thus building PCM-like predictions from LLM-derived information, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to our data.
+  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to our data.
   These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at an aggregate level, for which they are, however, not designed to make predictions in the first place.
 \end{abstract}
 
@@ -129,16 +129,21 @@ Our foremost concern is methodological: How can we derive full distributional pr
 In short, while a lot of previous like-minded work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the more specific perspective of the probabilistic / statistical modeller.
 Taking numerical predictor values generated from LLMs as input, we explore strategies of building a Bayesian statistical model around them, and to scrutinize these LLM-grounded Bayesian statistical models with the usual methods of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A}.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width = 0.95\textwidth]{00-pics/condition-item-level-prediction.png}
+  \caption{
+    Schematic representation of key conceptual differences between different types of predictive models.
+    Standard statistical models, like hierarchical regression models, typically make predictions for aggregate data (e.g., at the condition level), and add random offsets for item-level variation.
+    More sophisticated models, like some probabilistic cognitive models, may holistically combine information from an aggregate level (task, condition) with specific information about items.
+    LLMs, in contrast, first and foremost give prediction about each individual item and must rely on proper aggregation to arrive at condition-level predictions.
+  }
+  \label{fig:stats-model-types}
+\end{figure}
+
 A main conceptual take-away of this investigation, is that statistical models built around LLMs are by design fundamentally different from common statistical or probabilistic cognitive models; an observation which also reflects back on the possibility of seeing LLMs as potentially explanatory for human behavior or cognition.
 Concretely, LLMs make predictions for each individual item, rather than specifying a predictor of central tendency at a more aggregate level, such as at the level of an experimental condition, as standard statistical models or probabilistic cognitive models normally do (see Figure~\ref{fig:stats-model-types}).
 As this point is crucial for our investigation, the following elaborates briefly.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width = 0.8\textwidth]{00-pics/condition-item-level-prediction.png}
-  \caption{Schematic representation of key conceptual differences between different types of statistical models. \mf{picture is cropped}}
-  \label{fig:stats-model-types}
-\end{figure}
 
 Psychological research into the workings of the human mind aims to find generalizable patterns in the way information is processed within or across different domains of cognition.
 Experimental work therefore often compares human performance in different \emph{experimental conditions}, which reflect the general factors that are hypothesized to influence behavior.
