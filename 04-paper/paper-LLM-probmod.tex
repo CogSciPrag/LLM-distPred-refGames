@@ -437,12 +437,12 @@ From these next-token probabilities, we can derive probabilities for multiple-ch
 \paragraph{Notation.}
 Let $\set{I_{1}, \dots, I_{m}}$ be $m$ be instances of the same task, or items belonging to the same (logical) condition in a behavioral experiment.
 % For human observers, these items are interchangeable, all exemplifying the same conceptual problem.
-Each item $I_{k} = \tuple{x_{k}, \tuple{y_{k1}, \dots, y_{kl}}}$ consists of an input prompt $x_{k}$, which is a string of text, and $l$ choice options $\tuple{y_{k1}, \dots, y_{kl}}$, all of which are strings as well, possibly composed of $|y_{ki}|$ tokens, $y_{ki} = w_{ki1}, \dots, w_{ki|y_{ki}|}$.
-For simplicity of notation, we assume that the $i$-th choice option $y_{ki}$ for each item $k$ belongs to the same response category $R_{i}$.
+Each item $I_{k} = \tuple{x_{k}, \tuple{y_{kl}}_{1 \le l \le n}}$ consists of an input prompt $x_{k}$, which is a string of text, and $n$ choice options $\tuple{y_{kl}}$, all of which are strings as well, possibly composed of $|y_{kl}|$ tokens, $y_{kl} = w_{kl1}, \dots, w_{kl|y_{kl}|}$.
+For simplicity of notation, we assume that the $l$-th choice option $y_{kl}$ for each item $k$ belongs to the same response category $R_{l}$.
 For the case at hand these categories are: target, competitor, distractor, so that $y_{k1}$ always corresponds to the designated \emph{target option}, $R_{1}$.
 
 \paragraph{LLM scores \& predictions.}
-The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{ki}$ is its log-probability:\footnote{
+The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{kl}$ is its log-probability:\footnote{
   More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
   For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
@@ -451,16 +451,16 @@ The most obvious \emph{item-level score} an (autoregressive) LLM provides for ea
 %
 \begin{align*}
   % S\left( y_{ki}, x_{k} \right) =
-  \text{S}_{ki}
+  \text{S}_{kl}
   % = \log P_{\text{LLM}} \left(y_{ki} \mid x_{k} \right)
-  =  \sum_{j=1}^{|y_{ki}|} \log P_{\text{LLM}} \left(w_{kij} \mid x_{k}, w_{ki1}, \dots, w_{ki(j-1)} \right)  \,.
+  =  \sum_{i=1}^{|y_{kl}|} \log P_{\text{LLM}} \left(w_{kli} \mid x_{k}, w_{kl1}, \dots, w_{kl(i-1)} \right)  \,.
 \end{align*}
 %
 
 Based on each option's score, we can define the \emph{item-level prediction} of choosing option $y_{ki}$ in term of soft-maximization as:
 %
 \begin{align*}
-P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{ki} \right)\,.
+P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{kl} \right)\,.
 \end{align*}
 %
 Notice that the usual item-level prediction used in benchmark testing is actually a ``winner-takes-all'' strategy, but this is just a special case of the above for $\alpha_{C} \rightarrow \infty$.
@@ -472,7 +472,7 @@ As mentioned previously, the items of the reference game experiment from Section
 We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references prompt variation}
 It therefore becomes an empirical question of whether item-level predictions from LLMs provide a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
-To address this question, we assessed item-level scores $\text{S}_{ki}$ from the text-davinci-003 instance GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} for a text-based version of the reference game from Section~\ref{experiment-reference-games}.
+To address this question, we assessed item-level scores $\text{S}_{kl}$ from the text-davinci-003 instance GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} for a text-based version of the reference game from Section~\ref{experiment-reference-games}.
 % \footnote{
   % Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
 The task description $x_{k}$ for item $I_{k}$ is a text supplied as prompt (see Appendix~\ref{sec:examples-items-llm} for an example).
@@ -481,14 +481,14 @@ The choice options are categorized as in the human experiment.\footnote{
 Similar to the RSA model fit, we allow for random errors with probability $\epsilon_{C}$:
 %
 \begin{align*}
-  P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right )
-  = \epsilon_{c} \  P_{\text{item}}^{\text{LLM}}\left ( y_{ki} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
+  P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c}, \epsilon_{c} \right )
+  = \epsilon_{c} \  P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
 \end{align*}
 %
 The resulting likelihood function for item-level data with item-level predictions is, where priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}:
 %
 \begin{align*}
- P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{ki} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le i \le 3} \right )\,.
+ P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{kl} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
 \end{align*}
 %
 
@@ -549,15 +549,15 @@ Put more strongly, a model that uses the most obvious item-level score to predic
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
   \caption{
-    Schematic overview over three different approaches of obtaining condition-level predictions by aggregating item-level information.
-    Approaches differ in the kind of item-level information they take into account, which entails differences in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
+    Schematic overview over three different methods of obtaining condition-level predictions by aggregating item-level information.
+    Methods differ in the kind of item-level information they take into account, which entails differences in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
   }
   \label{fig:measures-overview}
 \end{figure}
 
-While LLMs do not make conditional-level predictions as such, they can be derived from item-level scores $\text{S}_{ki}$ by averaging over all items belonging to the relevant condition.
+While LLMs do not make conditional-level predictions as such, they can be derived from item-level scores $\text{S}_{kl}$ by averaging over all items belonging to the relevant condition.
 There are many ways of averaging item-level information.
-Figure~\ref{fig:measures-overview} shows three salient approaches, which differ in what the underlying item-level measure is: the raw scores $\text{S}_{ki}$, the item-level probability derived from it (as used in Section~\ref{sec:item-level-pred}), or the predictions from the winner-takes-all (WTA) strategy commonly used in benchmark testing.
+Figure~\ref{fig:measures-overview} shows three salient approaches, which differ in what the underlying item-level measure for aggregation is: the raw scores $\text{S}_{kl}$, the item-level probability derived from it (as used in Section~\ref{sec:item-level-pred}), or the predictions from the winner-takes-all (WTA) strategy commonly used in benchmark testing.
 
 % In general, to map a vector non-normalized scores $\myvec{s} = \tuple{s_{1}, \dots, s_{l}}$ to probabilities $\myvec{p} = \tuple{p_{1}, \dots, p_{l}}$ with different degrees of optimization, a common choice is the softmax function with optimality parameter $\alpha$:
 % %
@@ -577,16 +577,16 @@ The \emph{average-scores predictor} first aggregates the item-level scores, and 
   By using a multi-set, which may contain a single item multiple times, we produce aggregate predictions for exactly the set of items that the participant group saw, which provides the most fitting counterpart to the human data.}
 %
 \begin{align*}
-  & P_{\text{cond}}^{\text{SCR}}(r_{i} \mid C, \alpha_{c})
-    \propto \expo \left [  \alpha_{c} \ \frac{1}{m} \ \sum_{k=1}^{m} \text{S}_{ki}  \right ] \,.
+  & P_{\text{cond}}^{\text{SCR}}(R_{l} \mid C, \alpha_{c})
+    \propto \expo \left [  \alpha_{c} \ \frac{1}{m} \ \sum_{k=1}^{m} \text{S}_{kl}  \right ] \,.
     \tag*{\textcolor{gray}{[average scores (narrow-scope aggregation)]}}
 \end{align*}
 %
 The \emph{average-probabilities predictor} first transposes scores into probabilities with a parameterized softmax function, and only aggregates over items last:
 \begin{align*}
   % & \textbf{wide-scope aggregation} \\
-  & P_{\text{cond}}^{\text{PRB}}(r_{i} \mid C, \alpha_{c})
-    = \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha_{c}) \,.
+  & P_{\text{cond}}^{\text{PRB}}(R_{l} \mid C, \alpha_{c})
+    = \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{LLM}}(y_{kl} \mid C, \alpha_{c}) \,.
     \tag*{\textcolor{gray}{[average probabilities (wide-scope aggregation)]}}
 \end{align*}
 %
@@ -594,11 +594,11 @@ Finally, the \emph{average-WTA predictor} considers the prediction of the WTA st
 To add parameterized scaling to this method, a power-law transformation is a natural choice:
 \begin{align*}
   % & \textbf{intermediate-scope aggregation} \\
-  & P_{\text{cond}}^{\text{WTA}}(r_{i} \mid C, \alpha_{c})
-    \propto  \left [ \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) \right ]^{\alpha_{c}}\,,
+  & P_{\text{cond}}^{\text{WTA}}(R_{l} \mid C, \alpha_{c})
+    \propto  \left [ \frac{1}{m} \ \sum_{k=1}^{m} P_{\text{item}}^{\text{WTA}}(y_{kl} \mid C) \right ]^{\alpha_{c}}\,,
     \tag*{\textcolor{gray}{[average WTA (intermediate-scope aggregation)]}}
 \end{align*}
-where $P_{\text{item}}^{\text{WTA}}(y_{ki} \mid C) = \lim_{\alpha \rightarrow \infty} P_{\text{item}}^{\text{LLM}}(y_{ki} \mid C, \alpha)$.
+where $P_{\text{item}}^{\text{WTA}}(y_{kl} \mid C) = \lim_{\alpha \rightarrow \infty} P_{\text{item}}^{\text{LLM}}(y_{kl} \mid C, \alpha)$.
 \bigskip
 
 
@@ -648,74 +648,75 @@ Table~\ref{tab:sumStats-LLaMA2} shows the relevant summary statistics and Bayesi
 Figure~\ref{fig:LLaMA-results-vPPC} shows visual posterior predictive checks for the condition-level data.
 The plots show the \emph{differences} between observed counts and the models' posterior predictions for expected counts for each condition and response option.
 We find that the average-WTA predictor is consistently able to capture the data from the production condition, except for one of the six models (LLaMA2-chat 70B).
-However, the average-WTA predictor recovers the interpretation data for only one of the six models (LLaMA2-chat 13B, see also Table~\ref{tab:sumStats-LLaMA2}).
+When the average-WTA predictor passes the model checking criterion for the production data, the posteriors for the power-law parameter $\alpha$ are credibly different from 1, thus suggesting that, contrary to the results for GPT-3.5 a mere ``WTA average'' is not a good prediction strategy for the production data for the LLaMA2-based models.
+Looking at interpretation, the average-WTA predictor recovers the interpretation data for only one of the six models (LLaMA2-chat 13B, see also Table~\ref{tab:sumStats-LLaMA2}).
 Interestingly, for LLaMA2-chat 13B also the average-probability predictor is able to recover the interpretation data, unlike for the GPT-3.5.
-As for GPT-3.5, no model captured the item-level variance observed in the human data.
+Finally, for item-level data, as for GPT-3.5, no LLaMA2-based model captured the item-level variance observed in the human data.
 In sum, we find general support for the previous conclusions that the average-WTA predictor is most successful in capturing the condition-level data, and therefore that, where models manage to recover the condition-level data, they seem to be ``right for the wrong reasons.''
 Additionally, we also find variability in which method of aggregation works well with which LLM as scoring model.
 
-\begin{table}[t]
+\begin{table}[]
 \centering
 \begin{tabular}{cllllcrlcrlc}
   \toprule
-  &&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){4-6} \cmidrule(l){7-9}
+  &&&&&& $\alpha$ &&& $\epsilon$ & \\ \cmidrule(r){6-8} \cmidrule(l){9-11}
   & model & data & method & condition & |95\% & mean\ & 95\%| & |95\% & mean\ & 95\%| & Bpppv \\
   \midrule
 
-    & L2-hf-7b    & item  & ---         & prd. & 1.09  & 1.30   & 1.51   & 0.00 & 0.02 & 0.06 & 0.00 \\
-    & L2-hf-7b    & item  & ---         & int. & 1.90  & 2.52   & 3.13   & 0.00 & 0.04 & 0.12 & 0.00 \\
-  ! & L2-hf-7b    & cond. & avg. scores & prd. & 9.65  & 11.50  & 13.62  & 0.08 & 0.12 & 0.16 & 0.48 \\
-    & L2-hf-7b    & cond. & avg. scores & int. & 6.80  & 7.96   & 9.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
-    & L2-hf-7b    & cond. & avg. prob.  & prd. & 4.98  & 16.44  & 33.06  & 0.06 & 0.10 & 0.13 & 0.00 \\
-    & L2-hf-7b    & cond. & avg. prob.  & int. & 20.06 & 79.30  & 163.94 & 0.00 & 0.01 & 0.04 & 0.00 \\
-  ! & L2-hf-7b    & cond. & avg. WTA    & prd. & 4.17  & 4.96   & 5.85   & 0.07 & 0.12 & 0.16 & 0.48 \\
-    & L2-hf-7b    & cond. & avg. WTA    & int. & 0.87  & 1.02   & 1.18   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
-    & L2-hf-13b   & item  & ---         & prd. & 1.37  & 1.91   & 2.47   & 0.00 & 0.07 & 0.12 & 0.00 \\
-    & L2-hf-13b   & item  & ---         & int. & 2.13  & 2.90   & 3.69   & 0.00 & 0.05 & 0.14 & 0.00 \\
-  ! & L2-hf-13b   & cond. & avg. scores & prd. & 13.73 & 16.32  & 19.10  & 0.08 & 0.12 & 0.16 & 0.50 \\
-    & L2-hf-13b   & cond. & avg. scores & int. & 7.73  & 9.11   & 10.42  & 0.00 & 0.02 & 0.05 & 0.00 \\
-    & L2-hf-13b   & cond. & avg. prob.  & prd. & 69.84 & 185.80 & 360.44 & 0.06 & 0.09 & 0.13 & 0.00 \\
-    & L2-hf-13b   & cond. & avg. prob.  & int. & 13.63 & 39.72  & 88.28  & 0.00 & 0.02 & 0.05 & 0.00 \\
-  ! & L2-hf-13b   & cond. & avg. WTA    & prd. & 2.28  & 2.70   & 3.18   & 0.08 & 0.12 & 0.16 & 0.51 \\
-    & L2-hf-13b   & cond. & avg. WTA    & int. & 0.78  & 0.94   & 1.12   & 0.00 & 0.03 & 0.07 & 0.03 \\ \addlinespace[0.5em]
-    & L2-hf-70b   & item  & ---         & prd. & 1.53  & 1.86   & 2.22   & 0.00 & 0.03 & 0.07 & 0.00 \\
-    & L2-hf-70b   & item  & ---         & int. & 3.20  & 4.01   & 4.74   & 0.00 & 0.03 & 0.08 & 0.00 \\
-  ! & L2-hf-70b   & cond. & avg. scores & prd. & 44.57 & 53.17  & 62.44  & 0.08 & 0.12 & 0.17 & 0.48 \\
-    & L2-hf-70b   & cond. & avg. scores & int. & 6.86  & 8.14   & 9.32   & 0.00 & 0.02 & 0.05 & 0.00 \\
-    & L2-hf-70b   & cond. & avg. prob.  & prd. & 10.51 & 26.59  & 45.73  & 0.07 & 0.10 & 0.14 & 0.00 \\
-    & L2-hf-70b   & cond. & avg. prob.  & int. & 10.86 & 23.63  & 42.16  & 0.00 & 0.03 & 0.09 & 0.00 \\
-  ! & L2-hf-70b   & cond. & avg. WTA    & prd. & 5.88  & 7.03   & 8.19   & 0.08 & 0.12 & 0.17 & 0.50 \\
-    & L2-hf-70b   & cond. & avg. WTA    & int. & 0.55  & 0.68   & 0.81   & 0.00 & 0.03 & 0.07 & 0.04 \\ \addlinespace[0.5em]
-    & L2-chat-7b  & item  & ---         & prd. & 0.34  & 0.41   & 0.49   & 0.00 & 0.03 & 0.07 & 0.00 \\
-    & L2-chat-7b  & item  & ---         & int. & 0.79  & 1.05   & 1.34   & 0.00 & 0.05 & 0.15 & 0.00 \\
-  ! & L2-chat-7b  & cond. & avg. scores & prd. & 58.47 & 69.64  & 81.79  & 0.08 & 0.12 & 0.16 & 0.48 \\
-    & L2-chat-7b  & cond. & avg. scores & int. & 2.03  & 2.37   & 2.73   & 0.00 & 0.02 & 0.05 & 0.00 \\
-    & L2-chat-7b  & cond. & avg. prob.  & prd. & 8.05  & 27.26  & 55.30  & 0.07 & 0.11 & 0.15 & 0.00 \\
-    & L2-chat-7b  & cond. & avg. prob.  & int. & 2.86  & 19.24  & 51.41  & 0.00 & 0.01 & 0.04 & 0.00 \\
-  ! & L2-chat-7b  & cond. & avg. WTA    & prd. & 12.18 & 14.70  & 17.21  & 0.08 & 0.12 & 0.16 & 0.50 \\
-    & L2-chat-7b  & cond. & avg. WTA    & int. & 0.86  & 1.01   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
-    & L2-chat-13b & item  & ---         & prd. & 0.36  & 0.44   & 0.53   & 0.00 & 0.03 & 0.08 & 0.00 \\
-    & L2-chat-13b & item  & ---         & int. & 0.68  & 0.90   & 1.11   & 0.00 & 0.05 & 0.13 & 0.00 \\
-  ! & L2-chat-13b & cond. & avg. scores & prd. & 5.56  & 6.63   & 7.76   & 0.08 & 0.12 & 0.16 & 0.49 \\
-    & L2-chat-13b & cond. & avg. scores & int. & 1.70  & 2.05   & 2.40   & 0.00 & 0.02 & 0.06 & 0.01 \\
-    & L2-chat-13b & cond. & avg. prob.  & prd. & 3.90  & 22.25  & 74.12  & 0.06 & 0.10 & 0.14 & 0.00 \\
-  ! & L2-chat-13b & cond. & avg. prob.  & int. & 2.85  & 4.70   & 7.01   & 0.00 & 0.03 & 0.07 & 0.08 \\
-  ! & L2-chat-13b & cond. & avg. WTA    & prd. & 4.28  & 5.11   & 5.99   & 0.07 & 0.12 & 0.16 & 0.49 \\
-  ! & L2-chat-13b & cond. & avg. WTA    & int. & 0.15  & 0.32   & 0.51   & 0.02 & 0.11 & 0.18 & 0.50 \\ \addlinespace[0.5em]
-    & L2-chat-70b & item  & ---         & prd. & 0.28  & 0.35   & 0.42   & 0.00 & 0.03 & 0.08 & 0.00 \\
-    & L2-chat-70b & item  & ---         & int. & 1.03  & 1.24   & 1.47   & 0.00 & 0.03 & 0.08 & 0.00 \\
-    & L2-chat-70b & cond. & avg. scores & prd. & 0.40  & 0.55   & 0.74   & 0.00 & 0.04 & 0.10 & 0.00 \\
-  ! & L2-chat-70b & cond. & avg. scores & int. & 1.91  & 2.37   & 2.89   & 0.00 & 0.03 & 0.08 & 0.16 \\
-    & L2-chat-70b & cond. & avg. prob.  & prd. & 0.43  & 0.66   & 0.96   & 0.00 & 0.04 & 0.10 & 0.00 \\
-    & L2-chat-70b & cond. & avg. prob.  & int. & 2.82  & 5.21   & 8.43   & 0.00 & 0.01 & 0.04 & 0.02 \\
-    & L2-chat-70b & cond. & avg. WTA    & prd. & 0.14  & 0.21   & 0.35   & 0.00 & 0.06 & 0.13 & 0.00 \\
-    & L2-chat-70b & cond. & avg. WTA    & int. & 0.85  & 1.00   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & item  & ---         & prd. & 1.09  & 1.30   & 1.51   & 0.00 & 0.02 & 0.06 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & item  & ---         & int. & 1.90  & 2.52   & 3.13   & 0.00 & 0.04 & 0.12 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-7b    & cond. & avg. scores & prd. & 9.65  & 11.50  & 13.62  & 0.08 & 0.12 & 0.16 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. scores & int. & 6.80  & 7.96   & 9.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. prob.  & prd. & 4.98  & 16.44  & 33.06  & 0.06 & 0.10 & 0.13 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. prob.  & int. & 20.06 & 79.30  & 163.94 & 0.00 & 0.01 & 0.04 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-7b    & cond. & avg. WTA    & prd. & 4.17  & 4.96   & 5.85   & 0.07 & 0.12 & 0.16 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. WTA    & int. & 0.87  & 1.02   & 1.18   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & item  & ---         & prd. & 1.37  & 1.91   & 2.47   & 0.00 & 0.07 & 0.12 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & item  & ---         & int. & 2.13  & 2.90   & 3.69   & 0.00 & 0.05 & 0.14 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-13b   & cond. & avg. scores & prd. & 13.73 & 16.32  & 19.10  & 0.08 & 0.12 & 0.16 & 0.50 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. scores & int. & 7.73  & 9.11   & 10.42  & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. prob.  & prd. & 69.84 & 185.80 & 360.44 & 0.06 & 0.09 & 0.13 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. prob.  & int. & 13.63 & 39.72  & 88.28  & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-13b   & cond. & avg. WTA    & prd. & 2.28  & 2.70   & 3.18   & 0.08 & 0.12 & 0.16 & 0.51 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. WTA    & int. & 0.78  & 0.94   & 1.12   & 0.00 & 0.03 & 0.07 & 0.03 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & item  & ---         & prd. & 1.53  & 1.86   & 2.22   & 0.00 & 0.03 & 0.07 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & item  & ---         & int. & 3.20  & 4.01   & 4.74   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-70b   & cond. & avg. scores & prd. & 44.57 & 53.17  & 62.44  & 0.08 & 0.12 & 0.17 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. scores & int. & 6.86  & 8.14   & 9.32   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. prob.  & prd. & 10.51 & 26.59  & 45.73  & 0.07 & 0.10 & 0.14 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. prob.  & int. & 10.86 & 23.63  & 42.16  & 0.00 & 0.03 & 0.09 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-hf-70b   & cond. & avg. WTA    & prd. & 5.88  & 7.03   & 8.19   & 0.08 & 0.12 & 0.17 & 0.50 \\
+  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. WTA    & int. & 0.55  & 0.68   & 0.81   & 0.00 & 0.03 & 0.07 & 0.04 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & item  & ---         & prd. & 0.34  & 0.41   & 0.49   & 0.00 & 0.03 & 0.07 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & item  & ---         & int. & 0.79  & 1.05   & 1.34   & 0.00 & 0.05 & 0.15 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-7b  & cond. & avg. scores & prd. & 58.47 & 69.64  & 81.79  & 0.08 & 0.12 & 0.16 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & cond. & avg. scores & int. & 2.03  & 2.37   & 2.73   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & cond. & avg. prob.  & prd. & 8.05  & 27.26  & 55.30  & 0.07 & 0.11 & 0.15 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & cond. & avg. prob.  & int. & 2.86  & 19.24  & 51.41  & 0.00 & 0.01 & 0.04 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-7b  & cond. & avg. WTA    & prd. & 12.18 & 14.70  & 17.21  & 0.08 & 0.12 & 0.16 & 0.50 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & cond. & avg. WTA    & int. & 0.86  & 1.01   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-chat-13b & item  & ---         & prd. & 0.36  & 0.44   & 0.53   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-13b & item  & ---         & int. & 0.68  & 0.90   & 1.11   & 0.00 & 0.05 & 0.13 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-13b & cond. & avg. scores & prd. & 5.56  & 6.63   & 7.76   & 0.08 & 0.12 & 0.16 & 0.49 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-13b & cond. & avg. scores & int. & 1.70  & 2.05   & 2.40   & 0.00 & 0.02 & 0.06 & 0.01 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-13b & cond. & avg. prob.  & prd. & 3.90  & 22.25  & 74.12  & 0.06 & 0.10 & 0.14 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-13b & cond. & avg. prob.  & int. & 2.85  & 4.70   & 7.01   & 0.00 & 0.03 & 0.07 & 0.08 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-13b & cond. & avg. WTA    & prd. & 4.28  & 5.11   & 5.99   & 0.07 & 0.12 & 0.16 & 0.49 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-13b & cond. & avg. WTA    & int. & 0.15  & 0.32   & 0.51   & 0.02 & 0.11 & 0.18 & 0.50 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & item  & ---         & prd. & 0.28  & 0.35   & 0.42   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & item  & ---         & int. & 1.03  & 1.24   & 1.47   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & cond. & avg. scores & prd. & 0.40  & 0.55   & 0.74   & 0.00 & 0.04 & 0.10 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-chat-70b & cond. & avg. scores & int. & 1.91  & 2.37   & 2.89   & 0.00 & 0.03 & 0.08 & 0.16 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & cond. & avg. prob.  & prd. & 0.43  & 0.66   & 0.96   & 0.00 & 0.04 & 0.10 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & cond. & avg. prob.  & int. & 2.82  & 5.21   & 8.43   & 0.00 & 0.01 & 0.04 & 0.02 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & cond. & avg. WTA    & prd. & 0.14  & 0.21   & 0.35   & 0.00 & 0.06 & 0.13 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-chat-70b & cond. & avg. WTA    & int. & 0.85  & 1.00   & 1.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
 
    \bottomrule \\
 \end{tabular}
 \caption{
-  Summary statistics for model fits based on LLaMA2 backends.
-  The information shown is the same as in Table~\ref{tab:sumStats}.
+  Summary statistics for models based on LLaMA2 variants.
+  Information shown is the same as in Table~\ref{tab:sumStats}.
 }
 \label{tab:sumStats-LLaMA2}
 \end{table}
@@ -871,15 +872,13 @@ I would choose the word
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Standard benchmark testing looks at \emph{task accuracy}, defined as the probability of selecting the ``gold standard'' response, usually based on ``winner-takes-all'' (WTA) selection of the highest scoring option.
-We can generalize this and define the \emph{softmax-based accuracy} as the average probability of choosing the designated target response option $r_{1}$ for the \emph{condition-level soft-max prediction} (notation as defined in main text):
+We can generalize this and define the \emph{softmax-based accuracy} as the average probability of choosing the designated target response option $R_{1}$ for the \emph{condition-level soft-max prediction} (notation as defined in main text):
 \begin{align*}
-  P_{\text{cond}}^{\text{SM}}\left(r_{1} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{k1} \right)\,.
+  P_{\text{cond}}^{\text{SM}}\left(R_{1} \right) = \frac{1}{m} \sum_{k = 1}^{m} P_{\text{item}}^{\text{SM}} \left(y_{k1} \right)\,.
 \end{align*}
 The WTA-based accuracy (the standard measure in most benchmark testing) is the special case of $\alpha \rightarrow\infty$.
 
 The WTA-based accuracy can differ qualitatively from the more general softmax-based accuracy, as shown by the following example.
-The example shows that differences between accuracy measures depend on the variation in item-level scores, in particular on the relation between score-ordering and score-differences.
-Note that the example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
 %
 \begin{quote}
   % \ex \label{bsp:exmpl-diff-WTA-SM}
@@ -890,10 +889,13 @@ Note that the example holds equally if numbers for the two options are reversed,
   For such a case, it never matters how much worse the goal answer is scored in the 20\% of the cases where it is not the maximum.
   As only the best option will be chosen, that information is irrelevant.
   But if an application uses anything other than greedy-like responses, the accuracy score of 0.8 may be misleading.
-  If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy, where $\alpha = 1$, with virtual certainty, so the softmax-based accuracy would around 0.4.\footnote{The probability of the target option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 0 in the remaining 20\% of the cases. This gives an expected rate of: $\nicefrac{4}{5} \ \nicefrac{1}{2} + \nicefrac{1}{5} \ 0 = \nicefrac{2}{5}$.}
+  If the remaining 20\% of the items are such that the non-goal option is almost infinitely better, it would be chosen under a pure sampling strategy, where $\alpha = 1$, with virtual certainty, so the softmax-based accuracy would be around 0.4.\footnote{The probability of the target option in the 80\% of items where the goal answer is slightly better is 0.5 in the limit of $\epsilon \rightarrow 0$, and it is virtually 0 in the remaining 20\% of the cases. This gives an expected rate of: $\nicefrac{4}{5} \ \nicefrac{1}{2} + \nicefrac{1}{5} \ 0 = \nicefrac{2}{5}$.}
 \end{quote}
 %
-The upshot of these considerations is that the standard practice of WTA-based performance assessment for LLMs gives false, or at least misleading or inaccurate results, whenever not all downstream applications use a greedy-like sampling strategy (which is almost certainly the case), and there is variability in item-level predictions.
+The example shows that differences between accuracy measures depend on the variation in item-level scores, in particular on the relation between score-ordering and score-differences.
+Note that the example holds equally if numbers for the two options are reversed, so that there is no way of saying which of the two measures of accuracy would generally be more favorable for selecting the target option.
+
+The upshot of these considerations is that the standard practice of WTA-based performance assessment for LLMs gives false, or at least misleading or inaccurate results, whenever not all downstream applications use a greedy-like sampling strategy (which is almost certainly the case), and there is variability in item-level predictions (which may or may not be the case, depending on the domain of application).
 
 
 
