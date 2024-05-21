@@ -33,7 +33,7 @@
   \author{ Michael Franke\thanks{Corresponding author.} \\
 	Department of Linguistics\\
 	University of Tübingen\\
-	\texttt{mchfranke@uni-tuebingen.de} \\
+	\texttt{mchfranke@gmail.com} \\
 	%% examples of more authors
 	\And
 	Polina Tsvilodub \\
@@ -79,13 +79,13 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 
 \begin{abstract}
   State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks and are increasingly used as components in larger applications, where LLM-based predictions serve as proxies for human judgements.
-  This raises questions about the human-likeness of LLM-derived information and whether LLMs, if they deliver human-like behavior, could possibly be considered explanatory models of (aspects of) human cognition or language use.
+  This raises questions about the human-likeness of LLM-derived information, alignment with human intuition in larger applications, and whether LLMs, if they deliver human-like behavior, could possibly be considered explanatory models of (aspects of) human cognition or language use.
   To shed more light on these issues, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of Bayesian statistical modeling.
   % We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
   % Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level), and that this is a sense in which LLMs may be said to be not explanatory.
-  Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs fail to capture the variance in the human data at the item-level.
-  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to our data.
-  These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at an aggregate level, for which they are, however, not designed to make predictions in the first place.
+  Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs do not capture the variance in the human data at the item-level.
+  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to human data.
+  These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at the aggregate condition-level, for which they are, however, not designed to make predictions in the first place.
 \end{abstract}
 
 
@@ -159,10 +159,11 @@ This variability is commonly incorporated in standard statistical models as rand
 Still, the focus of interest usually remains at the condition-level effects, because it is this more abstract level of behavioral aggregation that is relevant for generalizable theory building.
 Similarly, when analyzing or explaining data from psychological experiments with a probabilistic cognitive model (PCM), the model's predictions will naturally be set-up to predict data by taking condition-level properties, possibly in conjunction with item-level properties, into account \citep[e.g.,][]{NilsonRieskamp2011:Hierarchical-Ba,Lee2011:How-Cognitive-M,ScheibehenneRieskamp2013:Testing-the-Ada}, as shown schematically in the middle of Figure~\ref{fig:stats-model-types}.
 On the other hand, LLMs first and foremost provide predictions about each item.
-While it may be the case that, in producing an item-level prediction, the internal computation of a powerful LLM is informed by computations that incorporate abstract knowledge roughly corresponding to the condition-level, the atomic predictions accessible to the common user are specific to each individual string tested, thus raising concerns about robustness of predictions under perturbations of input prompts \mf{cite}.
+While it may be the case that, in producing an item-level prediction, the internal computation of a powerful LLM is informed by computations that incorporate abstract knowledge roughly corresponding to the condition-level, the atomic predictions accessible to the common user are specific to each individual string tested.
+Consequently, this raises concerns about robustness of predictions under perturbations of input prompts \mf{cite}.
 
 These considerations raise two important conceptual and empirical questions.
-First, we need to ask whether the item-level predictions made by LLMs are empirically correct.
+First, we need to ask whether the item-level predictions made by LLMs are empirically correct, i.e., match the human data at the item-level.
 Second, the implied methodological challenge lies in specifying how item-level information can be used, e.g., by different aggregation methods, to make robust predictions at a more abstract level (condition, task, $\dots$).
 To investigate these issues, this paper introduces different ways of building a Bayesian probabilistic model around core predictor values derived from various LLMs.
 We then use the standard tools of Bayesian data analysis, to fit and check the resulting statistical models based on data from human multiple-choice experiments.
@@ -205,7 +206,7 @@ Finally, Section~\ref{sec:gener-other-llm} explores whether previous results gen
 
   \includegraphics[width = 0.8\textwidth]{00-pics/reference-game.png}
 
-  \caption{Structure of a reference game with human participants. Each trial consists of a set of objects, the so-called context. In production trials, participants choose a single word to describe a trigger object from the context. In interpretation trials, an object is selected as the likely object a trigger word referring to.}
+  \caption{Structure of a reference game with human participants. Each trial consists of a set of objects, the so-called context. In production trials, participants choose a single word to describe a trigger object from the context. In interpretation trials, an object is selected as the likely object a trigger word is referring to.}
   \label{fig:ref-game}
 \end{figure}
 
@@ -222,10 +223,10 @@ One object shares both its color and shape with one other object, while the two 
 In a critical production trial, the trigger object to describe is one of the two objects with a unique feature.
 The speaker has four words to choose from.
 The \textbf{target utterance} is the word which uniquely describes the trigger object.
-The \textbf{distractor utterance} is the word that is true of the trigger object, but also true of another object.
-The other utterances, both of which are false of the trigger object are \textbf{competitor utterance}.
+The \textbf{competitor utterance} is the word that is true of the trigger object, but also true of another object.
+The other utterances, both of which are false of the trigger object are \textbf{distractor utterance}.
 %
-In a critical interpretation trial, the trigger word is one that is true of two of the three objects.
+In a critical interpretation trial, the trigger word is the one that is true of two of the three objects.
 If participants engage in pragmatic thought, they might reason that \emph{if} the speaker had wanted to refer to one of the two objects of which the trigger word is true (blue square and blue circle in Figure~\ref{fig:ref-game}), the speaker could have used a more informative word for exactly one of those two objects (``circle''), so they are more likely to refer to the \textbf{target object} (the blue square in Figure~\ref{fig:ref-game}).
 The \textbf{competitor object} is the other object of which the trigger word is true.
 The \textbf{distractor object} is the object of which the trigger word is false.
@@ -279,25 +280,25 @@ For example, in previous forced-choice reference games with human participants w
   \caption{
     Example of predictions from the RSA model.
     The semantic meaning is shown as a matrix of binary truth-values.
-    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over state (referents) for $\alpha=1$, and are shown as row-stochastic matrices.
+    The policies of literal listener, pragmatic speaker and listener are calculated for uniform priors over states (referents) for $\alpha=1$, and are shown as row-stochastic matrices.
   }
   \label{fig:RSA-example}
 \end{figure}
 
 Data from reference games with human participants have been variously analyzed with probabilistic models using inspiration from behavioral game theory \citep[e.g.,][]{DegenFranke2013:Cost-Based-Prag}, probabilistic Bayesian modeling \citep[e.g.,][]{FrankGoodman2012:Predicting-Prag} or other forms of probabilistic modeling \citep[e.g.,][]{GattGompel2013:Are-we-Bayesian}.
 Common to these approaches is that they derive or define, based on some explicit conceptual motivation, a parameterized stochastic speaker policy, $P_{S}(u \mid s; \theta_{S})$, modulated by parameters $\theta_{S}$, for a speaker's choice of expression or utterance $u$ given a referent or state $s$, which the speaker wants to communicate;
-and a stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the probability of choosing a referent $s$ for utterance $u$.
+and a parameterized stochastic listener policy, $P_{L}(s \mid u; \theta_{L})$, capturing the probability of choosing a referent $s$ for utterance $u$.
 
 \paragraph{The Rational Speech Act model.}
 As a concrete example, we introduce the Rational Speech Act (RSA) model first described in this form by \citet{FrankGoodman2012:Predicting-Prag} \citep[for overview see][]{FrankeJager2015:Probabilistic-p,GoodmanFrank2016:Pragmatic-Langu,StevensBenz2018:Game-Theoretic-,ScontrasTessler2021:A-practical-int,Degen2023:The-Rational-Sp}.
-The RSA model defines pragmatic reasoning as a sequence of iterated (soft-)optmization of policies, grounding out in literal interpretation.
+The RSA model defines pragmatic reasoning as a sequence of iterated (soft-)optmization of policies and Bayesian inference, grounding out in literal interpretation.
 If $\mathfrak{L}(s,u) \mapsto \set{0,1}$ is a semantic meaning function mapping each pair of state $s$ and utterance $u$ to a (binary) truth-value, and if $P_{\text{prior}}(s)$ is a prior over states, a literal listener policy is defined as:
 %
 \begin{align*}
  P_{L_{0}}(s \mid u) \propto \mathfrak{L}(s,u)\  P_{\text{prior}}(s)\,.
 \end{align*}
 %
-The pragmatic speaker policy is defined as soft-optimizing the choice of utterance to minimize the literal listener's surprisal for the state to be communicated, i.e., to maximize the log-probability of the trigger object:
+The pragmatic speaker policy is defined as soft-optimizing the choice of utterance to minimize the literal listener's surprisal for the state to be communicated, i.e., to maximize the log-probability of the trigger object given the utterance:
 %
 \begin{align}
   \label{eq:RSA-speaker}
@@ -317,7 +318,7 @@ For $\alpha=1$, the model predicts that the probabilities of target, competitor 
 Increasing $\alpha$ will increase the odds of target over competitor choices.
 
 \paragraph{Condition-level predictions.}
-In sum, the condition-level predictions of the RSA model are a parameterized function $P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c})$, assigning a probability to each response category $R_{l}$ (target, competitor, or distractor) in each condition $C$ (production or interpretation).
+In sum, the condition-level predictions of the RSA model are a parameterized function $P_{\text{cond}}^{\text{RSA}}(R_{l}, C; \alpha_{c})$, assigning a probability to each response category $R_{l}$ (target, competitor, or distractor) in each condition $C$ (production or interpretation) for a given $\alpha_{c}$.
 
 The model constructed so far predicts probability zero for distractor choices, so that the human data shown in Figure~\ref{fig:refgame-counts}, where the distractor option was chosen in both conditions, would immediately rule out the model entirely.
 It is therefore common to include a small error probability $\epsilon$, with which a choice would be made at random \citep[e.g.,][]{LeeWagenmakers2013:Bayesian-Cognit}, so that we get:
@@ -457,13 +458,13 @@ The most obvious \emph{item-level score} an (autoregressive) LLM provides for ea
 \end{align*}
 %
 
-Based on each option's score, we can define the \emph{item-level prediction} of choosing option $y_{ki}$ in term of soft-maximization as:
+Based on each option's score, we can define the \emph{item-level prediction} of choosing option $y_{kl}$ in terms of soft-maximization as:
 %
 \begin{align*}
 P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c} \right ) \propto \expo \left (\alpha_{c} \ \text{S}_{kl} \right)\,.
 \end{align*}
 %
-Notice that the usual item-level prediction used in benchmark testing is actually a ``winner-takes-all'' strategy, but this is just a special case of the above for $\alpha_{C} \rightarrow \infty$.
+Notice that the usual item-level prediction used in benchmark testing is actually a ``winner-takes-all'' strategy, which would choose any option that maximizes the score, but this is just a special case of the above for $\alpha_{C} \rightarrow \infty$.
 Here, the $\alpha_{C}$ parameter corresponds to inverse temperature, so that $\alpha_{C} \rightarrow \infty$ corresponds to greedy sampling with temperature zero.
 Like in the RSA model, we use an independent soft-max parameter for each condition.
 
@@ -472,20 +473,20 @@ As mentioned previously, the items of the reference game experiment from Section
 We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references prompt variation}
 It therefore becomes an empirical question of whether item-level predictions from LLMs provide a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
-To address this question, we assessed item-level scores $\text{S}_{kl}$ from the text-davinci-003 instance GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} for a text-based version of the reference game from Section~\ref{experiment-reference-games}.
+To address this question, we assessed item-level scores $\text{S}_{kl}$ from the text-davinci-003 instance of GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} for a text-based version of the reference game from Section~\ref{experiment-reference-games}.
 % \footnote{
   % Numerically, we worked with \emph{average} log-probabilities. As in our experiment, all choice options had the same number of words, this is largely irrelevant, except for the effect of the $\alpha$ parameter in the interpretation condition. Using length-corrected log-probabilities is the same as using raw log-probabilities with an $\alpha$ parameter divided by the number of words. In this way, we make the $\alpha$ parameter more meaningfully comparable across conditions.}
 The task description $x_{k}$ for item $I_{k}$ is a text supplied as prompt (see Appendix~\ref{sec:examples-items-llm} for an example).
 The choice options are categorized as in the human experiment.\footnote{
-  In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we lump both of the distractor words together and treat them as a single option.}
+  In the current set-up the response type ``distractor'' has two instantiations in the production condition. Since choice options are a single word in the production condition, for simplicity, we treat the union of the distractor words as a single option.}
 Similar to the RSA model fit, we allow for random errors with probability $\epsilon_{C}$:
 %
 \begin{align*}
   P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c}, \epsilon_{c} \right )
-  = \epsilon_{c} \  P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
+  = (1- \epsilon_{c}) \  P_{\text{item}}^{\text{LLM}}\left ( y_{kl} \mid C; \alpha_{c}, \epsilon_{c} \right ) \ \ + \ \ \nicefrac{\epsilon_{c}}{3}   \,.
 \end{align*}
 %
-The resulting likelihood function for item-level data with item-level predictions is, where priors on parameters are as for the RSA model described in Section~\ref{sec:model-pred-from}:
+With priors on parameters as for the RSA model described in Section~\ref{sec:model-pred-from}, the resulting likelihood function for item-level data with item-level predictions is:
 %
 \begin{align*}
  P^{\text{LLM}}_{\text{item}}(D_{c} \mid C; \alpha_{c}, \epsilon_{c}) = \prod_{k = 1}^{m} \text{Multinomial} \left ( D_{c}^{k}, \tuple{P^{\text{LLM}}_{\text{item}}(y_{kl} \mid C;  \alpha_{c}, \epsilon_{c})}_{1 \le l \le 3} \right )\,.
@@ -503,7 +504,7 @@ This suggests that the WTA strategy, which is the special limiting case for $\al
   \caption{
     Predicted probability of highest-scoring answer category, averaged over items, for different values of softmax parameter $\alpha$ (black lines).
     The gray-shaded area indicates the posterior 95\% credible interval for $\alpha$, and the implied probabilistic prediction.
-    For reference, the target probability under a random choice strategy and under the WTA strategy are shown with dashed lines.
+    For reference, the target probability under a random choice strategy and under the ``winner-takes-all'' (WTA) strategy are shown with dashed lines.
     For credible values of $\alpha$, the means of predicted probabilities for the target option are clearly distinct from the WTA strategy.
   }
   \label{fig:closeness-target-item-level}
@@ -516,7 +517,7 @@ There is ample variation in the model's predictions, especially visible in the p
 So, the model itself predicts systematic variability at the item level.
 The human data, too, show variability at the item-level, but there is no (visual) indication that the item-level variability predicted by the LLMs is borne out by the human data.
 These results suggest that LLM-based probabilistic predictions may imply item-level variance that is not attested in the human data.
-Put more strongly, a model that uses the most obvious item-level score to predict what human participants choose on a by-item level is ruled out by the current experimental data.
+Put more strongly, a model that uses the most obvious item-level scores, derived from the predicted log-probabilities, to predict what human participants choose on a by-item level is ruled out by the current experimental data.
 
 
 \begin{figure}[t]
@@ -606,7 +607,7 @@ The \emph{average-scores} and \emph{average-probabilities} predictors are equiva
 For cases with more than one item, the predictions of the three predictors are not guaranteed to be the same.
 Conceptually, the \emph{average-probabilities} and the \emph{average-WTA} predictors, but not the \emph{average-scores} predictor, are compatible with a picture in which condition-level predictions result from the actual predictions at the item level.
 However, based on the results from the previous section, the item-level predictions for the WTA strategy are demonstrably incongruent with the human data.
-In general, the average-probability and average-WTA predictors can lead to qualitatively different results about task-level accuracy (see Appendix~\ref{sec:aver-prob-vs}).
+In general, the average-probability and average-WTA predictors can lead to qualitatively different results for task-level accuracy (see Appendix~\ref{sec:aver-prob-vs}).
 
 Using the same approach as for the RSA model in Section~\ref{sec:model-pred-from}, we can build likelihood functions for condition-level data around the three predictors introduced above.
 With the same priors and methods used before, we obtain samples from the posterior over parameters and samples from the posterior predictive distributions.
@@ -620,7 +621,7 @@ This suggests that, for the production data, aggregation of item-level predictio
 Figure~\ref{fig:refgame-counts} shows the summary statistics (means and 95\% credible intervals) for each model's posterior predictive distribution.
 We find that only the theoretical model (RSA) and the \emph{average-WTA} model pass this ``visual posterior predictive check'' for both conditions; the other two models both overpredict the target choice rate and underpredict the competitor choice rate in the interpretation condition.
 To corroborate the visual impression, Table~\ref{tab:sumStats} shows sample-based estimates of Bayesian posterior predictive $p$-values, using likelihood of the observed data as a test statistics.
-Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{average-scores} and the \emph{average-probabilities} model are able to reproduce the production data, but fail on the interpretation data; and that only the \emph{average-WTA} model does not fail to capture the data from both conditions.
+Consequently, the results from Table~\ref{tab:sumStats} suggest that the \emph{average-scores} and the \emph{average-probabilities} models are able to reproduce the production data, but fail on the interpretation data; and that only the \emph{average-WTA} model does not fail to capture the data from both conditions.
 
 These results tell us that not all ways of deriving condition-level predictions by averaging over item-level variation are equally good.
 Some approaches clearly fail basic checks for statistical goodness-of-fit.
@@ -638,19 +639,19 @@ The model seems to be ``right for the wrong reasons.''
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/vPPC_all_LLaMA_models.pdf}
-  \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies.}
+  \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies. \mf{update plot by replacing 'hf' with 'base'.}}
   \label{fig:LLaMA-results-vPPC}
 \end{figure}
 
-All previous results where obtained for LMM predictions derived from GPT-3.5 turbo.
-To investigate whether key results replicate for other LLMs and scales, we ran the same analyses also for scores derived from variants of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}, in particular the 7, 13 and 70 billion parameter versions of the models fine-tuned with human feedback only (marked as `hf' in the following) and based on human feedback and chat data (marked as `chat').
+All previous results where obtained for LMM predictions derived from GPT-3.5 davinci.
+To investigate whether key results replicate for other LLMs and scales, we ran the same analyses also for scores derived from variants of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}, in particular the 7, 13 and 70 billion parameter base models (marked as `base'), and the models of similar size fine-tuned on chat data (marked as `chat').
 Table~\ref{tab:sumStats-LLaMA2} shows the relevant summary statistics and Bayesian posterior predictive $p$-values.
 Figure~\ref{fig:LLaMA-results-vPPC} shows visual posterior predictive checks for the condition-level data.
 The plots show the \emph{differences} between observed counts and the models' posterior predictions for expected counts for each condition and response option.
 We find that the average-WTA predictor is consistently able to capture the data from the production condition, except for one of the six models (LLaMA2-chat 70B).
 When the average-WTA predictor passes the model checking criterion for the production data, the posteriors for the power-law parameter $\alpha$ are credibly different from 1, thus suggesting that, contrary to the results for GPT-3.5 a mere ``WTA average'' is not a good prediction strategy for the production data for the LLaMA2-based models.
 Looking at interpretation, the average-WTA predictor recovers the interpretation data for only one of the six models (LLaMA2-chat 13B, see also Table~\ref{tab:sumStats-LLaMA2}).
-Interestingly, for LLaMA2-chat 13B also the average-probability predictor is able to recover the interpretation data, unlike for the GPT-3.5.
+Interestingly, for LLaMA2-chat 13B also the average-probability predictor is able to recover the interpretation data, unlike for the GPT-3.5 model.
 Finally, for item-level data, as for GPT-3.5, no LLaMA2-based model captured the item-level variance observed in the human data.
 In sum, we find general support for the previous conclusions that the average-WTA predictor is most successful in capturing the condition-level data, and therefore that, where models manage to recover the condition-level data, they seem to be ``right for the wrong reasons.''
 Additionally, we also find variability in which method of aggregation works well with which LLM as scoring model.
@@ -663,30 +664,30 @@ Additionally, we also find variability in which method of aggregation works well
   & model & data & method & condition & |95\% & mean\ & 95\%| & |95\% & mean\ & 95\%| & Bpppv \\
   \midrule
 
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & item  & ---         & prd. & 1.09  & 1.30   & 1.51   & 0.00 & 0.02 & 0.06 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & item  & ---         & int. & 1.90  & 2.52   & 3.13   & 0.00 & 0.04 & 0.12 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-7b    & cond. & avg. scores & prd. & 9.65  & 11.50  & 13.62  & 0.08 & 0.12 & 0.16 & 0.48 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. scores & int. & 6.80  & 7.96   & 9.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. prob.  & prd. & 4.98  & 16.44  & 33.06  & 0.06 & 0.10 & 0.13 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. prob.  & int. & 20.06 & 79.30  & 163.94 & 0.00 & 0.01 & 0.04 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-7b    & cond. & avg. WTA    & prd. & 4.17  & 4.96   & 5.85   & 0.07 & 0.12 & 0.16 & 0.48 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-7b    & cond. & avg. WTA    & int. & 0.87  & 1.02   & 1.18   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & item  & ---         & prd. & 1.37  & 1.91   & 2.47   & 0.00 & 0.07 & 0.12 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & item  & ---         & int. & 2.13  & 2.90   & 3.69   & 0.00 & 0.05 & 0.14 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-13b   & cond. & avg. scores & prd. & 13.73 & 16.32  & 19.10  & 0.08 & 0.12 & 0.16 & 0.50 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. scores & int. & 7.73  & 9.11   & 10.42  & 0.00 & 0.02 & 0.05 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. prob.  & prd. & 69.84 & 185.80 & 360.44 & 0.06 & 0.09 & 0.13 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. prob.  & int. & 13.63 & 39.72  & 88.28  & 0.00 & 0.02 & 0.05 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-13b   & cond. & avg. WTA    & prd. & 2.28  & 2.70   & 3.18   & 0.08 & 0.12 & 0.16 & 0.51 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-13b   & cond. & avg. WTA    & int. & 0.78  & 0.94   & 1.12   & 0.00 & 0.03 & 0.07 & 0.03 \\ \addlinespace[0.5em]
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & item  & ---         & prd. & 1.53  & 1.86   & 2.22   & 0.00 & 0.03 & 0.07 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & item  & ---         & int. & 3.20  & 4.01   & 4.74   & 0.00 & 0.03 & 0.08 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-70b   & cond. & avg. scores & prd. & 44.57 & 53.17  & 62.44  & 0.08 & 0.12 & 0.17 & 0.48 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. scores & int. & 6.86  & 8.14   & 9.32   & 0.00 & 0.02 & 0.05 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. prob.  & prd. & 10.51 & 26.59  & 45.73  & 0.07 & 0.10 & 0.14 & 0.00 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. prob.  & int. & 10.86 & 23.63  & 42.16  & 0.00 & 0.03 & 0.09 & 0.00 \\
-  \textcolor{fern-main}{$\checkmark$} & L2-hf-70b   & cond. & avg. WTA    & prd. & 5.88  & 7.03   & 8.19   & 0.08 & 0.12 & 0.17 & 0.50 \\
-  \textcolor{shimmer-main}{$\times$} & L2-hf-70b   & cond. & avg. WTA    & int. & 0.55  & 0.68   & 0.81   & 0.00 & 0.03 & 0.07 & 0.04 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & item  & ---         & prd. & 1.09  & 1.30   & 1.51   & 0.00 & 0.02 & 0.06 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & item  & ---         & int. & 1.90  & 2.52   & 3.13   & 0.00 & 0.04 & 0.12 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-7b    & cond. & avg. scores & prd. & 9.65  & 11.50  & 13.62  & 0.08 & 0.12 & 0.16 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & cond. & avg. scores & int. & 6.80  & 7.96   & 9.14   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & cond. & avg. prob.  & prd. & 4.98  & 16.44  & 33.06  & 0.06 & 0.10 & 0.13 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & cond. & avg. prob.  & int. & 20.06 & 79.30  & 163.94 & 0.00 & 0.01 & 0.04 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-7b    & cond. & avg. WTA    & prd. & 4.17  & 4.96   & 5.85   & 0.07 & 0.12 & 0.16 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-7b    & cond. & avg. WTA    & int. & 0.87  & 1.02   & 1.18   & 0.00 & 0.02 & 0.05 & 0.00 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & item  & ---         & prd. & 1.37  & 1.91   & 2.47   & 0.00 & 0.07 & 0.12 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & item  & ---         & int. & 2.13  & 2.90   & 3.69   & 0.00 & 0.05 & 0.14 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-13b   & cond. & avg. scores & prd. & 13.73 & 16.32  & 19.10  & 0.08 & 0.12 & 0.16 & 0.50 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & cond. & avg. scores & int. & 7.73  & 9.11   & 10.42  & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & cond. & avg. prob.  & prd. & 69.84 & 185.80 & 360.44 & 0.06 & 0.09 & 0.13 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & cond. & avg. prob.  & int. & 13.63 & 39.72  & 88.28  & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-13b   & cond. & avg. WTA    & prd. & 2.28  & 2.70   & 3.18   & 0.08 & 0.12 & 0.16 & 0.51 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-13b   & cond. & avg. WTA    & int. & 0.78  & 0.94   & 1.12   & 0.00 & 0.03 & 0.07 & 0.03 \\ \addlinespace[0.5em]
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & item  & ---         & prd. & 1.53  & 1.86   & 2.22   & 0.00 & 0.03 & 0.07 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & item  & ---         & int. & 3.20  & 4.01   & 4.74   & 0.00 & 0.03 & 0.08 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-70b   & cond. & avg. scores & prd. & 44.57 & 53.17  & 62.44  & 0.08 & 0.12 & 0.17 & 0.48 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & cond. & avg. scores & int. & 6.86  & 8.14   & 9.32   & 0.00 & 0.02 & 0.05 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & cond. & avg. prob.  & prd. & 10.51 & 26.59  & 45.73  & 0.07 & 0.10 & 0.14 & 0.00 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & cond. & avg. prob.  & int. & 10.86 & 23.63  & 42.16  & 0.00 & 0.03 & 0.09 & 0.00 \\
+  \textcolor{fern-main}{$\checkmark$} & L2-base-70b   & cond. & avg. WTA    & prd. & 5.88  & 7.03   & 8.19   & 0.08 & 0.12 & 0.17 & 0.50 \\
+  \textcolor{shimmer-main}{$\times$} & L2-base-70b   & cond. & avg. WTA    & int. & 0.55  & 0.68   & 0.81   & 0.00 & 0.03 & 0.07 & 0.04 \\ \addlinespace[0.5em]
   \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & item  & ---         & prd. & 0.34  & 0.41   & 0.49   & 0.00 & 0.03 & 0.07 & 0.00 \\
   \textcolor{shimmer-main}{$\times$} & L2-chat-7b  & item  & ---         & int. & 0.79  & 1.05   & 1.34   & 0.00 & 0.05 & 0.15 & 0.00 \\
   \textcolor{fern-main}{$\checkmark$} & L2-chat-7b  & cond. & avg. scores & prd. & 58.47 & 69.64  & 81.79  & 0.08 & 0.12 & 0.16 & 0.48 \\
@@ -728,14 +729,14 @@ Additionally, we also find variability in which method of aggregation works well
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 While the common practice in evaluating the capabilities of LLMs is based on accuracy averaged over large collections of data, this work took the alternative route to explore what we learn if we subjected LLMs to the same routines and strong demands on distributional quality of fit to human data as we normally do for statistical or probabilistic cognitive models.
-Knowledge of the adequacy of LLMs' full distributional predictions for simple tasks that require human like judgement or decisions is important to gauge in how far LLMs can be trusted to provide such information in applications such as hybrid, neuro-symbolic models \mf{refs}.
+Knowledge of the adequacy of LLMs' full distributional predictions for simple tasks that require human-like judgement or decisions is important to gauge in how far LLMs can be trusted to provide such information in applications such as hybrid, neuro-symbolic models \mf{refs}.
 A main contribution of this paper is methodological, showing how statistical model criticism can be used for LLMs in the first place, and, more specifically, how it can be insightful in the detailed assessment of how LLMs might or might not be able to predict human data at the degree of accuracy that we would normally aspire for when dealing with explanatory statistical models in cognitive science.
 Applying this comparative approach to a minimal, but non-trivial data set, we find that the LLM predictions on a per-item level predict variance that is not attested in the human data.
-From several candidate predictor measures for aggregate condition-level data, only one was not refuted by the human data, but this was one that relied on the empirically implausible WTA-strategy at the item-level, incidentally the same strategy that is commonly used in accuracy-based benchmark testing \citep{srivastava2023-BIGbench}.
+From several candidate predictor measures for aggregate condition-level data, only one was not refuted by the human data (at least for the GPT-3.5 model), but this was one that relied on the empirically implausible WTA-strategy at the item-level, incidentally the same strategy that is commonly used in accuracy-based benchmark testing \citep{srivastava2023-BIGbench}.
 
 \paragraph{Explanatory power.}
 A basic observation brought to the foreground by our approach is that LLMs' atomic predictions are for individual items and that some aggregation method is needed to derive more abstract, condition- or task-level predictions.
-This is potential one sense in which LLMs may be felt to be less, or not at all, explanatory.
+This is one sense in which LLMs may be felt to be less, or not at all, explanatory.
 They do not offer, at least not directly, a human-comprehensible compression of reality into a \emph{kind} of response pattern, over and beyond making a prediction for each particular situation.
 As this kind of compression is arguably important for a sense of understanding \citep{Dellsen2020:Beyond-Explanat,Grimm2021:Understanding}, the direct comparison of LLMs with common practices in experimental psychology and with probabilistic cognitive models, provides an interesting perspective on why LLMs are often felt to be lacking in explanatory power.
 
@@ -777,11 +778,12 @@ If future work would contribute to systematically exploring these, the main goal
 
 \paragraph{Human-like predictions from LLM.}
 The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-Moreover, to the extent that LLMs are used as parts of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-,TsvilodubCarcassi2024:Towards-Neuro-S}.
+Moreover, to the extent that LLMs are used as parts of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-} \mf{insert references}.
 Based on the data set and the detailed analyses conducted here, it seems not infeasible to use numerical predictions from LLMs as part of predictive probabilistic models.
-But, ideally, low-level variation, such as from order of presentation or similar ``nuisance variables,'' should be averaged out or taken into account in some way or other, at least as long as we do not understand what causes this variation in the predictions of models and further research that investigates when exactly this variation accords with empirically observed patterns.
+But, ideally, low-level prompt variation, such as from order of presentation or similar ``nuisance variables,'' should be averaged out or taken into account in some way or other, as we do not understand what causes this variation in the predictions of models.
+Further research is necessary that investigates when exactly this variation accords with empirically observed patterns.
 In sum, we conjecture that using LLM predictors for probabilistic predictions, such as in a neuro-symbolic model, might be possible if embedded in the proper link functions and if item-level variation is taken into account.
-This, however, entails that each LLM component in a hybrid model is independently tested against at least a modestly sized empirical data set.
+This, however, entails that each LLM component in a hybrid model should be independently tested against at least a modestly sized empirical data set.
 
 
 \paragraph{No substitute for human subjects.}
