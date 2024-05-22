@@ -78,14 +78,14 @@ pdfkeywords={statistical models, language use, large language models, Bayesian d
 \maketitle
 
 \begin{abstract}
-  State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks and are increasingly used as components in larger applications, where LLM-based predictions serve as proxies for human judgements.
-  This raises questions about the human-likeness of LLM-derived information, alignment with human intuition in larger applications, and whether LLMs, if they deliver human-like behavior, could possibly be considered explanatory models of (aspects of) human cognition or language use.
+  State of the art large language models (LLMs) have shown impressive performance on a variety of benchmark tasks and are increasingly used as components in larger applications, where LLM-based predictions serve as proxies for human judgements or decision.
+  This raises questions about the human-likeness of LLM-derived information, alignment with human intuition, and whether LLMs could possibly be considered (parts of) explanatory models of (aspects of) human cognition or language use.
   To shed more light on these issues, we here investigate the human-likeness of LLMs' predictions for multiple-choice decision tasks from the perspective of Bayesian statistical modeling.
   % We identify core differences, in terms of conceptual interpretation and usual practical evaluation, between LLMs and probabilistic cognitive models (PCMs).
   % Concretely, we argue that LLMs are, first and foremost, predictors of item-level data, whereas PCMs primarily make predictions at a more abstract level (the condition-level), and that this is a sense in which LLMs may be said to be not explanatory.
-  Using human data from a multiple-choice experiment on pragmatic language use, we find that LLMs do not capture the variance in the human data at the item-level.
-  We suggest different ways of deriving full distributional predictions from LLMs for condition-level data, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to human data.
-  These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at the aggregate condition-level, for which they are, however, not designed to make predictions in the first place.
+  Using human data from a forced-choice experiment on pragmatic language use, we find that LLMs do not capture the variance in the human data at the item-level.
+  We suggest different ways of deriving full distributional predictions from LLMs for aggregate, condition-level data, and find that some, but not all ways of obtaining condition-level predictions yield adequate fits to human data.
+  These results suggests that assessment of LLM performance depends strongly on seemingly subtle choices in methodology, and that LLMs are at best predictors of human behavior at the aggregate, condition-level, for which they are, however, not designed to, or usually used to, make predictions in the first place.
 \end{abstract}
 
 
@@ -102,7 +102,7 @@ State-of-the-art LLMs excel on many benchmark data sets \citep[e.g.,][]{srivasta
 Yet, for any downstream application of LLMs, it is crucial to understand what LLMs can or cannot reliably do.
 
 The way in which LLM capabilities should be assessed depends on what their intended application is.
-For many industrial applications, the prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' or ``gold standard'' exists, averaged over many instances of this task \citep[e.g.,][]{srivastava2023-BIGbench}, but more encompassing approaches also highlight the importance of a more holistic assessments of LLM, including factors such as robustness, fairness and efficiency \citep{LiangBommasani2023:Holistic-Evalua}.
+For many industrial applications, the prevalent approach towards characterizing the capabilities of LLMs relies on benchmark testing, which usually consists in assessing the accuracy of LLM predictions in tasks where a designated ``target answer'' or ``gold standard'' exists, averaged over many instances of this task \citep[e.g.,][]{srivastava2023-BIGbench}, but more encompassing approaches also highlight the importance of more holistic assessments of LLM, including factors such as robustness, fairness and efficiency \citep{LiangBommasani2023:Holistic-Evalua}.
 Benchmark-driven assessments are very useful for engineering purposes, when the main issue is whether a given system can perform a particular task correctly.
 
 % Benchmark testing is also useful to systematically study of the effects of scale \citep[e.g.,][]{srivastava2023-BIGbench}, to uncover areas in which LLMs might under-perform on some standard that is practically relevant, and to thereby direct the community's attention to what needs improvement.
@@ -112,10 +112,10 @@ Benchmark-driven assessments are very useful for engineering purposes, when the 
 
 There are also applications of LLMs where benchmark testing on a ``gold standard'' is arguably not optimal.
 Recent works increasingly go beyond using LLMs based on single-run input-output behavior, and instead utilize LLMs as a part of a larger computational process.
-Simple examples include sophisticated prompting strategies \citep[e.g.,][]{LiuLiu2022:Generated-Knowl}, or structured reasoning models \citep[e.g.,][]{CreswellShanahan2022:Selection-Infer,GaoMadaan2023:PAL:-Program-ai,ParanjapeLundberg2023:ART:-Automatic-}.
-More sophisticated examples include neuro-symbolic models in which LLMs supply specific parts of the relevant information for some practical application \mf{include citations}, or where LLMs are a part of bigger programs to build towards something more akin to explanatory cognitive models \citep[e.g.,][]{WongGrand2023:From-Word-Model}.
-For example, information from LLMs can be used to generate alternatives for deliberation \citep[e.g.][]{TsvilodubCarcassi2024:Towards-Neuro-S}, arguably similar to human resource-rational reasoning in open-ended domains. \mf{include citations}
-LLMs may also be used to rank or numerically score options in open-ended applications, e.g., to mimic human judgements of relevance or interestingness \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
+Simple examples include sophisticated prompting strategies \citep[e.g.,][]{LiuLiu2022:Generated-Knowl}, or structured reasoning models \citep[e.g.,][]{CreswellShanahan2022:Selection-Infer,GaoMadaan2023:PAL:-Program-ai,ParanjapeLundberg2023:ART:-Automatic-,YangKlein2023:DOC:-Improving-}.
+More sophisticated examples include neuro-symbolic models in which LLMs supply specific parts of the relevant information for some practical application \citep[e.g.,][]{NyeTessler2021:Improving-Coher}, or where LLMs are a part of bigger programs to build towards something more akin to explanatory cognitive models \citep[e.g.,][]{WongGrand2023:From-Word-Model}.
+For example, information from LLMs can be used to generate alternatives for deliberation \citep[e.g.][]{LewTessler2020:Leveraging-Unst,TsvilodubCarcassi2024:Towards-Neuro-S}, arguably similar to human resource-rational reasoning in open-ended domains \citep{VulGoodman2014:One-and-Done-Op}.
+LLMs may also be used to rank or numerically score options in large or open-ended applications, e.g., to mimic human judgements of desirability, relevance or interestingness \citep[e.g.,][]{BaiKadavath2022:Constitutional-,ParkOBrien2023:Generative-Agen,KwonXie2023:Reward-Design-w,ZhangLehman2023:OMNI:-Open-ende}.
 In many of these applications, LLMs essentially serve as a cheap, compressed stand-in for (average) human judgements, associations or choice behavior.
 To assess the quality of LLMs in such contexts, it is less important to compare against a gold standard, and more important to compare against the full distribution of the human behavior that is to be captured by the LLM.
 In sum, at least for some practical applications, the ``gold standard'' is not a single ``correct'' answer, but the full distribution of human responses.
