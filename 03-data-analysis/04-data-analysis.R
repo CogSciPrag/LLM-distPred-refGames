@@ -358,10 +358,12 @@ retrieve_results_model_fits <- function(model_name) {
     
   }
   
-  outplot <- make_alpha_plot("production") + make_alpha_plot("interpretation")
+  alpha_plot_production <- make_alpha_plot("production")
+  alpha_plot_interpretation <- make_alpha_plot("interpretation")
+  outplot <- gridExtra::grid.arrange(alpha_plot_production, alpha_plot_interpretation, ncol = 2)
   
   ggsave(
-    filename = str_c("../04-paper/00-pics/", model_name, "-closeness-target-by-alpha-item-level.pdf"),
+    filename = stringr::str_c("../04-paper/00-pics/", model_name, "-closeness-target-by-alpha-item-level.pdf"),
     plot = outplot, width = 9, height = 4, scale =1)
     
 }
@@ -487,9 +489,9 @@ vPPC_data_all_models <- rbind(
 ) |> 
   # specify levels for 'backend models'
   mutate(backend = case_when(
-    backend == "LLaMA2-hf-7b" ~ "L2-hf-7b",
-    backend == "LLaMA2-hf-13b" ~ "L2-hf-13b",
-    backend == "LLaMA2-hf-70b" ~ "L2-hf-70b",
+    backend == "LLaMA2-hf-7b" ~ "L2-7b",
+    backend == "LLaMA2-hf-13b" ~ "L2-13b",
+    backend == "LLaMA2-hf-70b" ~ "L2-70b",
     backend == "LLaMA2-chat-hf-7b" ~ "L2-chat-7b",
     backend == "LLaMA2-chat-hf-13b" ~ "L2-chat-13b",
     backend == "LLaMA2-chat-hf-70b" ~ "L2-chat-70b",
@@ -497,7 +499,7 @@ vPPC_data_all_models <- rbind(
   )) |> 
   mutate(backend = factor(backend, 
                          levels = c(
-                           "L2-hf-7b", "L2-hf-13b", "L2-hf-70b", 
+                           "L2-7b", "L2-13b", "L2-70b", 
                            "L2-chat-7b", "L2-chat-13b", "L2-chat-70b",
                            "GPT", "RSA"))) |> 
   # norm to human data

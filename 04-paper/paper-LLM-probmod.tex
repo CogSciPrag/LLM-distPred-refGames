@@ -127,7 +127,7 @@ Most notably, there is a strong tradition of relatively early work in computatio
 The work presented in this paper seeks to extend the investigation of the human-likeness of predictions derived from LLMs.
 Our foremost concern is methodological: How can we derive full distributional predictions from information supplied by LLMs, and how can we stringently test whether these distributional predictions are adequate given suitable empirical data?
 In short, while a lot of previous like-minded work has used targeted assessment of LLM capabilities from the point of view of the experimental psychologist, we here adopt the more specific perspective of the probabilistic / statistical modeller.
-Taking numerical predictor values generated from LLMs as input, we explore strategies of building a Bayesian statistical model around them, and to scrutinize these LLM-grounded Bayesian statistical models with the usual methods of Bayesian data analysis \citep{GelmanCarlin2014:Bayesian-Data-A}.
+Taking numerical predictor values generated from LLMs as input, we explore strategies of building a Bayesian statistical model around them, and to scrutinize these LLM-grounded Bayesian statistical models with the usual methods of Bayesian data analysis, in particular model criticism \citep{GelmanCarlin2014:Bayesian-Data-A}.
 
 \begin{figure}[t]
   \centering
@@ -141,13 +141,13 @@ Taking numerical predictor values generated from LLMs as input, we explore strat
   \label{fig:stats-model-types}
 \end{figure}
 
-A main conceptual take-away of this investigation, is that statistical models built around LLMs are by design fundamentally different from common statistical or probabilistic cognitive models; an observation which also reflects back on the possibility of seeing LLMs as potentially explanatory for human behavior or cognition.
+A main conceptual take-away of this investigation, is that statistical models built around LLMs are, by design, fundamentally different from common statistical or probabilistic cognitive models; an observation which also reflects back on the possibility of seeing LLMs as potentially explanatory model for human behavior or cognition.
 Concretely, LLMs make predictions for each individual item, rather than specifying a predictor of central tendency at a more aggregate level, such as at the level of an experimental condition, as standard statistical models or probabilistic cognitive models normally do (see Figure~\ref{fig:stats-model-types}).
 As this point is crucial for our investigation, the following elaborates briefly.
 
 Psychological research into the workings of the human mind aims to find generalizable patterns in the way information is processed within or across different domains of cognition.
 Experimental work therefore often compares human performance in different \emph{experimental conditions}, which reflect the general factors that are hypothesized to influence behavior.
-Yet a single experimental condition is often instantiated with different \emph{experimental items}, which are not under scrutiny for any systematic, predictable effect on the observed measurements.
+Yet a single experimental condition is often instantiated with different \emph{experimental items}, which are usually not under scrutiny for any systematic, predictable effect on the observed measurements.
 For example, classical research on human memory \citep{AtkinsonShiffrin1968:Human-memory:-A} investigated the effect of rehearsal on memory consolidation.
 Relevant experiments compare recall with and without rehearsal (experimental conditions), while using different items (words, numbers, etc., to be memorized) in each instantiation of the same memory task.
 Likewise, when studying how hearing a color word can facilitate a same-or-different judgement of color swatches \citep{Rosch1975:The-Nature-of-M}, the main experimental manipulation concerns the typicality of shown color swatches, while the variability between different color words like ``blue'' or ``green'', is less important to this research question and so treated as \emph{item-level variation}.
@@ -160,15 +160,15 @@ Still, the focus of interest usually remains at the condition-level effects, bec
 Similarly, when analyzing or explaining data from psychological experiments with a probabilistic cognitive model (PCM), the model's predictions will naturally be set-up to predict data by taking condition-level properties, possibly in conjunction with item-level properties, into account \citep[e.g.,][]{NilsonRieskamp2011:Hierarchical-Ba,Lee2011:How-Cognitive-M,ScheibehenneRieskamp2013:Testing-the-Ada}, as shown schematically in the middle of Figure~\ref{fig:stats-model-types}.
 On the other hand, LLMs first and foremost provide predictions about each item.
 While it may be the case that, in producing an item-level prediction, the internal computation of a powerful LLM is informed by computations that incorporate abstract knowledge roughly corresponding to the condition-level, the atomic predictions accessible to the common user are specific to each individual string tested.
-Consequently, this raises concerns about robustness of predictions under perturbations of input prompts \mf{cite}.
+Consequently, this points to known concerns about robustness of predictions under perturbations of input prompts \citep[e.g.][]{ReynoldsMcDonell2021:Prompt-Programm,WebsonPavlick2022:Do-Prompt-Based,SalinasMorstatter2024:The-Butterfly-E,TsvilodubWang2024:Predictions-fro}.
 
 These considerations raise two important conceptual and empirical questions.
 First, we need to ask whether the item-level predictions made by LLMs are empirically correct, i.e., match the human data at the item-level.
 Second, the implied methodological challenge lies in specifying how item-level information can be used, e.g., by different aggregation methods, to make robust predictions at a more abstract level (condition, task, $\dots$).
 To investigate these issues, this paper introduces different ways of building a Bayesian probabilistic model around core predictor values derived from various LLMs.
-We then use the standard tools of Bayesian data analysis, to fit and check the resulting statistical models based on data from human multiple-choice experiments.
+We then use the standard tools of Bayesian data analysis to fit and check the resulting statistical models based on data from human multiple-choice experiments.
 Rather than aiming for scale and large-coverage, we focus on transparency and zoom in on a single case study of pragmatic language production and interpretation, namely so-called reference games \citep[e.g.,][]{DeemterSluis2006:Building-a-Sema,DegenFranke2013:Cost-Based-Prag,QingFranke2013:Variations-on-a,Frank2016:Rational-speech,GrafDegen2016:Animal-dog-or-d,SikosVenhuizen2021:Reevaluating-pr}.
-For reference games, a widely used probabilistic cognitive model exists, namely the Rational Speech Act model \citep{FrankGoodman2012:Predicting-Prag}, so that we can compare a theoretically motivated probabilistic cognitive model (PCM) against a probabilistic model built on top of LLM predictions.
+The Rational Speech Act framework \citep{FrankGoodman2012:Predicting-Prag} provides a widely used probabilistic model for human data from reference games, so that we can compare a theoretically motivated probabilistic cognitive model (PCM) against a probabilistic model built on top of LLM predictions.
 We find that variability predicted by the LLM at the item-level is generally not borne out by the human data, that not all ways of constructing condition-level predictions are equally good, and that different LLMs as backends may prefer to use different aggregation strategies.
 
 % For the purposes of this investigation, a probabilistic cognitive model (PCM) is characterized by providing a parameterized likelihood function $P_{M}(D_{C} \mid \theta, C)$, which assigns a probability to each possible data observation $D_{C}$ for any experimental condition $C$ and parameter values $\theta$ \citep[e.g.,][]{LewandowskyFarrell2011:Computational-M,LeeWagenmakers2013:Bayesian-Cognit}.
@@ -470,7 +470,7 @@ Like in the RSA model, we use an independent soft-max parameter for each conditi
 
 \paragraph{Bayesian statistical modeling with LLM predictors.}
 As mentioned previously, the items of the reference game experiment from Section~\ref{experiment-reference-games} differ in which levels of features (color, shape, texture) instantiate the structure of the task shown in Figure \ref{fig:ref-game}, as well as the order of presentation of objects and words.
-We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options. \mf{references prompt variation}
+We expect both human and LLM predictions to vary between different items: e.g., humans seem to have preferences for some features \citep[e.g.,][]{QingFranke2013:Variations-on-a}, such as over-production of informationally irrelevant material \citep[e.g.,][]{DaviesKatsos2010:Over-informativ,Rubio-Fernandez2019:Overinformative,DegenHawkins2020:When-redundancy}; and machines may be susceptible to the presentation of the order of choice options.
 It therefore becomes an empirical question of whether item-level predictions from LLMs provide a good fit, if we aim at predicting the human data separately for each item, not as a condition-level average.
 
 To address this question, we assessed item-level scores $\text{S}_{kl}$ from the text-davinci-003 instance of GPT-3.5 August 2023 \citep{BrownMann2020:Language-Models} for a text-based version of the reference game from Section~\ref{experiment-reference-games}.
@@ -639,7 +639,7 @@ The model seems to be ``right for the wrong reasons.''
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.9\textwidth]{00-pics/vPPC_all_LLaMA_models.pdf}
-  \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies. \mf{update plot by replacing 'hf' with 'base'.}}
+  \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies.}
   \label{fig:LLaMA-results-vPPC}
 \end{figure}
 
@@ -729,7 +729,7 @@ Additionally, we also find variability in which method of aggregation works well
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 While the common practice in evaluating the capabilities of LLMs is based on accuracy averaged over large collections of data, this work took the alternative route to explore what we learn if we subjected LLMs to the same routines and strong demands on distributional quality of fit to human data as we normally do for statistical or probabilistic cognitive models.
-Knowledge of the adequacy of LLMs' full distributional predictions for simple tasks that require human-like judgement or decisions is important to gauge in how far LLMs can be trusted to provide such information in applications such as hybrid, neuro-symbolic models \mf{refs}.
+Knowledge of the adequacy of LLMs' full distributional predictions for simple tasks that require human-like judgement or decisions is important to gauge in how far LLMs can be trusted to provide such information in applications such as hybrid, neuro-symbolic models \citep[e.g.,][]{GarneloShanahan2019:Reconciling-dee,LewTessler2020:Leveraging-Unst,CreswellShanahan2022:Selection-Infer,Frank2023:Large-language-}.
 A main contribution of this paper is methodological, showing how statistical model criticism can be used for LLMs in the first place, and, more specifically, how it can be insightful in the detailed assessment of how LLMs might or might not be able to predict human data at the degree of accuracy that we would normally aspire for when dealing with explanatory statistical models in cognitive science.
 Applying this comparative approach to a minimal, but non-trivial data set, we find that the LLM predictions on a per-item level predict variance that is not attested in the human data.
 From several candidate predictor measures for aggregate condition-level data, only one was not refuted by the human data (at least for the GPT-3.5 model), but this was one that relied on the empirically implausible WTA-strategy at the item-level, incidentally the same strategy that is commonly used in accuracy-based benchmark testing \citep{srivastava2023-BIGbench}.
@@ -778,7 +778,7 @@ If future work would contribute to systematically exploring these, the main goal
 
 \paragraph{Human-like predictions from LLM.}
 The question after the human-likeness of quantitative LLM-derived information matters for applications which use numerical scores to rank or weigh options \citep[e.g.,][]{ParkOBrien2023:Generative-Agen,ZhangLehman2023:OMNI:-Open-ende}.
-Moreover, to the extent that LLMs are used as parts of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{Frank2023:Large-language-} \mf{insert references}.
+Moreover, to the extent that LLMs are used as parts of explanatory ``neuro-symbolic models'' of information processing \citep{GarcezLamb2020:Neurosymbolic-A}, understanding whether and how LLMs might yield full-fledged distributional predictions is important, e.g., to explore their integration into probabilistic (cognitive) models \citep[c.f.,][]{LewTessler2020:Leveraging-Unst,WongGrand2023:From-Word-Model,Frank2023:Large-language-}.
 Based on the data set and the detailed analyses conducted here, it seems not infeasible to use numerical predictions from LLMs as part of predictive probabilistic models.
 But, ideally, low-level prompt variation, such as from order of presentation or similar ``nuisance variables,'' should be averaged out or taken into account in some way or other, as we do not understand what causes this variation in the predictions of models.
 Further research is necessary that investigates when exactly this variation accords with empirically observed patterns.
