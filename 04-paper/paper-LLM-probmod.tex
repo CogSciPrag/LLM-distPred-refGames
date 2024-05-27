@@ -444,10 +444,9 @@ For the case at hand these categories are: target, competitor, distractor, so th
 
 \paragraph{LLM scores \& predictions.}
 The most obvious \emph{item-level score} an (autoregressive) LLM provides for each choice option $y_{kl}$ is its log-probability:\footnote{
-  More elaborate item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
-  From the point of view of experimental psychology, these corrections are \emph{post hoc} fixes to improperly balanced experimental materials.
-  For the purposes of this paper, where answer options are all equally long and commensurable, these corrections may be temporarily ignored for simplicity.
-  \mf{@PT: check whether this is correct also after new LLaMA results.}
+  Commonly used item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
+  Following common practice in the current literature, we also use length-corrected, average log-probabilities as raw scores for all options.
+  As most options have identical number of tokens, this only affects the numerical values of softmax-parameter $\alpha$, as introduced below.}
 }
 %
 \begin{align*}
