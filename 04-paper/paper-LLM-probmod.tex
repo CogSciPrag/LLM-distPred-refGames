@@ -447,7 +447,6 @@ The most obvious \emph{item-level score} an (autoregressive) LLM provides for ea
   Commonly used item-level scores include corrections for variable length of answer options \citep[e.g.,][]{BrownMann2020:Language-Models} or variation in base rate among answer options \citep[e.g.,][]{HoltzmanWest2021:Surface-Form-Co}.
   Following common practice in the current literature, we also use length-corrected, average log-probabilities as raw scores for all options.
   As most options have identical number of tokens, this only affects the numerical values of softmax-parameter $\alpha$, as introduced below.}
-}
 %
 \begin{align*}
   % S\left( y_{ki}, x_{k} \right) =
@@ -789,7 +788,7 @@ This, however, entails that each LLM component in a hybrid model should be indep
 Looking at LLM-derived predictions for human data from the perspective of cognitive modeling highlights the fact that LLMs predict item-level variation, but not subject-level variation, which is common in human data.
 We may consider variation introduced via softmax / temperature as analogous to between-human variation, but this likely falls short of reality, where pronounced differences in answer behavior may surface.
 For the particular case of pragmatic language use, prior research has shown that individual participants have markedly different behavioral profiles, often consistently behaving like literal language users or more sophisticated language users \citep[e.g.,][]{NieuwlandDitman2010:On-the-incremen,FrankeDegen2015:Reasoning-in-Re,SpychalskaKontinen2016:Investigating-s}.
-It is an open question whether predictions from LLMs reflect the same kind of variation.
+It is an open question whether predictions from LLMs reflect the same kind of variation \citep[][]{AherArriaga2023:Using-large-lan,SalewskiAlaniz2023:In-Context-Impe}.
 The results presented here recommend skepticism.
 We therefore side with the cautious voices that do not recommend replacing human participants with LLMs in psychological research \citep{DillionTandon2023:Can-AI-language,HardingDAlessandro2023:AI-language-mod}.
 In contrast, this points to an important challenge for future LLM research.
