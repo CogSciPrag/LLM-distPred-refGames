@@ -193,7 +193,9 @@ Section~\ref{experiment-reference-games} describes an experiment with human part
 Section~\ref{sec:model-pred-from} introduces the Rational Speech Act (RSA) model for the human data from the reference game experiment.
 Section~\ref{sec:item-level-pred} exposes a statistical model for item-level predictions derived from LLM scores and investigates whether this adequately captures the human data at the item-level based on scores from GPT-3.5 \citep{BrownMann2020:Language-Models}.
 Section~\ref{llm-predictions-for-reference-games} discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
-Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}.
+Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}.\footnote{
+  All data and code is available at \url{https://osf.io/f6j3a/?view_only=5e820cc8bbee4549aed58dc252ba61b9}.
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -801,7 +803,10 @@ The scope of our experimental investigation was deliberately small but perspicuo
 Focusing on the methodological contributions and details in performance assessments, we investigated a minimal non-trivial case study where we could triangulate LLMs, probabilistic cognitive models and human data.
 This work may therefore serve as starting point for a wider investigation of more complex data sets and case studies in which LLMs are analyzed as and directly compared to explanatory PCMs.
 
-
+\section*{Acknowledgements}
+Thanks to Robert D. Hawkins and Thomas Brochhagen for insightful comments.
+We gratefully acknowledge support by the state of Baden-Württemberg, Germany, through the computing resources provided by bwHPC and the German Research Foundation (DFG) through grant INST 35/1597-1 FUGG.
+MF is a member of the Machine Learning Cluster of Excellence, EXC number 2064/1 – Project number 39072764.
 
 \printbibliography[heading=bibintoc]
 
