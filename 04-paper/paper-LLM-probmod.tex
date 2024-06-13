@@ -3,7 +3,7 @@
 \usepackage{arxiv}
 
 \usepackage{mypackages}
-\bibliography{~/Desktop/icloud/MyRefGlobal}
+\bibliography{MyRefGlobal}
 \usepackage{mycommands}
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
@@ -131,7 +131,7 @@ Taking numerical predictor values generated from LLMs as input, we explore strat
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width = 0.95\textwidth]{00-pics/condition-item-level-prediction.png}
+  \includegraphics[width = 0.95\textwidth]{pics-final/condition-item-level-prediction.png}
   \caption{
     Schematic representation of key conceptual differences between different types of predictive models.
     Standard statistical models, like hierarchical regression models, typically make predictions for aggregate data (e.g., at the condition level), and add random offsets for item-level variation.
@@ -194,7 +194,7 @@ Section~\ref{sec:model-pred-from} introduces the Rational Speech Act (RSA) model
 Section~\ref{sec:item-level-pred} exposes a statistical model for item-level predictions derived from LLM scores and investigates whether this adequately captures the human data at the item-level based on scores from GPT-3.5 \citep{BrownMann2020:Language-Models}.
 Section~\ref{llm-predictions-for-reference-games} discusses different ways of deriving probabilistic predictions from LLMs at the condition-level and compares them against the human data and each other.
 Finally, Section~\ref{sec:gener-other-llm} explores whether previous results generalize to other LLM backends by investigating different versions of LLaMA2 \citep{TouvronLavril2023:LLaMA:-Open-and}.\footnote{
-  All data and code is available at \url{https://osf.io/f6j3a/?view_only=5e820cc8bbee4549aed58dc252ba61b9}.
+  All data and code is available at this OSF repository:  \href{https://osf.io/f6j3a/?view_only=5e820cc8bbee4549aed58dc252ba61b9}{https://osf.io/f6j3a/?view\_only=5e820cc8bbee4549aed58dc252ba61b9}.
 }
 
 
@@ -206,7 +206,7 @@ Finally, Section~\ref{sec:gener-other-llm} explores whether previous results gen
 \begin{figure}
   \centering
 
-  \includegraphics[width = 0.8\textwidth]{00-pics/reference-game.png}
+  \includegraphics[width = 0.8\textwidth]{pics-final/reference-game.png}
 
   \caption{Structure of a reference game with human participants. Each trial consists of a set of objects, the so-called context. In production trials, participants choose a single word to describe a trigger object from the context. In interpretation trials, an object is selected as the likely object a trigger word is referring to.}
   \label{fig:ref-game}
@@ -278,7 +278,7 @@ For example, in previous forced-choice reference games with human participants w
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width = 0.9 \textwidth]{00-pics/RSA-example.png}
+  \includegraphics[width = 0.9 \textwidth]{pics-final/RSA-example.png}
   \caption{
     Example of predictions from the RSA model.
     The semantic meaning is shown as a matrix of binary truth-values.
@@ -399,7 +399,7 @@ Reversely, the RSA model seems to adequately capture the condition-level data.
 \begin{figure}[t]
   \centering
 
-    \includegraphics[width=0.9\linewidth]{00-pics/GPT-PPC-alpha-eps-model.pdf}
+    \includegraphics[width=0.9\linewidth]{pics-final/GPT-PPC-alpha-eps-model.pdf}
 
     \caption{
       Counts of choices from reference games with human participants (colored bars), with summary statistics from the posterior predictive distribution of four models (shapes and error bars).
@@ -500,7 +500,7 @@ This suggests that the WTA strategy, which is the special limiting case for $\al
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{00-pics/GPT-closeness-target-by-alpha-item-level.pdf}
+  \includegraphics[width=\textwidth]{pics-final/GPT-closeness-target-by-alpha-item-level.pdf}
   \caption{
     Predicted probability of highest-scoring answer category, averaged over items, for different values of softmax parameter $\alpha$ (black lines).
     The gray-shaded area indicates the posterior 95\% credible interval for $\alpha$, and the implied probabilistic prediction.
@@ -523,7 +523,7 @@ Put more strongly, a model that uses the most obvious item-level scores, derived
 \begin{figure}[t]
   \centering
 
-  \includegraphics[width = 0.9\linewidth]{00-pics/GPT-item-combined-obs-pred.pdf}
+  \includegraphics[width = 0.9\linewidth]{pics-final/GPT-item-combined-obs-pred.pdf}
 
   \caption{
     Item-level prediction-observation plot.
@@ -548,7 +548,7 @@ Put more strongly, a model that uses the most obvious item-level scores, derived
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{00-pics/measures-overview.png}
+  \includegraphics[width=0.9\textwidth]{pics-final/measures-overview.png}
   \caption{
     Schematic overview over three different methods of obtaining condition-level predictions by aggregating item-level information.
     Methods differ in the kind of item-level information they take into account, which entails differences in the order in which aggregation, transformation to probabilities and parameterized scaling occur.
@@ -638,7 +638,7 @@ The model seems to be ``right for the wrong reasons.''
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=0.9\textwidth]{00-pics/vPPC_all_LLaMA_models.pdf}
+  \includegraphics[width=0.9\textwidth]{pics-final/vPPC_all_LLaMA_models.pdf}
   \caption{Visual posterior predictive checks on condition-level data for different models of the LLaMA family, paired with different aggregation strategies.}
   \label{fig:LLaMA-results-vPPC}
 \end{figure}
@@ -824,7 +824,7 @@ Figure~\ref{fig:refgame-screenshot-production} shows a trial from the production
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{00-pics/refgame-production.png}
+  \includegraphics[width = 0.8\textwidth]{pics-final/refgame-production.png}
 
   \caption{Screen shot from a production trial of the online experiment.}
   \label{fig:refgame-screenshot-production}
@@ -832,7 +832,7 @@ Figure~\ref{fig:refgame-screenshot-production} shows a trial from the production
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width = 0.8\textwidth]{00-pics/refgame-interpretation.png}
+  \includegraphics[width = 0.8\textwidth]{pics-final/refgame-interpretation.png}
 
   \caption{Screen shot from an interpretation trial of the online experiment.}
   \label{fig:refgame-screenshot-interpretation}
